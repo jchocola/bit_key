@@ -1,5 +1,9 @@
 // ignore_for_file: camel_case_types
 
+import 'dart:math';
+
+import 'package:bit_key/features/feature_generate_pass/data/model/password_strength.dart';
+import 'package:bit_key/features/feature_generate_pass/domain/repositories/pass_generator_repo.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -38,6 +42,8 @@ class PassGeneratorBlocEvent_removeNumberSpecial
 
 class PassGeneratorBlocEvent_addNumberSpecial extends PassGeneratorBlocEvent {}
 
+class PassGeneratorBlocEvent_generatePass extends PassGeneratorBlocEvent {}
+
 ///
 /// STATE
 ///
@@ -55,6 +61,8 @@ class PassGeneratorBlocState_state extends PassGeneratorBlocState {
   final bool passSpecialSymbol;
   final int minDigit;
   final int minSpecialSymbol;
+  final String generatedPass;
+  final PasswordStrength? passwordStrength;
 
   PassGeneratorBlocState_state({
     required this.length,
@@ -64,6 +72,8 @@ class PassGeneratorBlocState_state extends PassGeneratorBlocState {
     required this.passSpecialSymbol,
     required this.minDigit,
     required this.minSpecialSymbol,
+    required this.generatedPass,
+    this.passwordStrength,
   });
 
   factory PassGeneratorBlocState_state.initial() =>
@@ -75,6 +85,7 @@ class PassGeneratorBlocState_state extends PassGeneratorBlocState {
         passSpecialSymbol: false,
         minDigit: 0,
         minSpecialSymbol: 0,
+        generatedPass: '',
       );
 
   @override
@@ -86,6 +97,8 @@ class PassGeneratorBlocState_state extends PassGeneratorBlocState {
     passSpecialSymbol,
     minDigit,
     minSpecialSymbol,
+    generatedPass,
+    passwordStrength,
   ];
 
   PassGeneratorBlocState_state copyWith({
@@ -96,6 +109,8 @@ class PassGeneratorBlocState_state extends PassGeneratorBlocState {
     bool? passSpecialSymbol,
     int? minDigit,
     int? minSpecialSymbol,
+    String? generatedPass,
+    PasswordStrength? passwordStrength,
   }) {
     return PassGeneratorBlocState_state(
       length: length ?? this.length,
@@ -105,6 +120,8 @@ class PassGeneratorBlocState_state extends PassGeneratorBlocState {
       passSpecialSymbol: passSpecialSymbol ?? this.passSpecialSymbol,
       minDigit: minDigit ?? this.minDigit,
       minSpecialSymbol: minSpecialSymbol ?? this.minSpecialSymbol,
+      generatedPass: generatedPass ?? this.generatedPass,
+      passwordStrength: passwordStrength ?? this.passwordStrength,
     );
   }
 }
@@ -114,7 +131,10 @@ class PassGeneratorBlocState_state extends PassGeneratorBlocState {
 ///
 class PassGeneratorBloc
     extends Bloc<PassGeneratorBlocEvent, PassGeneratorBlocState> {
-  PassGeneratorBloc() : super(PassGeneratorBlocState_state.initial()) {
+  final PassGeneratorRepo passGeneratorRepo;
+
+  PassGeneratorBloc({required this.passGeneratorRepo})
+    : super(PassGeneratorBlocState_state.initial()) {
     ///
     /// CHANGE LENGTH
     ///
@@ -125,6 +145,7 @@ class PassGeneratorBloc
         emit(currentState.copyWith(length: event.value.toInt()));
       }
       _checkParameter();
+      add(PassGeneratorBlocEvent_generatePass());
     });
 
     ///
@@ -137,6 +158,7 @@ class PassGeneratorBloc
         emit(currentState.copyWith(passUpper: !currentState.passUpper));
       }
       _checkParameter();
+      add(PassGeneratorBlocEvent_generatePass());
     });
 
     ///
@@ -149,6 +171,7 @@ class PassGeneratorBloc
         emit(currentState.copyWith(passLower: !currentState.passLower));
       }
       _checkParameter();
+      add(PassGeneratorBlocEvent_generatePass());
     });
 
     ///
@@ -161,6 +184,7 @@ class PassGeneratorBloc
         emit(currentState.copyWith(passDigit: !currentState.passDigit));
       }
       _checkParameter();
+      add(PassGeneratorBlocEvent_generatePass());
     });
 
     ///
@@ -177,6 +201,7 @@ class PassGeneratorBloc
         );
 
         _checkParameter();
+        add(PassGeneratorBlocEvent_generatePass());
       }
     });
 
@@ -187,10 +212,11 @@ class PassGeneratorBloc
       final currentState = state;
       if (currentState is PassGeneratorBlocState_state) {
         logger.i(currentState.minDigit);
-        if (currentState.minDigit - 1 <= 0) {
+        if (currentState.minDigit - 1 < 0) {
           return;
         } else {
           emit(currentState.copyWith(minDigit: currentState.minDigit - 1));
+          add(PassGeneratorBlocEvent_generatePass());
         }
       }
     });
@@ -206,6 +232,7 @@ class PassGeneratorBloc
           return;
         } else {
           emit(currentState.copyWith(minDigit: currentState.minDigit + 1));
+          add(PassGeneratorBlocEvent_generatePass());
         }
       }
     });
@@ -217,7 +244,7 @@ class PassGeneratorBloc
       final currentState = state;
       if (currentState is PassGeneratorBlocState_state) {
         logger.i(currentState.minSpecialSymbol);
-        if (currentState.minSpecialSymbol - 1 <= 0) {
+        if (currentState.minSpecialSymbol - 1 < 0) {
           return;
         } else {
           emit(
@@ -225,6 +252,8 @@ class PassGeneratorBloc
               minSpecialSymbol: currentState.minSpecialSymbol - 1,
             ),
           );
+
+          add(PassGeneratorBlocEvent_generatePass());
         }
       }
     });
@@ -244,7 +273,25 @@ class PassGeneratorBloc
               minSpecialSymbol: currentState.minSpecialSymbol + 1,
             ),
           );
+
+          add(PassGeneratorBlocEvent_generatePass());
         }
+      }
+    });
+
+    ///
+    /// GENERATE PASS
+    ///
+    on<PassGeneratorBlocEvent_generatePass>((event, emit) {
+      final generatedPass = _generatePassword();
+      logger.d(generatedPass);
+      final passStrength = passGeneratorRepo.estimateTimeToCrack(
+        passLength: generatedPass.length,
+        alphabetSize: 3,
+      );
+      final currentState = state;
+      if (currentState is PassGeneratorBlocState_state) {
+        emit(currentState.copyWith(generatedPass: generatedPass , passwordStrength: passStrength));
       }
     });
   }
@@ -261,6 +308,23 @@ class PassGeneratorBloc
         add(PassGeneratorBlocEvent_tooglePassUpper());
         add(PassGeneratorBlocEvent_tooglePassDigit());
       }
+    }
+  }
+
+  String _generatePassword() {
+    final currentState = state;
+
+    if (currentState is PassGeneratorBlocState_state) {
+      final generatedPass = passGeneratorRepo.generatePassword(
+        length: currentState.length,
+        passDigits: currentState.passDigit,
+        passLower: currentState.passLower,
+        passUpper: currentState.passUpper,
+        passSafeSymbols: currentState.passSpecialSymbol,
+      );
+      return generatedPass;
+    } else {
+      return '';
     }
   }
 }

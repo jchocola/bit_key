@@ -1,4 +1,6 @@
 // Character set constants for password generation
+import 'package:bit_key/features/feature_generate_pass/data/model/password_strength.dart';
+
 const String passLower = 'abcdefghijklmnopqrstuvwxyz';
 const String passUpper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const String passDigits = '0123456789';
@@ -19,4 +21,6 @@ abstract class PassGeneratorRepo {
     bool passDigits = true,
     bool passSafeSymbols = true,
   });
+
+  PasswordStrength estimateTimeToCrack({required int passLength , required int alphabetSize});
 }

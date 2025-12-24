@@ -1,9 +1,11 @@
 import 'package:animate_gradient/animate_gradient.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
+import 'package:bit_key/core/di/di.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/core/theme/app_color.dart';
 import 'package:bit_key/core/theme/app_theme.dart';
+import 'package:bit_key/features/feature_generate_pass/domain/repositories/pass_generator_repo.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/bloc/pass_generator_bloc.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/generating_page.dart';
 import 'package:bit_key/features/feature_setting/presentation/setting_page.dart';
@@ -19,7 +21,9 @@ import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
 import 'package:logger/web.dart';
 
 final logger = Logger();
-void main() {
+Future<void> main() async {
+  await DI();
+
   runApp(const MyApp());
 }
 
@@ -32,7 +36,13 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: appTheme,
       home: MultiBlocProvider(
-        providers: [BlocProvider(create: (context) => PassGeneratorBloc())],
+        providers: [
+          BlocProvider(
+            create: (context) => PassGeneratorBloc(
+              passGeneratorRepo: getIt<PassGeneratorRepo>(),
+            ),
+          ),
+        ],
         child: MainPage(),
       ),
       // debugShowMaterialGrid: true,

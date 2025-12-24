@@ -1,8 +1,10 @@
 import 'package:bit_key/core/constants/app_constant.dart';
+import 'package:bit_key/features/feature_generate_pass/presentation/bloc/pass_generator_bloc.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/widgets/generated_password.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/widgets/pass_generator_parameters.dart';
 import 'package:bit_key/shared/widgets/big_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GeneratorPassword extends StatelessWidget {
   const GeneratorPassword({super.key});
@@ -14,9 +16,18 @@ class GeneratorPassword extends StatelessWidget {
         spacing: AppConstant.appPadding,
         children: [
           GeneratedPassword(),
-          BigButton(title: 'Copy',),
+          BigButton(title: 'Copy'),
+
+          BlocBuilder<PassGeneratorBloc, PassGeneratorBlocState>(
+            builder: (context, state) {
+              if (state is PassGeneratorBlocState_state) {
+                return Text(state.passwordStrength?.strength ?? '');
+              } else {
+                return CircleAvatar();
+              }
+            },
+          ),
           PassGeneratorParameters(),
-        
         ],
       ),
     );
