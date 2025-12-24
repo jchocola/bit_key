@@ -15,4 +15,11 @@ class AppIcon {
 
   static const IconData passwordIcon = LucideIcons.key;
   static const IconData userIcon = LucideIcons.user;
+
+  static const IconData loginIcon = LucideIcons.globe;
+  static const IconData identityIcon = LucideIcons.idCard;
+  static const IconData cardIcon = LucideIcons.idCard;
+
+  static const IconData folderIcon = LucideIcons.folder;
+  static const IconData deleteIcon = Icons.delete_outline_rounded;
 }

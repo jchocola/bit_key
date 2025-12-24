@@ -1,4 +1,5 @@
 import 'package:bit_key/core/constants/app_constant.dart';
+import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,7 @@ class BinWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Bin'),
-        CustomListile(),
+        CustomListile(icon: AppIcon.deleteIcon,),
        
       ],
     );

@@ -7,8 +7,10 @@ import 'package:bit_key/core/theme/app_theme.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/generating_page.dart';
 import 'package:bit_key/features/feature_setting/presentation/setting_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/my_vault_page.dart';
+import 'package:bit_key/features/feature_vault/presentation/widgets/menu.dart';
 import 'package:bit_key/features/feature_vault/presentation/widgets/vault_page_appbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_context_menu/flutter_context_menu.dart';
 import 'package:glassy_real_navbar/glassy_real_navbar.dart';
 import 'package:liquid_glass_renderer/experimental.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
@@ -63,25 +65,27 @@ class _MainPageState extends State<MainPage> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-      
-       resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: false,
         body: AppBg(
           child: Padding(
             padding: const EdgeInsets.all(AppConstant.appPadding),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
+             // mainAxisAlignment: MainAxisAlignment.end,
               children: [
-              
                 Expanded(
                   child: SafeArea(
                     child: PageView(
                       controller: _pageController,
                       onPageChanged: _changePage,
-                      children: [MyVaultPage(), GeneratingPage(), SettingPage()],
+                      children: [
+                        MyVaultPage(),
+                        GeneratingPage(),
+                        SettingPage(),
+                      ],
                     ),
                   ),
                 ),
-      
+
                 /// nav bar
                 SafeArea(
                   child: Row(
@@ -100,7 +104,7 @@ class _MainPageState extends State<MainPage> {
                           animationEffect: GlassAnimation.elasticRubber,
                           selectedItemColor: AppColor.primary,
                           unselectedItemColor: AppColor.secondary,
-      
+
                           items: [
                             GlassNavBarItem(
                               icon: AppIcon.vaultIcon,
@@ -117,7 +121,7 @@ class _MainPageState extends State<MainPage> {
                           ],
                         ),
                       ),
-      
+
                       LiquidGlassLayer(
                         // shape: LiquidRoundedSuperellipse(borderRadius: 20),
                         settings: LiquidGlassSettings(
@@ -133,7 +137,10 @@ class _MainPageState extends State<MainPage> {
                               width: 70,
                               child: Center(
                                 child: IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    final menu = getMenu(context);
+                                    showContextMenu(context, contextMenu: menu);
+                                  },
                                   icon: Icon(
                                     AppIcon.addIcon,
                                     color: AppColor.secondary.withOpacity(0.4),
