@@ -33,7 +33,8 @@ class PassGeneratorBlocEvent_removeNumberDigit extends PassGeneratorBlocEvent {}
 
 class PassGeneratorBlocEvent_addNumberDigit extends PassGeneratorBlocEvent {}
 
-class PassGeneratorBlocEvent_removeNumberSpecial extends PassGeneratorBlocEvent {}
+class PassGeneratorBlocEvent_removeNumberSpecial
+    extends PassGeneratorBlocEvent {}
 
 class PassGeneratorBlocEvent_addNumberSpecial extends PassGeneratorBlocEvent {}
 
@@ -123,6 +124,7 @@ class PassGeneratorBloc
         logger.i(event.value);
         emit(currentState.copyWith(length: event.value.toInt()));
       }
+      _checkParameter();
     });
 
     ///
@@ -134,6 +136,7 @@ class PassGeneratorBloc
         logger.i(!currentState.passUpper);
         emit(currentState.copyWith(passUpper: !currentState.passUpper));
       }
+      _checkParameter();
     });
 
     ///
@@ -145,6 +148,7 @@ class PassGeneratorBloc
         logger.i(!currentState.passLower);
         emit(currentState.copyWith(passLower: !currentState.passLower));
       }
+      _checkParameter();
     });
 
     ///
@@ -156,6 +160,7 @@ class PassGeneratorBloc
         logger.i(!currentState.passDigit);
         emit(currentState.copyWith(passDigit: !currentState.passDigit));
       }
+      _checkParameter();
     });
 
     ///
@@ -170,6 +175,8 @@ class PassGeneratorBloc
             passSpecialSymbol: !currentState.passSpecialSymbol,
           ),
         );
+
+        _checkParameter();
       }
     });
 
@@ -183,13 +190,12 @@ class PassGeneratorBloc
         if (currentState.minDigit - 1 <= 0) {
           return;
         } else {
-           emit(currentState.copyWith(minDigit: currentState.minDigit - 1));
+          emit(currentState.copyWith(minDigit: currentState.minDigit - 1));
         }
       }
     });
 
-
-     ///
+    ///
     /// ADD NUMBER DIGIT
     ///
     on<PassGeneratorBlocEvent_addNumberDigit>((event, emit) {
@@ -199,13 +205,12 @@ class PassGeneratorBloc
         if (currentState.minDigit + 1 > currentState.length) {
           return;
         } else {
-           emit(currentState.copyWith(minDigit: currentState.minDigit + 1));
+          emit(currentState.copyWith(minDigit: currentState.minDigit + 1));
         }
       }
     });
 
-
-       ///
+    ///
     /// REMOVE NUMBER SPECIAL
     ///
     on<PassGeneratorBlocEvent_removeNumberSpecial>((event, emit) {
@@ -215,13 +220,16 @@ class PassGeneratorBloc
         if (currentState.minSpecialSymbol - 1 <= 0) {
           return;
         } else {
-           emit(currentState.copyWith(minSpecialSymbol: currentState.minSpecialSymbol - 1));
+          emit(
+            currentState.copyWith(
+              minSpecialSymbol: currentState.minSpecialSymbol - 1,
+            ),
+          );
         }
       }
     });
 
-
-      ///
+    ///
     /// ADD NUMBER SPECIAL
     ///
     on<PassGeneratorBlocEvent_addNumberSpecial>((event, emit) {
@@ -231,9 +239,28 @@ class PassGeneratorBloc
         if (currentState.minSpecialSymbol + 1 > currentState.length) {
           return;
         } else {
-           emit(currentState.copyWith(minSpecialSymbol: currentState.minSpecialSymbol + 1));
+          emit(
+            currentState.copyWith(
+              minSpecialSymbol: currentState.minSpecialSymbol + 1,
+            ),
+          );
         }
       }
     });
+  }
+
+  void _checkParameter() {
+    final currentState = state;
+
+    if (currentState is PassGeneratorBlocState_state) {
+      if (!currentState.passUpper &&
+          !currentState.passLower &&
+          !currentState.passDigit &&
+          !currentState.passSpecialSymbol) {
+        add(PassGeneratorBlocEvent_tooglePassLower());
+        add(PassGeneratorBlocEvent_tooglePassUpper());
+        add(PassGeneratorBlocEvent_tooglePassDigit());
+      }
+    }
   }
 }
