@@ -4,17 +4,21 @@ import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/core/theme/app_color.dart';
 import 'package:bit_key/core/theme/app_theme.dart';
+import 'package:bit_key/features/feature_generate_pass/presentation/bloc/pass_generator_bloc.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/generating_page.dart';
 import 'package:bit_key/features/feature_setting/presentation/setting_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/my_vault_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/widgets/menu.dart';
 import 'package:bit_key/features/feature_vault/presentation/widgets/vault_page_appbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_context_menu/flutter_context_menu.dart';
 import 'package:glassy_real_navbar/glassy_real_navbar.dart';
 import 'package:liquid_glass_renderer/experimental.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
+import 'package:logger/web.dart';
 
+final logger = Logger();
 void main() {
   runApp(const MyApp());
 }
@@ -27,7 +31,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: appTheme,
-      home: MainPage(),
+      home: MultiBlocProvider(
+        providers: [BlocProvider(create: (context) => PassGeneratorBloc())],
+        child: MainPage(),
+      ),
       // debugShowMaterialGrid: true,
       //  showPerformanceOverlay: true,
       //showSemanticsDebugger: true,
@@ -70,7 +77,7 @@ class _MainPageState extends State<MainPage> {
           child: Padding(
             padding: const EdgeInsets.all(AppConstant.appPadding),
             child: Column(
-             // mainAxisAlignment: MainAxisAlignment.end,
+              // mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Expanded(
                   child: SafeArea(
