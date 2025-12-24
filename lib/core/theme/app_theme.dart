@@ -8,6 +8,7 @@ final appTheme = ThemeData(
   textTheme: TextTheme(
 titleMedium: appTextStyle.copyWith(color: AppColor.secondary),
 
+    bodySmall: appTextStyle.copyWith(color: AppColor.secondary.withOpacity(0.5)),
     bodyMedium: appTextStyle.copyWith(color: AppColor.secondary),
     bodyLarge: appTextStyle.copyWith(color: AppColor.secondary),
   ),
@@ -39,5 +40,10 @@ titleMedium: appTextStyle.copyWith(color: AppColor.secondary),
     activeTrackColor: AppColor.primary,
     thumbColor: AppColor.primary,
     inactiveTrackColor: AppColor.secondary.withOpacity(0.1)
+  ),
+
+  dialogTheme: DialogThemeData(
+    backgroundColor: AppColor.secondary.withOpacity(0.1),
+    titleTextStyle: appTextStyle.copyWith(color: AppColor.secondary),
   )
 );

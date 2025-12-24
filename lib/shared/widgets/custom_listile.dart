@@ -9,13 +9,15 @@ class CustomListile extends StatelessWidget {
     super.key,
     this.icon = Icons.abc,
     this.title = 'Title',
-    this.subTitle = '',
+    this.subTitle,
     this.trailingValue = '',
+    this.onTap
   });
   final IconData icon;
   final String title;
-  final String subTitle;
+  final String? subTitle;
   final String trailingValue;
+  final void Function()? onTap;
   @override
   Widget build(BuildContext context) {
     return FakeGlass(
@@ -24,9 +26,10 @@ class CustomListile extends StatelessWidget {
       ),
       shape: LiquidRoundedSuperellipse(borderRadius: AppConstant.appBorder),
       child: ListTile(
+        onTap: onTap,
         leading: Icon(icon),
         title: Text(title),
-       // subtitle: Text(subTitle),
+        subtitle: subTitle != null ?  Text(subTitle ?? '') : null ,
         trailing: Text(trailingValue),
       ),
     );

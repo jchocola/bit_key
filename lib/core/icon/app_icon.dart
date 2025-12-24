@@ -22,4 +22,13 @@ class AppIcon {
 
   static const IconData folderIcon = LucideIcons.folder;
   static const IconData deleteIcon = Icons.delete_outline_rounded;
+
+  static const IconData cancelIcon = Icons.cancel_outlined;
+  static const IconData arrowBackIcon = Icons.arrow_back_ios_new_rounded;
+  static const IconData moreIcon = Icons.more_vert_outlined;
+
+  static const IconData copyIcon = Icons.copy_rounded;
+
+  static const IconData openEyeIcon = LucideIcons.eye;
+  static const IconData closedEyeIcon = LucideIcons.eyeClosed;
 }

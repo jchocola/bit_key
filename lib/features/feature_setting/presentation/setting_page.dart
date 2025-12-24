@@ -15,11 +15,11 @@ class SettingPage extends StatelessWidget {
         children: [
           SettingPageAppbar(),
         
-          CustomListile(),
-           CustomListile(),
-            CustomListile(),
-             CustomListile(),
-              CustomListile(),
+          CustomListile(title: 'Account security',),
+           CustomListile(title: 'Import/Export data',),
+            CustomListile(title: 'About',),
+            //  CustomListile(),
+            //   CustomListile(),
         ],
       ),
     );
