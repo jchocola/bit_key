@@ -26,9 +26,12 @@ class PassGeneratorRepoImpl implements PassGeneratorRepo {
     bool passUpper = true,
     bool passDigits = true,
     bool passSafeSymbols = true,
+    int maxDigit = 0,
+    int maxSpecial = 0,
   }) {
     String generatedStr = '';
     allowedValue = [];
+
 
     if (passLower) {
       allowedValue.addAll(_passLower);
@@ -46,7 +49,11 @@ class PassGeneratorRepoImpl implements PassGeneratorRepo {
     }
 
     for (int i = 0; i < length; i++) {
+
+
+      // TODO : LOGIC TO MAX NUMBER / MAX SPECIAL
       final randomChar = allowedValue[Random().nextInt(allowedValue.length)];
+
       generatedStr += randomChar;
     }
 

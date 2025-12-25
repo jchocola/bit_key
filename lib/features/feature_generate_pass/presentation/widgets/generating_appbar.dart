@@ -31,7 +31,7 @@ class GeneratingPageAppbar extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: AppConstant.appPadding,
                   children: [
-                    Text('Generator'),
+                    Text(state.pageviewIndex == 0 ? 'Generator Password' : 'Generator Profile'),
                     GlassNavBar(
                       height: 40,
                       // preset: GlassNavBarPreset.gaming,

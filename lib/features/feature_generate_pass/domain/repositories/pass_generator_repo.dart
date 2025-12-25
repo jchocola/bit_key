@@ -20,6 +20,8 @@ abstract class PassGeneratorRepo {
     bool passUpper = true,
     bool passDigits = true,
     bool passSafeSymbols = true,
+    int maxDigit =0,
+    int maxSpecial = 0
   });
 
   PasswordStrength estimateTimeToCrack({required int passLength , required int alphabetSize});

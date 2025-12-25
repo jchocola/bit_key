@@ -97,32 +97,32 @@ class PassGeneratorParameters extends StatelessWidget {
                 const Divider(),
 
                 ListTile(
-                  leading: Text('Minimum numbers'),
+                  leading: Text('Maximum numbers'),
                   trailing: _qtyWidget(
-                    value: state.minDigit.toString(),
+                    value: state.maxDigit.toString(),
                     onRemove: () => passGeneratorBloc_read.add(
                       PassGeneratorBlocEvent_removeNumberDigit(),
                     ),
 
-                    onAdd: () => passGeneratorBloc_read.add(PassGeneratorBlocEvent_addNumberDigit()),
+                    onAdd: () => passGeneratorBloc_read.add(
+                      PassGeneratorBlocEvent_addNumberDigit(),
+                    ),
                   ),
                 ),
 
                 const Divider(),
 
                 ListTile(
-                  leading: Text('Minimum special'),
+                  leading: Text('Maximum special'),
                   trailing: _qtyWidget(
-                    value: state.minSpecialSymbol.toString(),
+                    value: state.maxSpecialSymbol.toString(),
 
-                     onRemove: () => passGeneratorBloc_read.add(
+                    onRemove: () => passGeneratorBloc_read.add(
                       PassGeneratorBlocEvent_removeNumberSpecial(),
                     ),
                     onAdd: () => passGeneratorBloc_read.add(
                       PassGeneratorBlocEvent_addNumberSpecial(),
                     ),
-
-
                   ),
                 ),
               ],

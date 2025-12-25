@@ -68,8 +68,8 @@ class PassGeneratorBlocState_state extends PassGeneratorBlocState {
   final bool passLower;
   final bool passDigit;
   final bool passSpecialSymbol;
-  final int minDigit;
-  final int minSpecialSymbol;
+  final int maxDigit;
+  final int maxSpecialSymbol;
   final String generatedPass;
   final PasswordStrength? passwordStrength;
 
@@ -81,8 +81,8 @@ class PassGeneratorBlocState_state extends PassGeneratorBlocState {
     required this.passLower,
     required this.passDigit,
     required this.passSpecialSymbol,
-    required this.minDigit,
-    required this.minSpecialSymbol,
+    required this.maxDigit,
+    required this.maxSpecialSymbol,
     required this.generatedPass,
     this.passwordStrength,
     required this.pageviewIndex,
@@ -96,8 +96,8 @@ class PassGeneratorBlocState_state extends PassGeneratorBlocState {
         passLower: true,
         passDigit: true,
         passSpecialSymbol: false,
-        minDigit: 0,
-        minSpecialSymbol: 0,
+        maxDigit: 0,
+        maxSpecialSymbol: 0,
         generatedPass: '',
       );
 
@@ -108,8 +108,8 @@ class PassGeneratorBlocState_state extends PassGeneratorBlocState {
     passLower,
     passDigit,
     passSpecialSymbol,
-    minDigit,
-    minSpecialSymbol,
+    maxDigit,
+    maxSpecialSymbol,
     generatedPass,
     passwordStrength,
     pageviewIndex,
@@ -134,8 +134,8 @@ class PassGeneratorBlocState_state extends PassGeneratorBlocState {
       passLower: passLower ?? this.passLower,
       passDigit: passDigit ?? this.passDigit,
       passSpecialSymbol: passSpecialSymbol ?? this.passSpecialSymbol,
-      minDigit: minDigit ?? this.minDigit,
-      minSpecialSymbol: minSpecialSymbol ?? this.minSpecialSymbol,
+      maxDigit: minDigit ?? this.maxDigit,
+      maxSpecialSymbol: minSpecialSymbol ?? this.maxSpecialSymbol,
       generatedPass: generatedPass ?? this.generatedPass,
       passwordStrength: passwordStrength ?? this.passwordStrength,
     );
@@ -227,11 +227,11 @@ class PassGeneratorBloc
     on<PassGeneratorBlocEvent_removeNumberDigit>((event, emit) {
       final currentState = state;
       if (currentState is PassGeneratorBlocState_state) {
-        logger.i(currentState.minDigit);
-        if (currentState.minDigit - 1 < 0) {
+        logger.i(currentState.maxDigit);
+        if (currentState.maxDigit - 1 < 0) {
           return;
         } else {
-          emit(currentState.copyWith(minDigit: currentState.minDigit - 1));
+          emit(currentState.copyWith(minDigit: currentState.maxDigit - 1));
           add(PassGeneratorBlocEvent_generatePass());
         }
       }
@@ -243,11 +243,11 @@ class PassGeneratorBloc
     on<PassGeneratorBlocEvent_addNumberDigit>((event, emit) {
       final currentState = state;
       if (currentState is PassGeneratorBlocState_state) {
-        logger.i(currentState.minDigit);
-        if (currentState.minDigit + 1 > currentState.length) {
+        logger.i(currentState.maxDigit);
+        if (currentState.maxDigit + 1 > currentState.length) {
           return;
         } else {
-          emit(currentState.copyWith(minDigit: currentState.minDigit + 1));
+          emit(currentState.copyWith(minDigit: currentState.maxDigit + 1));
           add(PassGeneratorBlocEvent_generatePass());
         }
       }
@@ -259,13 +259,13 @@ class PassGeneratorBloc
     on<PassGeneratorBlocEvent_removeNumberSpecial>((event, emit) {
       final currentState = state;
       if (currentState is PassGeneratorBlocState_state) {
-        logger.i(currentState.minSpecialSymbol);
-        if (currentState.minSpecialSymbol - 1 < 0) {
+        logger.i(currentState.maxSpecialSymbol);
+        if (currentState.maxSpecialSymbol - 1 < 0) {
           return;
         } else {
           emit(
             currentState.copyWith(
-              minSpecialSymbol: currentState.minSpecialSymbol - 1,
+              minSpecialSymbol: currentState.maxSpecialSymbol - 1,
             ),
           );
 
@@ -280,13 +280,13 @@ class PassGeneratorBloc
     on<PassGeneratorBlocEvent_addNumberSpecial>((event, emit) {
       final currentState = state;
       if (currentState is PassGeneratorBlocState_state) {
-        logger.i(currentState.minSpecialSymbol);
-        if (currentState.minSpecialSymbol + 1 > currentState.length) {
+        logger.i(currentState.maxSpecialSymbol);
+        if (currentState.maxSpecialSymbol + 1 > currentState.length) {
           return;
         } else {
           emit(
             currentState.copyWith(
-              minSpecialSymbol: currentState.minSpecialSymbol + 1,
+              minSpecialSymbol: currentState.maxSpecialSymbol + 1,
             ),
           );
 
@@ -353,6 +353,8 @@ class PassGeneratorBloc
         passLower: currentState.passLower,
         passUpper: currentState.passUpper,
         passSafeSymbols: currentState.passSpecialSymbol,
+        maxDigit: currentState.maxDigit,
+        maxSpecial: currentState.maxSpecialSymbol
       );
       return generatedPass;
     } else {
