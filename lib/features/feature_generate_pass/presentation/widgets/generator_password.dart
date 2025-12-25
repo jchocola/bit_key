@@ -4,6 +4,7 @@ import 'package:bit_key/features/feature_generate_pass/presentation/widgets/gene
 import 'package:bit_key/features/feature_generate_pass/presentation/widgets/pass_generator_parameters.dart';
 import 'package:bit_key/shared/widgets/big_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GeneratorPassword extends StatelessWidget {
@@ -11,22 +12,31 @@ class GeneratorPassword extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentState = context.watch<PassGeneratorBloc>().state;
     return SingleChildScrollView(
       child: Column(
         spacing: AppConstant.appPadding,
         children: [
           GeneratedPassword(),
-          BigButton(title: 'Copy'),
-
-          BlocBuilder<PassGeneratorBloc, PassGeneratorBlocState>(
-            builder: (context, state) {
-              if (state is PassGeneratorBlocState_state) {
-                return Text(state.passwordStrength?.strength ?? '');
-              } else {
-                return CircleAvatar();
+          BigButton(
+            title: 'Copy',
+            onTap: () {
+              if (currentState is PassGeneratorBlocState_state) {
+                Clipboard.setData(ClipboardData(text: currentState.generatedPass));
               }
+              
             },
           ),
+
+          // BlocBuilder<PassGeneratorBloc, PassGeneratorBlocState>(
+          //   builder: (context, state) {
+          //     if (state is PassGeneratorBlocState_state) {
+          //       return Text(state.passwordStrength?.strength ?? '');
+          //     } else {
+          //       return CircleAvatar();
+          //     }
+          //   },
+          // ),
           PassGeneratorParameters(),
         ],
       ),

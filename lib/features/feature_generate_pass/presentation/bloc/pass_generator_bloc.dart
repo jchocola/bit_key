@@ -44,6 +44,15 @@ class PassGeneratorBlocEvent_addNumberSpecial extends PassGeneratorBlocEvent {}
 
 class PassGeneratorBlocEvent_generatePass extends PassGeneratorBlocEvent {}
 
+class PassGeneratorBlocEvent_changePageViewIndex
+    extends PassGeneratorBlocEvent {
+  final int index;
+  PassGeneratorBlocEvent_changePageViewIndex({required this.index});
+
+  @override
+  List<Object?> get props => [index];
+}
+
 ///
 /// STATE
 ///
@@ -64,6 +73,8 @@ class PassGeneratorBlocState_state extends PassGeneratorBlocState {
   final String generatedPass;
   final PasswordStrength? passwordStrength;
 
+  final int pageviewIndex;
+
   PassGeneratorBlocState_state({
     required this.length,
     required this.passUpper,
@@ -74,10 +85,12 @@ class PassGeneratorBlocState_state extends PassGeneratorBlocState {
     required this.minSpecialSymbol,
     required this.generatedPass,
     this.passwordStrength,
+    required this.pageviewIndex,
   });
 
   factory PassGeneratorBlocState_state.initial() =>
       PassGeneratorBlocState_state(
+        pageviewIndex: 0,
         length: 10,
         passUpper: true,
         passLower: true,
@@ -99,6 +112,7 @@ class PassGeneratorBlocState_state extends PassGeneratorBlocState {
     minSpecialSymbol,
     generatedPass,
     passwordStrength,
+    pageviewIndex,
   ];
 
   PassGeneratorBlocState_state copyWith({
@@ -111,8 +125,10 @@ class PassGeneratorBlocState_state extends PassGeneratorBlocState {
     int? minSpecialSymbol,
     String? generatedPass,
     PasswordStrength? passwordStrength,
+    int? pageviewIndex,
   }) {
     return PassGeneratorBlocState_state(
+      pageviewIndex: pageviewIndex ?? this.pageviewIndex,
       length: length ?? this.length,
       passUpper: passUpper ?? this.passUpper,
       passLower: passLower ?? this.passLower,
@@ -291,7 +307,23 @@ class PassGeneratorBloc
       );
       final currentState = state;
       if (currentState is PassGeneratorBlocState_state) {
-        emit(currentState.copyWith(generatedPass: generatedPass , passwordStrength: passStrength));
+        emit(
+          currentState.copyWith(
+            generatedPass: generatedPass,
+            passwordStrength: passStrength,
+          ),
+        );
+      }
+    });
+
+    ///
+    /// CHANGE PAGE VIEW INDEX
+    ///
+    on<PassGeneratorBlocEvent_changePageViewIndex>((event, emit) {
+      final currentState = state;
+      if (currentState is PassGeneratorBlocState_state) {
+        logger.i('Pageview index : ${event.index}');
+        emit(currentState.copyWith(pageviewIndex: event.index));
       }
     });
   }
