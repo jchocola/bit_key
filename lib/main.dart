@@ -6,6 +6,7 @@ import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/core/theme/app_color.dart';
 import 'package:bit_key/core/theme/app_theme.dart';
 import 'package:bit_key/features/feature_generate_pass/domain/repositories/pass_generator_repo.dart';
+import 'package:bit_key/features/feature_generate_pass/presentation/bloc/name_generator_bloc.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/bloc/pass_generator_bloc.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/generating_page.dart';
 import 'package:bit_key/features/feature_setting/presentation/setting_page.dart';
@@ -42,6 +43,8 @@ class MyApp extends StatelessWidget {
               passGeneratorRepo: getIt<PassGeneratorRepo>(),
             ),
           ),
+
+          BlocProvider(create: (context)=> NameGeneratorBloc())
         ],
         child: MainPage(),
       ),

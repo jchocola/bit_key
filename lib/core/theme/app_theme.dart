@@ -45,5 +45,13 @@ titleMedium: appTextStyle.copyWith(color: AppColor.secondary),
   dialogTheme: DialogThemeData(
     backgroundColor: AppColor.secondary.withOpacity(0.1),
     titleTextStyle: appTextStyle.copyWith(color: AppColor.secondary),
-  )
+  ),
+
+  popupMenuTheme: PopupMenuThemeData(
+    color: AppColor.primary.withOpacity(0.1),
+    textStyle: appTextStyle.copyWith(color: AppColor.secondary),
+  labelTextStyle: WidgetStatePropertyAll( appTextStyle.copyWith(color: AppColor.secondary),)
+  ),
+
+
 );
