@@ -23,34 +23,59 @@ class TypesWidget extends StatelessWidget {
           icon: AppIcon.loginIcon,
           title: 'Login',
           onTap: () async {
-            await FamilyModalSheet.show<void>(
+            showModalBottomSheet(
               context: context,
-              contentBackgroundColor: AppColor.transparent,
-              builder: (ctx) {
-                return LoginsPage();
+              isScrollControlled: true,
+              builder: (modalContext) {
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height * AppConstant.modalPageHeight,
+                  child: LoginsPage());
               },
             );
+
+            // await FamilyModalSheet.show<void>(
+            //   context: context,
+            //   contentBackgroundColor: AppColor.transparent,
+            //   builder: (ctx) {
+            //     return LoginsPage();
+            //   },
+            // );
           },
         ),
-        CustomListile(icon: AppIcon.cardIcon, title: 'Card' , onTap: () async{
-           await FamilyModalSheet.show<void>(
+        CustomListile(
+          icon: AppIcon.cardIcon,
+          title: 'Card',
+          onTap: () async {
+
+             showModalBottomSheet(
               context: context,
-              contentBackgroundColor: AppColor.transparent,
-              builder: (ctx) {
-                return CardsPage();
+              isScrollControlled: true,
+              builder: (modalContext) {
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height * AppConstant.modalPageHeight,
+                  child: CardsPage());
               },
             );
-        },),
-        CustomListile(icon: AppIcon.identityIcon, title: 'Identity',
-        onTap: () async{
-            await FamilyModalSheet.show<void>(
+
+          },
+        ),
+        CustomListile(
+          icon: AppIcon.identityIcon,
+          title: 'Identity',
+          onTap: () async {
+
+
+             showModalBottomSheet(
               context: context,
-              contentBackgroundColor: AppColor.transparent,
-              builder: (ctx) {
-                return IdentifyPage();
+              isScrollControlled: true,
+              builder: (modalContext) {
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height * AppConstant.modalPageHeight,
+                  child: IdentifyPage());
               },
             );
-        },
+            
+          },
         ),
       ],
     );

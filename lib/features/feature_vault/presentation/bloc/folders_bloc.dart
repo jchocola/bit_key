@@ -1,10 +1,12 @@
 import 'dart:developer';
 
-import 'package:bit_key/main.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
+import 'package:bit_key/main.dart';
 
 ///
 /// EVENT
@@ -24,6 +26,14 @@ class FoldersBlocEvent_createFolder extends FoldersBlocEvent {
   List<Object?> get props => [folderName];
 }
 
+class FolderBlocEvent_selectFolder extends FoldersBlocEvent {
+  final String folderName;
+  FolderBlocEvent_selectFolder({required this.folderName});
+
+  @override
+  List<Object?> get props => [folderName];
+}
+
 ///
 /// STATE
 ///
@@ -38,9 +48,25 @@ class FoldersBlocLoading extends FoldersBlocState {}
 
 class FoldersBlocLoaded extends FoldersBlocState {
   final List<String> folders;
-  FoldersBlocLoaded({required this.folders});
+
+  final String? selectedFolder;
+
+  FoldersBlocLoaded({required this.folders, this.selectedFolder});
+
   @override
-  List<Object?> get props => [folders];
+  List<Object?> get props => [folders, selectedFolder];
+
+
+
+  FoldersBlocLoaded copyWith({
+    List<String>? folders,
+    String? selectedFolder,
+  }) {
+    return FoldersBlocLoaded(
+      folders: folders ?? this.folders,
+      selectedFolder: selectedFolder?? this.selectedFolder,
+    );
+  }
 }
 
 class FoldersBlocError extends FoldersBlocState {}
@@ -84,6 +110,18 @@ class FoldersBloc extends Bloc<FoldersBlocEvent, FoldersBlocState> {
       } catch (e) {
         logger.e(e);
         emit(FoldersBlocError());
+      }
+    });
+
+    ///
+    /// SELECT FOLDER
+    ///
+    on<FolderBlocEvent_selectFolder>((event, emit) {
+      logger.d(event.folderName);
+
+      final currentState = state;
+      if (currentState is FoldersBlocLoaded) {
+        emit(currentState.copyWith(selectedFolder: event.folderName));
       }
     });
   }

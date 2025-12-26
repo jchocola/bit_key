@@ -27,9 +27,12 @@ class LoginsPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Logins', style: theme.textTheme.titleMedium),
-                  IconButton(onPressed: () {
-                    FamilyModalSheet.of(context).popPage();
-                  }, icon: Icon(AppIcon.cancelIcon)),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    icon: Icon(AppIcon.cancelIcon),
+                  ),
                 ],
               ),
               SearchTextfiled(),
@@ -41,7 +44,18 @@ class LoginsPage extends StatelessWidget {
                     children: [
                       CustomListile(
                         onTap: () {
-                          FamilyModalSheet.of(context).pushPage(ViewInfoPage());
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (modalContext) {
+                              return SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height *
+                                    AppConstant.modalPageHeight,
+                                child: ViewInfoPage(),
+                              );
+                            },
+                          );
                         },
                         title: 'github',
                         subTitle: 'sangsangden@gmail',

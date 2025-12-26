@@ -31,7 +31,7 @@ class ViewInfoPage extends StatelessWidget {
                 children: [
                   IconButton(
                     onPressed: () {
-                      FamilyModalSheet.of(context).popPage();
+                      Navigator.pop(context);
                     },
                     icon: Icon(AppIcon.arrowBackIcon),
                   ),

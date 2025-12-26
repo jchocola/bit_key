@@ -5,4 +5,6 @@ class AppConstant {
 
   static const double minPassLength = 2;
   static const double maxPassLength = 64;
+
+  static const double modalPageHeight = 0.85;
 }
