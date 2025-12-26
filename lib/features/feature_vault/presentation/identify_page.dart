@@ -26,9 +26,12 @@ class IdentifyPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Identifys', style: theme.textTheme.titleMedium),
-                  IconButton(onPressed: () {
-                    FamilyModalSheet.of(context).popPage();
-                  }, icon: Icon(AppIcon.cancelIcon)),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(AppIcon.cancelIcon),
+                  ),
                 ],
               ),
               SearchTextfiled(),

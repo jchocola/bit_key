@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 class Card extends Equatable {
   final String id;
   final String itemName;
+  final bool? isHide;
   final String? folderName;
   final String? cardHolderName;
   final String? number;
@@ -20,6 +21,7 @@ class Card extends Equatable {
     this.expMonth,
     this.expYear,
     this.secCode,
+    this.isHide,
   });
 
   @override
@@ -33,5 +35,6 @@ class Card extends Equatable {
     expMonth,
     expYear,
     secCode,
+    isHide,
   ];
 }

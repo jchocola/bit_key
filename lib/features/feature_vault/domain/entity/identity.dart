@@ -5,6 +5,7 @@ class Identity extends Equatable {
   final String id;
   final String itemName;
   final String? folderName;
+  final bool? isHide; // bin
 
   //personal details
   final String? firstName;
@@ -49,6 +50,7 @@ class Identity extends Equatable {
     this.cityTown,
     this.country,
     this.postcode,
+    this.isHide
   });
 
   @override
@@ -72,5 +74,6 @@ class Identity extends Equatable {
     cityTown,
     country,
     postcode,
+    isHide
   ];
 }

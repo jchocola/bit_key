@@ -14,7 +14,10 @@ import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dar
 import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/logins_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/my_vault_page.dart';
+import 'package:bit_key/features/feature_vault/presentation/page/creating_card/creating_card_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_folder/creating_folder_page.dart';
+import 'package:bit_key/features/feature_vault/presentation/page/creating_identity/creating_identity_page.dart';
+import 'package:bit_key/features/feature_vault/presentation/page/creating_login/creating_login_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/widgets/vault_page_appbar.dart';
 import 'package:family_bottom_sheet/family_bottom_sheet.dart';
 import 'package:flutter/material.dart';
@@ -96,13 +99,70 @@ class _MainPageState extends State<MainPage> {
   void onCreateFolderTapped(BuildContext parentContext) async {
     showModalBottomSheet(
       context: parentContext,
-     // showDragHandle: true,
+      // showDragHandle: true,
       useRootNavigator: true,
       //isScrollControlled: true,
       builder: (modalContext) {
         return BlocProvider.value(
           value: BlocProvider.of<FoldersBloc>(parentContext),
           child: CreatingFolderPage(),
+        );
+      },
+    );
+  }
+
+  void onCreateLoginTapped(BuildContext parentContext) async {
+    showModalBottomSheet(
+      context: parentContext,
+      // showDragHandle: true,
+      useRootNavigator: true,
+      isScrollControlled: true,
+      builder: (modalContext) {
+        return SizedBox(
+          height:
+              MediaQuery.of(context).size.height * AppConstant.modalPageHeight,
+          child: BlocProvider.value(
+            value: BlocProvider.of<FoldersBloc>(parentContext),
+            child: CreatingLoginPage(),
+          ),
+        );
+      },
+    );
+  }
+
+  void onCreateCardTapped(BuildContext parentContext) async {
+    showModalBottomSheet(
+      context: parentContext,
+      // showDragHandle: true,
+      useRootNavigator: true,
+      isScrollControlled: true,
+      builder: (modalContext) {
+        return SizedBox(
+          height:
+              MediaQuery.of(context).size.height * AppConstant.modalPageHeight,
+          child: BlocProvider.value(
+            value: BlocProvider.of<FoldersBloc>(parentContext),
+            child: CreatingCardPage(),
+          ),
+        );
+      },
+    );
+  }
+
+  void onCreateIdentityTapped(BuildContext parentContext) async {
+    showModalBottomSheet(
+      context: parentContext,
+      // showDragHandle: true,
+      useRootNavigator: true,
+      isScrollControlled: true,
+      builder: (modalContext) {
+        return SizedBox(
+          height:
+              MediaQuery.of(context).size.height * AppConstant.modalPageHeight,
+          child: BlocProvider.value(
+            value: BlocProvider.of<FoldersBloc>(parentContext),
+            child: CreatingIdentityPage(),
+          ),
         );
       },
     );
@@ -189,9 +249,24 @@ class _MainPageState extends State<MainPage> {
                                   child: Icon(AppIcon.addIcon),
                                   itemBuilder: (context) {
                                     return [
-                                      PopupMenuItem(child: Text('Login')),
-                                      PopupMenuItem(child: Text('Card')),
-                                      PopupMenuItem(child: Text('Identity')),
+                                      PopupMenuItem(
+                                        child: Text('Login'),
+                                        onTap: () {
+                                          onCreateLoginTapped(context);
+                                        },
+                                      ),
+                                      PopupMenuItem(
+                                        child: Text('Card'),
+                                        onTap: () {
+                                          onCreateCardTapped(context);
+                                        },
+                                      ),
+                                      PopupMenuItem(
+                                        child: Text('Identity'),
+                                        onTap: () {
+                                          onCreateIdentityTapped(context);
+                                        },
+                                      ),
                                       PopupMenuItem(
                                         onTap: () {
                                           onCreateFolderTapped(context);

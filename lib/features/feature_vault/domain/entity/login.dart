@@ -7,6 +7,7 @@ class Login extends Equatable {
   final String? login;
   final String? password;
   final String? url;
+  final bool? isHide; // bin 
   Login({
     required this.id,
     required this.itemName,
@@ -14,8 +15,9 @@ class Login extends Equatable {
     this.login,
     this.password,
     this.url,
+    this.isHide
   });
 
   @override
-  List<Object?> get props => [id, itemName, folderName, login, password, url];
+  List<Object?> get props => [id, itemName, folderName, login, password, url, isHide];
 }
