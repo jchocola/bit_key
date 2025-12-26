@@ -11,11 +11,9 @@ import 'package:bit_key/features/feature_generate_pass/presentation/bloc/pass_ge
 import 'package:bit_key/features/feature_generate_pass/presentation/generating_page.dart';
 import 'package:bit_key/features/feature_setting/presentation/setting_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/my_vault_page.dart';
-import 'package:bit_key/features/feature_vault/presentation/widgets/menu.dart';
 import 'package:bit_key/features/feature_vault/presentation/widgets/vault_page_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_context_menu/flutter_context_menu.dart';
 import 'package:glassy_real_navbar/glassy_real_navbar.dart';
 import 'package:liquid_glass_renderer/experimental.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
@@ -43,9 +41,10 @@ class MyApp extends StatelessWidget {
                 PassGeneratorBloc(passGeneratorRepo: getIt<GeneratorRepo>()),
           ),
 
-          BlocProvider(create: (context) => NameGeneratorBloc(
-            generatorRepo: getIt<GeneratorRepo>(),
-          )),
+          BlocProvider(
+            create: (context) =>
+                NameGeneratorBloc(generatorRepo: getIt<GeneratorRepo>()),
+          ),
         ],
         child: MainPage(),
       ),
@@ -157,15 +156,16 @@ class _MainPageState extends State<MainPage> {
                               height: 70,
                               width: 70,
                               child: Center(
-                                child: IconButton(
-                                  onPressed: () {
-                                    final menu = getMenu(context);
-                                    showContextMenu(context, contextMenu: menu);
+                                child: PopupMenuButton(
+                                  child: Icon(AppIcon.addIcon),
+                                  itemBuilder: (context) {
+                                    return [
+                                      PopupMenuItem(child: Text('Login')),
+                                       PopupMenuItem(child: Text('Card')),
+                                        PopupMenuItem(child: Text('Identity')),
+                                         PopupMenuItem(child: Text('Folder')),
+                                    ];
                                   },
-                                  icon: Icon(
-                                    AppIcon.addIcon,
-                                    color: AppColor.secondary.withOpacity(0.4),
-                                  ),
                                 ),
                               ),
                             ),
