@@ -15,6 +15,10 @@ class FolderRepoImpl implements FolderRepository {
   @override
   Future<void> createNewFolder({required String folderName}) async {
     try {
+      if (folderName.isEmpty) {
+        throw AppException.item_name_cannot_be_empty;
+      }
+
       final currentList = await getAllFolder();
 
       if (currentList.contains(folderName)) {
@@ -40,7 +44,7 @@ class FolderRepoImpl implements FolderRepository {
         throw AppException.folder_not_exist;
       } else {
         currentList.remove(folderName);
-        await prefs.setStringList(FOLDER_KEY, currentList); 
+        await prefs.setStringList(FOLDER_KEY, currentList);
       }
     } catch (e) {
       logger.e(e);

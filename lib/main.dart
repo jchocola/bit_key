@@ -12,8 +12,11 @@ import 'package:bit_key/features/feature_generate_pass/presentation/generating_p
 import 'package:bit_key/features/feature_setting/presentation/setting_page.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/logins_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/my_vault_page.dart';
+import 'package:bit_key/features/feature_vault/presentation/page/creating_folder/creating_folder_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/widgets/vault_page_appbar.dart';
+import 'package:family_bottom_sheet/family_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glassy_real_navbar/glassy_real_navbar.dart';
@@ -90,6 +93,21 @@ class _MainPageState extends State<MainPage> {
     _pageController = PageController(initialPage: 0, keepPage: true);
   }
 
+  void onCreateFolderTapped(BuildContext parentContext) async {
+    showModalBottomSheet(
+      context: parentContext,
+     // showDragHandle: true,
+      useRootNavigator: true,
+      //isScrollControlled: true,
+      builder: (modalContext) {
+        return BlocProvider.value(
+          value: BlocProvider.of<FoldersBloc>(parentContext),
+          child: CreatingFolderPage(),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -135,7 +153,7 @@ class _MainPageState extends State<MainPage> {
                           animationEffect: GlassAnimation.elasticRubber,
                           selectedItemColor: AppColor.primary,
                           unselectedItemColor: AppColor.secondary,
-                
+
                           items: [
                             GlassNavBarItem(
                               icon: AppIcon.vaultIcon,
@@ -152,7 +170,7 @@ class _MainPageState extends State<MainPage> {
                           ],
                         ),
                       ),
-                
+
                       LiquidGlassLayer(
                         // shape: LiquidRoundedSuperellipse(borderRadius: 20),
                         settings: LiquidGlassSettings(
@@ -174,7 +192,12 @@ class _MainPageState extends State<MainPage> {
                                       PopupMenuItem(child: Text('Login')),
                                       PopupMenuItem(child: Text('Card')),
                                       PopupMenuItem(child: Text('Identity')),
-                                      PopupMenuItem(child: Text('Folder')),
+                                      PopupMenuItem(
+                                        onTap: () {
+                                          onCreateFolderTapped(context);
+                                        },
+                                        child: Text('Folder'),
+                                      ),
                                     ];
                                   },
                                 ),

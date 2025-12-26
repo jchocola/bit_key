@@ -54,4 +54,13 @@ titleMedium: appTextStyle.copyWith(color: AppColor.secondary),
   ),
 
 
+  textButtonTheme: TextButtonThemeData(
+    style: ButtonStyle(
+    
+      textStyle: WidgetStatePropertyAll(appTextStyle.copyWith(color: AppColor.secondary))
+    )
+  ),
+
+
+
 );

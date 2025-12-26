@@ -16,6 +16,14 @@ abstract class FoldersBlocEvent extends Equatable {
 
 class FoldersBlocEvent_loadFolders extends FoldersBlocEvent {}
 
+class FoldersBlocEvent_createFolder extends FoldersBlocEvent {
+  final String folderName;
+
+  FoldersBlocEvent_createFolder({required this.folderName});
+  @override
+  List<Object?> get props => [folderName];
+}
+
 ///
 /// STATE
 ///
@@ -37,6 +45,8 @@ class FoldersBlocLoaded extends FoldersBlocState {
 
 class FoldersBlocError extends FoldersBlocState {}
 
+class FoldersBlocSuccess extends FoldersBlocState {}
+
 ///
 /// BLOC
 ///
@@ -52,6 +62,25 @@ class FoldersBloc extends Bloc<FoldersBlocEvent, FoldersBlocState> {
         final folders = await folderRepository.getAllFolder();
         logger.i('Folders : ${folders.length}');
         emit(FoldersBlocLoaded(folders: folders));
+      } catch (e) {
+        logger.e(e);
+        emit(FoldersBlocError());
+      }
+    });
+
+    ///
+    /// CREATE FOLDER
+    ///
+    on<FoldersBlocEvent_createFolder>((event, emit) async {
+      logger.d('Create folder');
+      try {
+        await folderRepository
+            .createNewFolder(folderName: event.folderName)
+            .then((_) {
+              emit(FoldersBlocSuccess());
+            });
+
+        add(FoldersBlocEvent_loadFolders());
       } catch (e) {
         logger.e(e);
         emit(FoldersBlocError());

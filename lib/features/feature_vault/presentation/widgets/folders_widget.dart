@@ -19,7 +19,12 @@ class FoldersWidget extends StatelessWidget {
             return Column(
               spacing: AppConstant.appPadding,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [Text('Folders')],
+              children: [
+                Text('Folders'),
+                ...List.generate(state.folders.length, (index) {
+                  return CustomListile(title: state.folders[index], icon: AppIcon.folderIcon,);
+                }),
+              ],
             );
           }
         } else {
