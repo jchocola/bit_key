@@ -31,4 +31,8 @@ class AppIcon {
 
   static const IconData openEyeIcon = LucideIcons.eye;
   static const IconData closedEyeIcon = LucideIcons.eyeClosed;
+
+  static const IconData infoIcon = LucideIcons.info;
+  static const IconData languageIcon = LucideIcons.languages;
+  static const IconData securityIcon = LucideIcons.lock;
 }
