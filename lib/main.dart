@@ -5,7 +5,7 @@ import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/core/theme/app_color.dart';
 import 'package:bit_key/core/theme/app_theme.dart';
-import 'package:bit_key/features/feature_generate_pass/domain/repositories/pass_generator_repo.dart';
+import 'package:bit_key/features/feature_generate_pass/domain/repositories/generator_repo.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/bloc/name_generator_bloc.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/bloc/pass_generator_bloc.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/generating_page.dart';
@@ -39,12 +39,13 @@ class MyApp extends StatelessWidget {
       home: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => PassGeneratorBloc(
-              passGeneratorRepo: getIt<PassGeneratorRepo>(),
-            ),
+            create: (context) =>
+                PassGeneratorBloc(passGeneratorRepo: getIt<GeneratorRepo>()),
           ),
 
-          BlocProvider(create: (context)=> NameGeneratorBloc())
+          BlocProvider(create: (context) => NameGeneratorBloc(
+            generatorRepo: getIt<GeneratorRepo>(),
+          )),
         ],
         child: MainPage(),
       ),

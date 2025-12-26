@@ -1,4 +1,5 @@
 import 'package:bit_key/core/constants/app_constant.dart';
+import 'package:bit_key/features/feature_generate_pass/presentation/bloc/name_generator_bloc.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/bloc/pass_generator_bloc.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/widgets/generated_password.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/widgets/generated_user.dart';
@@ -14,7 +15,7 @@ class GeneratorUser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentState = context.watch<PassGeneratorBloc>().state;
+    final currentState = context.watch<NameGeneratorBloc>().state;
     return SingleChildScrollView(
       child: Column(
         spacing: AppConstant.appPadding,
@@ -23,8 +24,8 @@ class GeneratorUser extends StatelessWidget {
           BigButton(
             title: 'Copy',
             onTap: () {
-              if (currentState is PassGeneratorBlocState_state) {
-                Clipboard.setData(ClipboardData(text: currentState.generatedPass));
+              if (currentState is NameGeneratorBlocState_loaded) {
+                Clipboard.setData(ClipboardData(text: currentState.generatedName));
               }
               
             },

@@ -1,6 +1,6 @@
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
-import 'package:bit_key/features/feature_generate_pass/domain/repositories/pass_generator_repo.dart';
+import 'package:bit_key/features/feature_generate_pass/domain/repositories/generator_repo.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/bloc/name_generator_bloc.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/bloc/pass_generator_bloc.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +23,7 @@ class NameGeneratorParameters extends StatelessWidget {
             return Column(
               children: [
                 ListTile(
-                  leading: Text('Sex'),
+                  leading: Text(state.isMale ? 'Male' : 'Female'),
                   trailing: Switch.adaptive(
                     value: state.isMale,
                     onChanged: (val) {
@@ -41,9 +41,9 @@ class NameGeneratorParameters extends StatelessWidget {
                   trailing: Switch.adaptive(
                     value: state.firstName,
                     onChanged: (val) {
-                     context.read<NameGeneratorBloc>().add(
+                      context.read<NameGeneratorBloc>().add(
                         NameGeneratorBlocEvent_toogleFirstName(),
-                      ); 
+                      );
                     },
                   ),
                 ),
@@ -58,7 +58,7 @@ class NameGeneratorParameters extends StatelessWidget {
                     onChanged: (val) {
                       context.read<NameGeneratorBloc>().add(
                         NameGeneratorBlocEvent_toogleLastName(),
-                      ); 
+                      );
                     },
                   ),
                 ),
@@ -71,9 +71,9 @@ class NameGeneratorParameters extends StatelessWidget {
                   trailing: Switch.adaptive(
                     value: state.fullName,
                     onChanged: (val) {
-                     context.read<NameGeneratorBloc>().add(
+                      context.read<NameGeneratorBloc>().add(
                         NameGeneratorBlocEvent_toogleFullName(),
-                      ); 
+                      );
                     },
                   ),
                 ),
@@ -84,9 +84,17 @@ class NameGeneratorParameters extends StatelessWidget {
                   leading: Text('Zone'),
 
                   trailing: PopupMenuButton(
+                    child: Text(state.zone.id),
                     itemBuilder: (context) {
                       return List.generate(Zone.all.length, (index) {
-                        return PopupMenuItem(child: Text(Zone.all[index].id));
+                        return PopupMenuItem(
+                          onTap: () => context.read<NameGeneratorBloc>().add(
+                            NameGeneratorBlocEvent_setZone(
+                              zone: Zone.all[index],
+                            ),
+                          ),
+                          child: Text(Zone.all[index].id),
+                        );
                       });
                     },
                   ),

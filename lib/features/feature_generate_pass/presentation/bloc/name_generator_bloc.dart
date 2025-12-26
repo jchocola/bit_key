@@ -1,6 +1,8 @@
+import 'package:bit_key/features/feature_generate_pass/domain/repositories/generator_repo.dart';
 import 'package:bit_key/main.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:random_name_generator/random_name_generator.dart' show Zone;
 
 ///
 /// EVENT
@@ -18,6 +20,16 @@ class NameGeneratorBlocEvent_toogleLastName extends NameGeneratorBlocEvent {}
 
 class NameGeneratorBlocEvent_toogleFullName extends NameGeneratorBlocEvent {}
 
+class NameGeneratorBlocEvent_setZone extends NameGeneratorBlocEvent {
+  final Zone zone;
+  NameGeneratorBlocEvent_setZone({required this.zone});
+
+  @override
+  List<Object?> get props => [zone];
+}
+
+class NameGeneratorBlocEvent_generateName extends NameGeneratorBlocEvent {}
+
 ///
 /// STATE
 ///
@@ -31,17 +43,19 @@ class NameGeneratorBlocState_loaded extends NameGeneratorBlocState {
   final bool firstName;
   final bool lastName;
   final bool fullName;
-  final String zone;
+  final Zone zone;
+  final String generatedName;
   NameGeneratorBlocState_loaded({
     required this.isMale,
     required this.firstName,
     required this.lastName,
     required this.fullName,
     required this.zone,
+    required this.generatedName,
   });
 
   @override
-  List<Object?> get props => [isMale, firstName, lastName, fullName, zone];
+  List<Object?> get props => [isMale, firstName, lastName, fullName, zone, generatedName];
 
   factory NameGeneratorBlocState_loaded.inital() =>
       NameGeneratorBlocState_loaded(
@@ -49,7 +63,8 @@ class NameGeneratorBlocState_loaded extends NameGeneratorBlocState {
         firstName: false,
         lastName: false,
         fullName: true,
-        zone: '',
+        zone: Zone.uk,
+        generatedName: '',
       );
 
   NameGeneratorBlocState_loaded copyWith({
@@ -57,7 +72,8 @@ class NameGeneratorBlocState_loaded extends NameGeneratorBlocState {
     bool? firstName,
     bool? lastName,
     bool? fullName,
-    String? zone,
+    Zone? zone,
+    String? generatedName,
   }) {
     return NameGeneratorBlocState_loaded(
       isMale: isMale ?? this.isMale,
@@ -65,6 +81,7 @@ class NameGeneratorBlocState_loaded extends NameGeneratorBlocState {
       lastName: lastName ?? this.lastName,
       fullName: fullName ?? this.fullName,
       zone: zone ?? this.zone,
+      generatedName: generatedName ?? this.generatedName,
     );
   }
 }
@@ -74,7 +91,9 @@ class NameGeneratorBlocState_loaded extends NameGeneratorBlocState {
 ///
 class NameGeneratorBloc
     extends Bloc<NameGeneratorBlocEvent, NameGeneratorBlocState> {
-  NameGeneratorBloc() : super(NameGeneratorBlocState_loaded.inital()) {
+  final GeneratorRepo generatorRepo;
+  NameGeneratorBloc({required this.generatorRepo})
+    : super(NameGeneratorBlocState_loaded.inital()) {
     ///
     /// TOOGLE ISMALE
     ///
@@ -85,6 +104,8 @@ class NameGeneratorBloc
         emit(currentState.copyWith(isMale: !currentState.isMale));
         logger.i('Changed isMale');
       }
+
+       add(NameGeneratorBlocEvent_generateName());
     });
 
     ///
@@ -105,16 +126,15 @@ class NameGeneratorBloc
             ),
           );
         } else {
-          emit(currentState.copyWith(
-            firstName: nextValue
-          ));
+          emit(currentState.copyWith(firstName: nextValue));
         }
+
+         add(NameGeneratorBlocEvent_generateName());
         logger.i('Changed firstname');
       }
     });
 
-
-       ///
+    ///
     /// TOOGLE Lastname
     ///
     on<NameGeneratorBlocEvent_toogleLastName>((event, emit) {
@@ -132,17 +152,15 @@ class NameGeneratorBloc
             ),
           );
         } else {
-          emit(currentState.copyWith(
-            lastName: nextValue
-          ));
+          emit(currentState.copyWith(lastName: nextValue));
         }
+
+         add(NameGeneratorBlocEvent_generateName());
         logger.i('Changed lastname');
       }
     });
 
-
-
-       ///
+    ///
     /// TOOGLE Full name
     ///
     on<NameGeneratorBlocEvent_toogleFullName>((event, emit) {
@@ -160,13 +178,43 @@ class NameGeneratorBloc
             ),
           );
         } else {
-          emit(currentState.copyWith(
-            fullName: nextValue,
-            firstName: true
-          ));
+          emit(currentState.copyWith(fullName: nextValue, firstName: true));
         }
+         add(NameGeneratorBlocEvent_generateName());
         logger.i('Changed fulname');
       }
-    }); 
+    });
+
+    ///
+    /// SET ZONE
+    ///
+    on<NameGeneratorBlocEvent_setZone>((event, emit) {
+      final currentState = state;
+      if (currentState is NameGeneratorBlocState_loaded) {
+        emit(currentState.copyWith(zone: event.zone));
+        add(NameGeneratorBlocEvent_generateName());
+
+        logger.i('Changed Zone : ${event.zone.fullNameStructure}');
+      }
+    });
+
+    ///
+    /// GENERATE NAME
+    ///
+    on<NameGeneratorBlocEvent_generateName>((event, emit) {
+      final currentState = state;
+      if (currentState is NameGeneratorBlocState_loaded) {
+        final name = generatorRepo.generateName(
+          isMan: currentState.isMale,
+          firstName: currentState.firstName,
+          lastName: currentState.lastName,
+          fullName: currentState.fullName,
+          zone: currentState.zone,
+        );
+
+        emit(currentState.copyWith(generatedName: name));
+        logger.d(name);
+      }
+    });
   }
 }

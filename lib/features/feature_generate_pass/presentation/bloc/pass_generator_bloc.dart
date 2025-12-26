@@ -3,7 +3,7 @@
 import 'dart:math';
 
 import 'package:bit_key/features/feature_generate_pass/data/model/password_strength.dart';
-import 'package:bit_key/features/feature_generate_pass/domain/repositories/pass_generator_repo.dart';
+import 'package:bit_key/features/feature_generate_pass/domain/repositories/generator_repo.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -147,7 +147,7 @@ class PassGeneratorBlocState_state extends PassGeneratorBlocState {
 ///
 class PassGeneratorBloc
     extends Bloc<PassGeneratorBlocEvent, PassGeneratorBlocState> {
-  final PassGeneratorRepo passGeneratorRepo;
+  final GeneratorRepo passGeneratorRepo;
 
   PassGeneratorBloc({required this.passGeneratorRepo})
     : super(PassGeneratorBlocState_state.initial()) {
@@ -354,7 +354,7 @@ class PassGeneratorBloc
         passUpper: currentState.passUpper,
         passSafeSymbols: currentState.passSpecialSymbol,
         maxDigit: currentState.maxDigit,
-        maxSpecial: currentState.maxSpecialSymbol
+        maxSpecial: currentState.maxSpecialSymbol,
       );
       return generatedPass;
     } else {

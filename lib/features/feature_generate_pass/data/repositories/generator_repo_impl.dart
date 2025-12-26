@@ -1,9 +1,11 @@
 import 'dart:math';
 
 import 'package:bit_key/features/feature_generate_pass/data/model/password_strength.dart';
-import 'package:bit_key/features/feature_generate_pass/domain/repositories/pass_generator_repo.dart';
+import 'package:bit_key/features/feature_generate_pass/domain/repositories/generator_repo.dart';
+import 'package:random_name_generator/random_name_generator.dart';
+import 'package:random_name_generator/src/zone.dart';
 
-class PassGeneratorRepoImpl implements PassGeneratorRepo {
+class GeneratorRepoImpl implements GeneratorRepo {
   final _passLower = passLower.split('');
   final _passUpper = passUpper.split('');
   final _passDigits = passDigits.split('');
@@ -32,7 +34,6 @@ class PassGeneratorRepoImpl implements PassGeneratorRepo {
     String generatedStr = '';
     allowedValue = [];
 
-
     if (passLower) {
       allowedValue.addAll(_passLower);
     }
@@ -49,8 +50,6 @@ class PassGeneratorRepoImpl implements PassGeneratorRepo {
     }
 
     for (int i = 0; i < length; i++) {
-
-
       // TODO : LOGIC TO MAX NUMBER / MAX SPECIAL
       final randomChar = allowedValue[Random().nextInt(allowedValue.length)];
 
@@ -84,5 +83,29 @@ class PassGeneratorRepoImpl implements PassGeneratorRepo {
     if (seconds < 31536000) return 'Средний'; // 1 год
     if (seconds < 3153600000) return 'Сильный'; // 100 лет
     return 'Очень сильный';
+  }
+
+  @override
+  String generateName({
+    required bool isMan,
+    required bool firstName,
+    required bool lastName,
+    required bool fullName,
+    required Zone zone,
+  }) {
+    final service = RandomNames(zone);
+    // MAN
+    if (isMan) {
+      if (firstName) return service.manName();
+      if (lastName) return service.surname();
+      if (fullName) return service.manFullName();
+    }
+    // WOMAN
+    else {
+      if (firstName) return service.womanName();
+      if (lastName) return service.surname();
+      if (fullName) return service.womanFullName();
+    }
+     return '';
   }
 }
