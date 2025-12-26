@@ -20,9 +20,11 @@ class MyVaultPage extends StatelessWidget {
           VaultPageAppbar(),
 
           Expanded(
+            flex: 1,
             child: SingleChildScrollView(
               child: Column(
                 spacing: AppConstant.appPadding,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TypesWidget(),
                   FoldersWidget(),

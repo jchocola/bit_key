@@ -10,6 +10,8 @@ import 'package:bit_key/features/feature_generate_pass/presentation/bloc/name_ge
 import 'package:bit_key/features/feature_generate_pass/presentation/bloc/pass_generator_bloc.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/generating_page.dart';
 import 'package:bit_key/features/feature_setting/presentation/setting_page.dart';
+import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/my_vault_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/widgets/vault_page_appbar.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +23,8 @@ import 'package:logger/web.dart';
 
 final logger = Logger();
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   await DI();
 
   runApp(const MyApp());
@@ -44,6 +48,12 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) =>
                 NameGeneratorBloc(generatorRepo: getIt<GeneratorRepo>()),
+          ),
+
+          BlocProvider(
+            create: (context) =>
+                FoldersBloc(folderRepository: getIt<FolderRepository>())
+                  ..add(FoldersBlocEvent_loadFolders()),
           ),
         ],
         child: MainPage(),
@@ -93,6 +103,7 @@ class _MainPageState extends State<MainPage> {
               // mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Expanded(
+                  flex: 1,
                   child: SafeArea(
                     child: PageView(
                       controller: _pageController,
@@ -124,7 +135,7 @@ class _MainPageState extends State<MainPage> {
                           animationEffect: GlassAnimation.elasticRubber,
                           selectedItemColor: AppColor.primary,
                           unselectedItemColor: AppColor.secondary,
-
+                
                           items: [
                             GlassNavBarItem(
                               icon: AppIcon.vaultIcon,
@@ -141,7 +152,7 @@ class _MainPageState extends State<MainPage> {
                           ],
                         ),
                       ),
-
+                
                       LiquidGlassLayer(
                         // shape: LiquidRoundedSuperellipse(borderRadius: 20),
                         settings: LiquidGlassSettings(
@@ -161,9 +172,9 @@ class _MainPageState extends State<MainPage> {
                                   itemBuilder: (context) {
                                     return [
                                       PopupMenuItem(child: Text('Login')),
-                                       PopupMenuItem(child: Text('Card')),
-                                        PopupMenuItem(child: Text('Identity')),
-                                         PopupMenuItem(child: Text('Folder')),
+                                      PopupMenuItem(child: Text('Card')),
+                                      PopupMenuItem(child: Text('Identity')),
+                                      PopupMenuItem(child: Text('Folder')),
                                     ];
                                   },
                                 ),
