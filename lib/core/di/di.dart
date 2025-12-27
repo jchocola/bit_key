@@ -6,6 +6,7 @@ import 'package:bit_key/features/feature_vault/data/folder_repo_impl.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
 import 'package:bit_key/main.dart';
 import 'package:get_it/get_it.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final getIt = GetIt.instance;
@@ -17,6 +18,8 @@ Future<void> DI() async {
   getIt.registerSingleton<FolderRepository>(
     FolderRepoImpl(prefs: shared_prefs),
   );
+
+  final dir = await getApplicationDocumentsDirectory();
 
   logger.i('DI inited');
 }

@@ -23,14 +23,17 @@ import 'package:family_bottom_sheet/family_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glassy_real_navbar/glassy_real_navbar.dart';
+import 'package:hive/hive.dart';
 import 'package:liquid_glass_renderer/experimental.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
 import 'package:logger/web.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:resizable_bottom_sheet/resizable_bottom_sheet.dart';
 
 final logger = Logger();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+ 
 
   await DI();
 
