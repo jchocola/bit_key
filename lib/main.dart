@@ -143,8 +143,15 @@ class _MainPageState extends State<MainPage> {
         return SizedBox(
           height:
               MediaQuery.of(context).size.height * AppConstant.modalPageHeight,
-          child: BlocProvider.value(
-            value: BlocProvider.of<CreateLoginBloc>(parentContext),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider.value(
+                value: BlocProvider.of<CreateLoginBloc>(parentContext),
+              ),
+               BlocProvider.value(
+                value: BlocProvider.of<FoldersBloc>(parentContext),
+              ),
+            ],
             child: CreatingLoginPage(),
           ),
         );

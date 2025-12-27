@@ -48,7 +48,9 @@ class LoginsPage extends StatelessWidget {
                           spacing: AppConstant.appPadding,
                           children: List.generate(state.logins.length, (index) {
                             return CustomListile(
+                              icon: AppIcon.loginIcon,
                               title: state.logins[index].itemName,
+                              subTitle: state.logins[index].login,
                             );
                           }),
                         ),

@@ -25,6 +25,9 @@ class _CreatingLoginPageState extends State<CreatingLoginPage> {
   late TextEditingController userNameController;
   late TextEditingController passwordController;
   late TextEditingController urlController;
+
+  String? selectedFolder;
+
   @override
   void initState() {
     super.initState();
@@ -49,15 +52,35 @@ class _CreatingLoginPageState extends State<CreatingLoginPage> {
       final Login login = Login(
         id: Uuid().v4(),
         itemName: itemNameController.text,
+        login: userNameController.text,
+        password: passwordController.text,
+        url: urlController.text,
+        folderName: selectedFolder
       );
-
+      logger.i(login.toString());
       // create login
       context.read<CreateLoginBloc>().add(
         CreateLoginBlocEvent_createLogin(login: login),
       );
+
+      // pop
+      Navigator.pop(context);
     } catch (e) {
       logger.e(e);
     }
+  }
+
+  void _pickFolder({required String folder}) {
+    if (selectedFolder == folder) {
+      setState(() {
+        selectedFolder = null;
+      });
+    } else {
+      setState(() {
+        selectedFolder = folder;
+      });
+    }
+    logger.d(selectedFolder);
   }
 
   @override
@@ -113,15 +136,29 @@ class _CreatingLoginPageState extends State<CreatingLoginPage> {
                     hintText: 'Item name (required)',
                   ),
 
-                  PopupMenuButton(
-                    child: Text('Folder 1'),
-                    itemBuilder: (context) {
-                      return [
-                        PopupMenuItem(child: Text('Folder 1')),
-                        PopupMenuItem(child: Text('Folder 2')),
-                        PopupMenuItem(child: Text('Folder 3')),
-                      ];
-                    },
+                  ///
+                  /// TODO : PICK FOLDERS
+                  ///
+                  BlocBuilder<FoldersBloc, FoldersBlocState>(
+                    builder: (context, state) => PopupMenuButton(
+                      child: Text(selectedFolder ?? 'None'),
+                      itemBuilder: (context) {
+                        if (state is FoldersBlocLoaded) {
+                          return List.generate(state.folders.length, (index) {
+                            final folder = state.folders[index];
+
+                            return PopupMenuItem(
+                              child: Text(folder),
+                              onTap: () {
+                                _pickFolder(folder: folder);
+                              },
+                            );
+                          });
+                        } else {
+                          return [];
+                        }
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -133,6 +170,8 @@ class _CreatingLoginPageState extends State<CreatingLoginPage> {
               ),
               CustomTextfield(
                 controller: passwordController,
+                withEye: true,
+                obscure: true,
                 hintText: 'Password',
               ),
               CustomTextfield(
