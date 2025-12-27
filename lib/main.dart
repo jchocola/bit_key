@@ -11,6 +11,7 @@ import 'package:bit_key/features/feature_generate_pass/presentation/bloc/pass_ge
 import 'package:bit_key/features/feature_generate_pass/presentation/generating_page.dart';
 import 'package:bit_key/features/feature_setting/presentation/setting_page.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
+import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/logins_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/my_vault_page.dart';
@@ -33,10 +34,15 @@ import 'package:resizable_bottom_sheet/resizable_bottom_sheet.dart';
 final logger = Logger();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
- 
 
+  // DI
   await DI();
 
+  // init local db
+  await getIt<LocalDbRepository>().init();
+
+
+  // run app
   runApp(const MyApp());
 }
 
@@ -156,12 +162,13 @@ class _MainPageState extends State<MainPage> {
   void onCreateIdentityTapped(BuildContext parentContext) async {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => BlocProvider.value(
-            value: BlocProvider.of<FoldersBloc>(parentContext),
-            child: CreatingIdentityPage(
-            ),
-          ),
-        ));
+      MaterialPageRoute(
+        builder: (context) => BlocProvider.value(
+          value: BlocProvider.of<FoldersBloc>(parentContext),
+          child: CreatingIdentityPage(),
+        ),
+      ),
+    );
 
     // showModalBottomSheet(
     //   context: parentContext,
