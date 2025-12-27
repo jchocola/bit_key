@@ -1,3 +1,7 @@
+import 'package:bit_key/core/exception/app_exception.dart';
+import 'package:bit_key/features/feature_vault/data/model/card_model.dart';
+import 'package:bit_key/features/feature_vault/data/model/identity_model.dart';
+import 'package:bit_key/features/feature_vault/data/model/login_model.dart';
 import 'package:hive/hive.dart';
 
 import 'package:bit_key/features/feature_vault/domain/entity/card.dart';
@@ -8,10 +12,19 @@ import 'package:bit_key/main.dart';
 
 class HiveDbRepoImpl implements LocalDbRepository {
   final String pathDir;
-  HiveDbRepoImpl({
-    required this.pathDir,
-  });
-  
+
+  ///
+  /// KEYS
+  ///
+  static const LOGIN_BOX = 'LOGIN';
+  static const CARD_BOX = 'CARD';
+  static const IDENTITY_BOX = 'IDENTITY';
+
+  late Box<dynamic> _loginsBox;
+  late Box<dynamic> _cardsBox;
+  late Box<dynamic> _identitiesBox;
+
+  HiveDbRepoImpl({required this.pathDir});
 
   @override
   Future<void> deleteCard({required Card card}) {
@@ -44,15 +57,39 @@ class HiveDbRepoImpl implements LocalDbRepository {
   }
 
   @override
-  Future<List<Login>> getAllLogin() {
-    // TODO: implement getAllLogin
-    throw UnimplementedError();
+  Future<List<Login>> getAllLogin() async {
+    try {
+      final values = _loginsBox.values;
+
+      final listModel = values.map((e) => e as LoginModel).toList();
+      return listModel.map((e) => e.toEntity()).toList();
+    } catch (e) {
+       logger.e(e);
+      return [];
+     
+    }
   }
 
   @override
   Future<void> init() async {
+    // INIT
     Hive.init(pathDir);
-    logger.d('Hive inited');
+    // REGISTER ADAPTER
+    Hive.registerAdapter(LoginModelAdapter());
+    Hive.registerAdapter(CardModelAdapter());
+    Hive.registerAdapter(IdentityModelAdapter());
+
+    // OPEN BOX
+    await Hive.openBox(LOGIN_BOX);
+    await Hive.openBox(CARD_BOX);
+    await Hive.openBox(IDENTITY_BOX);
+
+    // BOXES
+    _loginsBox = Hive.box(LOGIN_BOX);
+    _cardsBox = Hive.box(CARD_BOX);
+    _identitiesBox = Hive.box(IDENTITY_BOX);
+
+    logger.d('Hive inited , box opened and registered adapters');
   }
 
   @override
@@ -68,9 +105,15 @@ class HiveDbRepoImpl implements LocalDbRepository {
   }
 
   @override
-  Future<void> saveLogin({required Login login}) {
-    // TODO: implement saveLogin
-    throw UnimplementedError();
+  Future<void> saveLogin({required Login login}) async {
+    try {
+      final loginModel = LoginModel.fromEntity(login);
+      await _loginsBox.add(loginModel);
+      logger.d('Added new login');
+    } catch (e) {
+      logger.e(e);
+      throw AppException.failed_to_save_login;
+    }
   }
 
   @override

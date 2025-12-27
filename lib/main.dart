@@ -13,11 +13,13 @@ import 'package:bit_key/features/feature_setting/presentation/setting_page.dart'
 import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/logins_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/my_vault_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_card/creating_card_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_folder/creating_folder_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_identity/creating_identity_page.dart';
+import 'package:bit_key/features/feature_vault/presentation/page/creating_login/bloc/create_login_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_login/creating_login_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/widgets/vault_page_appbar.dart';
 import 'package:family_bottom_sheet/family_bottom_sheet.dart';
@@ -40,7 +42,6 @@ Future<void> main() async {
 
   // init local db
   await getIt<LocalDbRepository>().init();
-
 
   // run app
   runApp(const MyApp());
@@ -70,6 +71,17 @@ class MyApp extends StatelessWidget {
             create: (context) =>
                 FoldersBloc(folderRepository: getIt<FolderRepository>())
                   ..add(FoldersBlocEvent_loadFolders()),
+          ),
+
+          BlocProvider(
+            create: (context) =>
+                CreateLoginBloc(localDbRepository: getIt<LocalDbRepository>()),
+          ),
+
+          BlocProvider(
+            create: (context) =>
+                LoginsBloc(localDbRepository: getIt<LocalDbRepository>())
+                  ..add(LoginsBlocEvent_loadLogins()),
           ),
         ],
         child: MainPage(),
@@ -132,12 +144,15 @@ class _MainPageState extends State<MainPage> {
           height:
               MediaQuery.of(context).size.height * AppConstant.modalPageHeight,
           child: BlocProvider.value(
-            value: BlocProvider.of<FoldersBloc>(parentContext),
+            value: BlocProvider.of<CreateLoginBloc>(parentContext),
             child: CreatingLoginPage(),
           ),
         );
       },
-    );
+    ).then((_) {
+      // RELOAD LOGINS LIST WHEN BOMMTOM MODAL CLOSED
+      context.read<LoginsBloc>().add(LoginsBlocEvent_loadLogins());
+    });
   }
 
   void onCreateCardTapped(BuildContext parentContext) async {

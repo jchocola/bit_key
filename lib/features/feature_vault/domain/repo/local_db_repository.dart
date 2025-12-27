@@ -5,6 +5,8 @@ import 'package:bit_key/features/feature_vault/domain/entity/login.dart';
 abstract class LocalDbRepository {
   Future<void> init();
 
+  
+
   ///
   /// CARD
   ///
