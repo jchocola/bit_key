@@ -1,34 +1,56 @@
 import 'package:bit_key/features/feature_vault/domain/entity/identity.dart';
-
+import 'package:hive/hive.dart';
+part 'identity_model.g.dart';
+@HiveType(typeId: 1)
 class IdentityModel {
   //item details
+   @HiveField(0)
   final String id;
+   @HiveField(1)
   final String itemName;
+   @HiveField(2)
   final String? folderName;
+   @HiveField(3)
   final bool? isHide; // bin
 
   //personal details
+   @HiveField(4)
   final String? firstName;
+   @HiveField(5)
   final String? middleName;
+   @HiveField(6)
   final String? lastName;
+   @HiveField(7)
   final String? userName;
+   @HiveField(8)
   final String? company;
 
   //identification
+   @HiveField(9)
   final String? nationalInsuranceNumber;
+   @HiveField(10)
   final String? passportName;
+   @HiveField(11)
   final String? licenseNumber;
 
   // contact info
+   @HiveField(12)
   final String? email;
+   @HiveField(13)
   final String? phone;
 
   //address
+   @HiveField(14)
   final String? address1;
+   @HiveField(15)
   final String? address2;
+   @HiveField(16)
   final String? address3;
+   @HiveField(17)
   final String? cityTown;
+   @HiveField(18)
   final String? country;
+   @HiveField(19)
   final String? postcode;
   IdentityModel({
     required this.id,
