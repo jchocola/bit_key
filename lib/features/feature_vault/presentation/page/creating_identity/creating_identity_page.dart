@@ -11,7 +11,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreatingIdentityPage extends StatefulWidget {
   const CreatingIdentityPage({super.key});
-
   @override
   State<CreatingIdentityPage> createState() => _CreatingIdentityPageState();
 }
@@ -38,163 +37,160 @@ class _CreatingIdentityPageState extends State<CreatingIdentityPage> {
       onTap: () {
         FocusScope.of(context).unfocus();
       },
-      child: AppBg(
-        child: Padding(
-          padding: const EdgeInsets.all(AppConstant.appPadding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: AppConstant.appPadding,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('Cancel', style: theme.textTheme.bodyMedium),
+      child: Scaffold(
+        body: AppBg(
+          child: Padding(
+            padding: const EdgeInsets.all(AppConstant.appPadding),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+             // spacing: AppConstant.appPadding,
+              children: [
+                SafeArea(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('Cancel', style: theme.textTheme.bodyMedium),
+                      ),
+                      Text('New Identity', style: theme.textTheme.titleMedium),
+                          
+                      BlocListener<FoldersBloc, FoldersBlocState>(
+                        listener: (context, state) {
+                          if (state is FoldersBlocError) {
+                            logger.e('error');
+                          }
+                          if (state is FoldersBlocSuccess) {
+                            logger.e('success');
+                            Navigator.pop(context);
+                          }
+                        },
+                        child: TextButton(
+                          onPressed: () {
+                            context.read<FoldersBloc>().add(
+                              FoldersBlocEvent_createFolder(
+                                folderName: folderController.text,
+                              ),
+                            );
+                          },
+                          child: Text('Save', style: theme.textTheme.bodyMedium),
+                        ),
+                      ),
+                    ],
                   ),
-                  Text('New Identity', style: theme.textTheme.titleMedium),
-          
-                  BlocListener<FoldersBloc, FoldersBlocState>(
-                    listener: (context, state) {
-                      if (state is FoldersBlocError) {
-                        logger.e('error');
-                      }
-                      if (state is FoldersBlocSuccess) {
-                        logger.e('success');
-                        Navigator.pop(context);
-                      }
-                    },
-                    child: TextButton(
-                      onPressed: () {
-                        context.read<FoldersBloc>().add(
-                          FoldersBlocEvent_createFolder(
-                            folderName: folderController.text,
-                          ),
-                        );
-                      },
-                      child: Text('Save', style: theme.textTheme.bodyMedium),
+                ),
+        
+                Divider(),
+        
+               Expanded(child: ListView(
+                physics: AlwaysScrollableScrollPhysics(),
+                children: [
+                   Text('Item Details'),
+                Row(
+                  spacing: AppConstant.appPadding,
+                  children: [
+                    CustomTextfield(
+                      controller: folderController,
+                      hintText: 'Item name (required)',
                     ),
-                  ),
+                       
+                    PopupMenuButton(
+                      child: Text('Folder 1'),
+                      itemBuilder: (context) {
+                        return [
+                          PopupMenuItem(child: Text('Folder 1')),
+                          PopupMenuItem(child: Text('Folder 2')),
+                          PopupMenuItem(child: Text('Folder 3')),
+                        ];
+                      },
+                    ),
+                  ],
+                ),
+                       
+                Text('Personal Details'),
+                CustomTextfield(
+                  controller: folderController,
+                  hintText: 'First name',
+                ),
+                CustomTextfield(
+                  controller: folderController,
+                  hintText: 'Middle name',
+                ),
+                CustomTextfield(
+                  controller: folderController,
+                  hintText: 'Last name',
+                ),
+                CustomTextfield(
+                  controller: folderController,
+                  hintText: 'Username',
+                ),
+                       
+                CustomTextfield(
+                  controller: folderController,
+                  hintText: 'Company',
+                ),
+                       
+                Text('Identification'),
+                CustomTextfield(
+                  controller: folderController,
+                  hintText: 'National Insurance number',
+                ),
+                       
+                CustomTextfield(
+                  controller: folderController,
+                  hintText: 'Passport number',
+                ),
+                       
+                CustomTextfield(
+                  controller: folderController,
+                  hintText: 'License number',
+                ),
+                       
+                Text('Contact info'),
+                       
+                CustomTextfield(controller: folderController, hintText: 'Email'),
+                       
+                CustomTextfield(controller: folderController, hintText: 'Phone'),
+                       
+                Text('Address'),
+                CustomTextfield(
+                  controller: folderController,
+                  hintText: 'Address 1',
+                ),
+                CustomTextfield(
+                  controller: folderController,
+                  hintText: 'Address 2',
+                ),
+                CustomTextfield(
+                  controller: folderController,
+                  hintText: 'Address 3',
+                ),
+                       
+                CustomTextfield(
+                  controller: folderController,
+                  hintText: 'City/Town',
+                ),
+                       
+                CustomTextfield(
+                  controller: folderController,
+                  hintText: 'Country',
+                ),
+                       
+                CustomTextfield(
+                  controller: folderController,
+                  hintText: 'Postcode',
+                ),
+                       
+                CustomTextfield(
+                  controller: folderController,
+                  hintText: 'Country',
+                ),
                 ],
-              ),
-          
-              Divider(),
-          
-          
-           
-                  Text('Item Details'),
-              Row(
-                spacing: AppConstant.appPadding,
-                children: [
-                  CustomTextfield(
-                    controller: folderController,
-                    hintText: 'Item name (required)',
-                  ),
-                      
-                  PopupMenuButton(
-                    child: Text('Folder 1'),
-                    itemBuilder: (context) {
-                      return [
-                        PopupMenuItem(child: Text('Folder 1')),
-                        PopupMenuItem(child: Text('Folder 2')),
-                        PopupMenuItem(child: Text('Folder 3')),
-                      ];
-                    },
-                  ),
-                ],
-              ),
-                      
-              Text('Personal Details'),
-              CustomTextfield(
-                controller: folderController,
-                hintText: 'First name',
-              ),
-              CustomTextfield(
-                controller: folderController,
-                hintText: 'Middle name',
-              ),
-              CustomTextfield(
-                controller: folderController,
-                hintText: 'Last name',
-              ),
-              CustomTextfield(
-                controller: folderController,
-                hintText: 'Username',
-              ),
-                      
-              CustomTextfield(
-                controller: folderController,
-                hintText: 'Company',
-              ),
-                      
-                      
-              Text('Identification'),
-              CustomTextfield(
-                controller: folderController,
-                hintText: 'National Insurance number',
-              ),
-                      
-               CustomTextfield(
-                controller: folderController,
-                hintText: 'Passport number',
-              ),
-                      
-                CustomTextfield(
-                controller: folderController,
-                hintText: 'License number',
-              ),
-                      
-               Text('Contact info'),
-                      
-                CustomTextfield(
-                controller: folderController,
-                hintText: 'Email',
-              ),
-                      
-               CustomTextfield(
-                controller: folderController,
-                hintText: 'Phone',
-              ),
-                      
-                      
-              Text('Address'),
-               CustomTextfield(
-                controller: folderController,
-                hintText: 'Address 1',
-              ),
-                CustomTextfield(
-                controller: folderController,
-                hintText: 'Address 2',
-              ),
-                CustomTextfield(
-                controller: folderController,
-                hintText: 'Address 3',
-              ), 
-                      
-                CustomTextfield(
-                controller: folderController,
-                hintText: 'City/Town',
-              ),
-                      
-                CustomTextfield(
-                controller: folderController,
-                hintText: 'Country',
-              ),
-                      
-                CustomTextfield(
-                controller: folderController,
-                hintText: 'Postcode',
-              ),
-                      
-                CustomTextfield(
-                controller: folderController,
-                hintText: 'Country',
-              ),
-             
-            
-            ],
+               )) ,
+              ],
+            ),
           ),
         ),
       ),

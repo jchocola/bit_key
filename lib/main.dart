@@ -26,6 +26,7 @@ import 'package:glassy_real_navbar/glassy_real_navbar.dart';
 import 'package:liquid_glass_renderer/experimental.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
 import 'package:logger/web.dart';
+import 'package:resizable_bottom_sheet/resizable_bottom_sheet.dart';
 
 final logger = Logger();
 Future<void> main() async {
@@ -150,22 +151,31 @@ class _MainPageState extends State<MainPage> {
   }
 
   void onCreateIdentityTapped(BuildContext parentContext) async {
-    showModalBottomSheet(
-      context: parentContext,
-      // showDragHandle: true,
-      useRootNavigator: true,
-      isScrollControlled: true,
-      builder: (modalContext) {
-        return SizedBox(
-          height:
-              MediaQuery.of(context).size.height * AppConstant.modalPageHeight,
-          child: BlocProvider.value(
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => BlocProvider.value(
             value: BlocProvider.of<FoldersBloc>(parentContext),
-            child: CreatingIdentityPage(),
+            child: CreatingIdentityPage(
+            ),
           ),
-        );
-      },
-    );
+        ));
+
+    // showModalBottomSheet(
+    //   context: parentContext,
+    //   // showDragHandle: true,
+    //   useRootNavigator: true,
+    //   isScrollControlled: true,
+    //   builder: (modalContext) {
+    //     return FractionallySizedBox(
+    //     heightFactor: AppConstant.modalPageHeight,
+    //       child: BlocProvider.value(
+    //         value: BlocProvider.of<FoldersBloc>(parentContext),
+    //         child: CreatingIdentityPage(
+    //         ),
+    //       ),
+    //     );
+    //   },
+    // );
   }
 
   @override

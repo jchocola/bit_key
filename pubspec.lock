@@ -384,6 +384,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.0"
+  resizable_bottom_sheet:
+    dependency: "direct main"
+    description:
+      name: resizable_bottom_sheet
+      sha256: ee2da24ec6d0197a54460d596f993f4fba21165c29afda7ffa98dba181c27dfb
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
   shared_preferences:
     dependency: "direct main"
     description:

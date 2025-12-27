@@ -150,6 +150,8 @@ class _CreatingCardPageState extends State<CreatingCardPage> {
                CustomTextfield(
                 controller: folderController,
                 hintText: 'Security code',
+                withEye: true,
+                obscure: true,
               ),
             ],
           ),
