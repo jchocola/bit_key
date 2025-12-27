@@ -2,8 +2,8 @@
 
 import 'package:bit_key/features/feature_generate_pass/data/repositories/generator_repo_impl.dart';
 import 'package:bit_key/features/feature_generate_pass/domain/repositories/generator_repo.dart';
-import 'package:bit_key/features/feature_vault/data/folder_repo_impl.dart';
-import 'package:bit_key/features/feature_vault/data/hive_db_repo_impl.dart';
+import 'package:bit_key/features/feature_vault/data/repo/folder_repo_impl.dart';
+import 'package:bit_key/features/feature_vault/data/repo/hive_db_repo_impl.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
 import 'package:bit_key/main.dart';
