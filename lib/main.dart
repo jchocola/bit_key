@@ -13,10 +13,12 @@ import 'package:bit_key/features/feature_setting/presentation/setting_page.dart'
 import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/cards_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/folder_detail_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/identities_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/no_folders_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/folder_info_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/logins_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/my_vault_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_card/bloc/create_card_bloc.dart';
@@ -118,6 +120,11 @@ class MyApp extends StatelessWidget {
             create: (context) =>
                 NoFoldersBloc(localDbRepository: getIt<LocalDbRepository>())
                   ..add(NoFoldersBlocEvent_load()),
+          ),
+
+          BlocProvider(
+            create: (context) =>
+                FolderDetailBloc(localDbRepository: getIt<LocalDbRepository>())
           ),
         ],
         child: MainPage(),
@@ -234,7 +241,7 @@ class _MainPageState extends State<MainPage> {
 
       // RELOAD NO FOLDERS
       context.read<NoFoldersBloc>().add(NoFoldersBlocEvent_load());
-      
+
         // RELOAD FOLDERS
       context.read<FoldersBloc>().add(FoldersBlocEvent_loadFolders());
     });
