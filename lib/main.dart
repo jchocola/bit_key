@@ -14,12 +14,14 @@ import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dar
 import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/cards_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/identities_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/logins_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/my_vault_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_card/bloc/create_card_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_card/creating_card_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_folder/creating_folder_page.dart';
+import 'package:bit_key/features/feature_vault/presentation/page/creating_identity/bloc/create_identity_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_identity/creating_identity_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_login/bloc/create_login_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_login/creating_login_page.dart';
@@ -27,6 +29,7 @@ import 'package:bit_key/features/feature_vault/presentation/widgets/vault_page_a
 import 'package:family_bottom_sheet/family_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:glassy_real_navbar/glassy_real_navbar.dart';
 import 'package:hive/hive.dart';
 import 'package:liquid_glass_renderer/experimental.dart';
@@ -95,6 +98,18 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) =>
                 CreateCardBloc(localDbRepository: getIt<LocalDbRepository>()),
+          ),
+
+          BlocProvider(
+            create: (context) =>
+                IdentitiesBloc(localDbRepository: getIt<LocalDbRepository>())
+                  ..add(IdentitiesBlocEvent_loadIdentities()),
+          ),
+
+          BlocProvider(
+            create: (context) => CreateIdentityBloc(
+              localDbRepository: getIt<LocalDbRepository>(),
+            ),
           ),
         ],
         child: MainPage(),
@@ -209,8 +224,19 @@ class _MainPageState extends State<MainPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => BlocProvider.value(
-          value: BlocProvider.of<FoldersBloc>(parentContext),
+        builder: (context) => MultiBlocProvider(
+          providers: [
+            BlocProvider.value(
+              value: BlocProvider.of<FoldersBloc>(parentContext),
+            ),
+            BlocProvider.value(
+              value: BlocProvider.of<CreateIdentityBloc>(parentContext),
+            ),
+
+             BlocProvider.value(
+              value: BlocProvider.of<IdentitiesBloc>(parentContext),
+            ),
+          ],
           child: CreatingIdentityPage(),
         ),
       ),

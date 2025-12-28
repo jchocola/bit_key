@@ -57,9 +57,15 @@ class HiveDbRepoImpl implements LocalDbRepository {
   }
 
   @override
-  Future<List<Identity>> getAllIdentity() {
-    // TODO: implement getAllIdentity
-    throw UnimplementedError();
+  Future<List<Identity>> getAllIdentity() async {
+    try {
+      final values = _identitiesBox.values;
+      final listModel = values.map((e) => e as IdentityModel).toList();
+      return listModel.map((e) => e.toEntity()).toList();
+    } catch (e) {
+      logger.e(e);
+      return [];
+    }
   }
 
   @override
@@ -109,9 +115,14 @@ class HiveDbRepoImpl implements LocalDbRepository {
   }
 
   @override
-  Future<void> saveIdentity({required Identity identity}) {
-    // TODO: implement saveIdentity
-    throw UnimplementedError();
+  Future<void> saveIdentity({required Identity identity}) async {
+    try {
+      final identityModel = IdentityModel.fromEntity(identity);
+      await _identitiesBox.add(identityModel);
+      logger.d('Added new identity');
+    } catch (e) {
+      logger.e(e);
+    }
   }
 
   @override

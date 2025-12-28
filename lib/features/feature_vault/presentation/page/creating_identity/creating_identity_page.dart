@@ -6,6 +6,8 @@ import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/identity.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/identities_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/page/creating_identity/bloc/create_identity_bloc.dart';
 import 'package:bit_key/main.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
 import 'package:bit_key/shared/widgets/custom_textfield.dart';
@@ -52,32 +54,43 @@ class _CreatingIdentityPageState extends State<CreatingIdentityPage> {
     }
   }
 
-  void _onSavePicked() async {
+  void _onSaveTapped() async {
     try {
-          // generate identity
-    final identity = Identity(
-      id: Uuid().v4(),
-      itemName: itemNameController.text,
-      folderName: folder,
-      firstName: firstNameController.text,
-      middleName: middleNameController.text,
-      lastName: lastNameController.text,
-      userName: userNameController.text,
-      company: companyController.text,
-      nationalInsuranceNumber: nationalInsuranceNumberController.text,
-      passportName: passportController.text,
-      licenseNumber: licenseNumberController.text,
-      email: emailController.text,
-      phone: phoneController.text,
-      address1: address1Controller.text,
-      address2: address2Controller.text,
-      address3: address3Controller.text,
-      cityTown: cityController.text,
-      country: companyController.text,
-      postcode: postcodeController.text,
-    );
+      // generate identity
+      final identity = Identity(
+        id: Uuid().v4(),
+        itemName: itemNameController.text,
+        folderName: folder,
+        firstName: firstNameController.text,
+        middleName: middleNameController.text,
+        lastName: lastNameController.text,
+        userName: userNameController.text,
+        company: companyController.text,
+        nationalInsuranceNumber: nationalInsuranceNumberController.text,
+        passportName: passportController.text,
+        licenseNumber: licenseNumberController.text,
+        email: emailController.text,
+        phone: phoneController.text,
+        address1: address1Controller.text,
+        address2: address2Controller.text,
+        address3: address3Controller.text,
+        cityTown: cityController.text,
+        country: companyController.text,
+        postcode: postcodeController.text,
+      );
 
-    logger.e(identity.toString());
+      logger.e(identity.toString());
+
+      // CREATE IDENTITY
+      context.read<CreateIdentityBloc>().add(
+        CreateIdentityEvent_createIdentity(identity: identity),
+      );
+
+      //POP
+      Navigator.pop(context);
+
+      // RELOAD IDENTITES
+      context.read<IdentitiesBloc>().add(IdentitiesBlocEvent_loadIdentities());
     } catch (e) {
       logger.e(e);
     }
@@ -168,7 +181,7 @@ class _CreatingIdentityPageState extends State<CreatingIdentityPage> {
                           }
                         },
                         child: TextButton(
-                          onPressed: _onSavePicked,
+                          onPressed: _onSaveTapped,
                           child: Text(
                             'Save',
                             style: theme.textTheme.bodyMedium,

@@ -3,6 +3,7 @@ import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/core/theme/app_color.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/cards_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/identities_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/cards_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/identify_page.dart';
@@ -23,8 +24,8 @@ class TypesWidget extends StatelessWidget {
       children: [
         Text('Types'),
 
-        BlocBuilder<LoginsBloc,LoginsBlocState>(
-          builder:(context,state) => CustomListile(
+        BlocBuilder<LoginsBloc, LoginsBlocState>(
+          builder: (context, state) => CustomListile(
             icon: AppIcon.loginIcon,
             title: 'Login',
             onTap: () async {
@@ -33,56 +34,81 @@ class TypesWidget extends StatelessWidget {
                 isScrollControlled: true,
                 builder: (modalContext) {
                   return SizedBox(
-                    height: MediaQuery.of(context).size.height * AppConstant.modalPageHeight,
-                    child: BlocProvider.value (value: BlocProvider.of<LoginsBloc>(context), child: LoginsPage()));
+                    height:
+                        MediaQuery.of(context).size.height *
+                        AppConstant.modalPageHeight,
+                    child: BlocProvider.value(
+                      value: BlocProvider.of<LoginsBloc>(context),
+                      child: LoginsPage(),
+                    ),
+                  );
                 },
               );
-          
-             
             },
-            trailingValue: state is LoginsBlocState_loaded ? state.logins.length.toString() : '',
+            trailingValue: state is LoginsBlocState_loaded
+                ? state.logins.length.toString()
+                : '',
           ),
         ),
-        BlocBuilder<CardsBloc,CardsBlocState>(
-          builder:(context,state)=> CustomListile(
+        BlocBuilder<CardsBloc, CardsBlocState>(
+          builder: (context, state) => CustomListile(
             icon: AppIcon.cardIcon,
             title: 'Card',
-            trailingValue: state is CardsBlocState_loaded ? state.cards.length.toString() : '',
+            trailingValue: state is CardsBlocState_loaded
+                ? state.cards.length.toString()
+                : '',
             onTap: () async {
-          
-               showModalBottomSheet(
+              showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
                 builder: (modalContext) {
                   return SizedBox(
-                    height: MediaQuery.of(context).size.height * AppConstant.modalPageHeight,
-                  child: MultiBlocProvider(providers: [
-                    BlocProvider.value(value: BlocProvider.of<CardsBloc>(context))
-                  ],   child: CardsPage()),
-                    );
+                    height:
+                        MediaQuery.of(context).size.height *
+                        AppConstant.modalPageHeight,
+                    child: MultiBlocProvider(
+                      providers: [
+                        BlocProvider.value(
+                          value: BlocProvider.of<CardsBloc>(context),
+                        ),
+                      ],
+                      child: CardsPage(),
+                    ),
+                  );
                 },
               );
-          
             },
           ),
         ),
-        CustomListile(
-          icon: AppIcon.identityIcon,
-          title: 'Identity',
-          onTap: () async {
-
-
-             showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              builder: (modalContext) {
-                return SizedBox(
-                  height: MediaQuery.of(context).size.height * AppConstant.modalPageHeight,
-                  child: IdentifyPage());
-              },
-            );
-            
-          },
+        BlocBuilder<IdentitiesBloc, IdentitiesBlocState>(
+          builder: (context, state) => CustomListile(
+            icon: AppIcon.identityIcon,
+            title: 'Identity',
+            trailingValue: state is IdentitiesBlocState_loaded
+                ? state.identities.length.toString()
+                : '',
+            onTap: () async {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                builder: (modalContext) {
+                  return SizedBox(
+                    height:
+                        MediaQuery.of(context).size.height *
+                        AppConstant.modalPageHeight,
+                    child: MultiBlocProvider(
+                      providers: [
+                        BlocProvider.value(
+                          value: BlocProvider.of<IdentitiesBloc>(context),
+                        ),
+                      ],
+                      child: IdentifyPage(),
+                    ),
+                  );
+                },
+              );
+            },
+          ),
         ),
       ],
     );
