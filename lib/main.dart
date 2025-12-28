@@ -148,7 +148,7 @@ class _MainPageState extends State<MainPage> {
               BlocProvider.value(
                 value: BlocProvider.of<CreateLoginBloc>(parentContext),
               ),
-               BlocProvider.value(
+              BlocProvider.value(
                 value: BlocProvider.of<FoldersBloc>(parentContext),
               ),
             ],
@@ -172,8 +172,15 @@ class _MainPageState extends State<MainPage> {
         return SizedBox(
           height:
               MediaQuery.of(context).size.height * AppConstant.modalPageHeight,
-          child: BlocProvider.value(
-            value: BlocProvider.of<FoldersBloc>(parentContext),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider.value(
+                value: BlocProvider.of<FoldersBloc>(parentContext),
+              ),
+               BlocProvider.value(
+                value: BlocProvider.of<FoldersBloc>(parentContext),
+              ),
+            ],
             child: CreatingCardPage(),
           ),
         );
@@ -191,23 +198,7 @@ class _MainPageState extends State<MainPage> {
         ),
       ),
     );
-
-    // showModalBottomSheet(
-    //   context: parentContext,
-    //   // showDragHandle: true,
-    //   useRootNavigator: true,
-    //   isScrollControlled: true,
-    //   builder: (modalContext) {
-    //     return FractionallySizedBox(
-    //     heightFactor: AppConstant.modalPageHeight,
-    //       child: BlocProvider.value(
-    //         value: BlocProvider.of<FoldersBloc>(parentContext),
-    //         child: CreatingIdentityPage(
-    //         ),
-    //       ),
-    //     );
-    //   },
-    // );
+    
   }
 
   @override

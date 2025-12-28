@@ -63,6 +63,18 @@ class _CreatingCardPageState extends State<CreatingCardPage> {
     }
   }
 
+  void _setFolder({required String value}) {
+    if (folder == value) {
+      setState(() {
+        folder = null;
+      });
+    } else {
+      setState(() {
+        folder = value;
+      });
+    }
+  }
+
   void _setExpMonth({required int value}) {
     if (expMonth == value) {
       setState(() {
@@ -76,20 +88,24 @@ class _CreatingCardPageState extends State<CreatingCardPage> {
   }
 
   void _onSaveTapped() {
-    // generate card
-    final Card card = Card(
-      id: Uuid().v4(),
-      itemName: itemNameController.text,
-      folderName: folder,
-      cardHolderName: cardHolderNameController.text,
-      number: cardNumberController.text,
-      brand: brand,
-      expMonth: expMonth,
-      expYear: int.parse(expYearController.text),
-      secCode: int.parse(secCodeController.text),
-    );
+    try {
+      // generate card
+      final Card card = Card(
+        id: Uuid().v4(),
+        itemName: itemNameController.text,
+        folderName: folder,
+        cardHolderName: cardHolderNameController.text,
+        number: cardNumberController.text,
+        brand: brand,
+        expMonth: expMonth,
+        expYear: expYearController.text.isNotEmpty  ? int.parse(expYearController.text) : null,
+        secCode: secCodeController.text.isNotEmpty ? int.parse(secCodeController.text) : null,
+      );
 
-    logger.d(card.toString());
+      logger.d(card.toString());
+    } catch (e) {
+      logger.e(e);
+    }
   }
 
   @override
@@ -146,15 +162,26 @@ class _CreatingCardPageState extends State<CreatingCardPage> {
                     hintText: 'Item name (required)',
                   ),
 
-                  PopupMenuButton(
-                    child: Text(folder ?? 'Folder'),
-                    itemBuilder: (context) {
-                      return [
-                        PopupMenuItem(child: Text('Folder 1')),
-                        PopupMenuItem(child: Text('Folder 2')),
-                        PopupMenuItem(child: Text('Folder 3')),
-                      ];
-                    },
+                  BlocBuilder<FoldersBloc, FoldersBlocState>(
+                    builder: (context, state) => PopupMenuButton(
+                      child: Text(folder ?? 'Folder'),
+                      itemBuilder: (context) {
+                        if (state is FoldersBlocLoaded) {
+                          return List.generate(state.folders.length, (index) {
+                            final folder = state.folders[index];
+
+                            return PopupMenuItem(
+                              child: Text(folder),
+                              onTap: () {
+                                _setFolder(value: folder);
+                              },
+                            );
+                          });
+                        } else {
+                          return [];
+                        }
+                      },
+                    ),
                   ),
                 ],
               ),

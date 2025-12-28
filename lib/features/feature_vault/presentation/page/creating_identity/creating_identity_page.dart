@@ -53,7 +53,8 @@ class _CreatingIdentityPageState extends State<CreatingIdentityPage> {
   }
 
   void _onSavePicked() async {
-    // generate identity
+    try {
+          // generate identity
     final identity = Identity(
       id: Uuid().v4(),
       itemName: itemNameController.text,
@@ -77,6 +78,9 @@ class _CreatingIdentityPageState extends State<CreatingIdentityPage> {
     );
 
     logger.e(identity.toString());
+    } catch (e) {
+      logger.e(e);
+    }
   }
 
   @override
@@ -190,15 +194,27 @@ class _CreatingIdentityPageState extends State<CreatingIdentityPage> {
                             hintText: 'Item name (required)',
                           ),
 
-                          PopupMenuButton(
-                            child: Text('Folder 1'),
-                            itemBuilder: (context) {
-                              return [
-                                PopupMenuItem(child: Text('Folder 1')),
-                                PopupMenuItem(child: Text('Folder 2')),
-                                PopupMenuItem(child: Text('Folder 3')),
-                              ];
-                            },
+                          BlocBuilder<FoldersBloc, FoldersBlocState>(
+                            builder: (context, state) => PopupMenuButton(
+                              child: Text(folder ?? 'Folder'),
+                              itemBuilder: (context) {
+                                if (state is FoldersBlocLoaded) {
+                                  return List.generate(state.folders.length, (
+                                    index,
+                                  ) {
+                                    final folder = state.folders[index];
+                                    return PopupMenuItem(
+                                      child: Text(folder),
+                                      onTap: () {
+                                        _pickFolder(value: folder);
+                                      },
+                                    );
+                                  });
+                                } else {
+                                  return [];
+                                }
+                              },
+                            ),
                           ),
                         ],
                       ),
