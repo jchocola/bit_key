@@ -2,6 +2,7 @@ import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/core/theme/app_color.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/cards_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/cards_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/identify_page.dart';
@@ -42,22 +43,28 @@ class TypesWidget extends StatelessWidget {
             trailingValue: state is LoginsBlocState_loaded ? state.logins.length.toString() : '',
           ),
         ),
-        CustomListile(
-          icon: AppIcon.cardIcon,
-          title: 'Card',
-          onTap: () async {
-
-             showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              builder: (modalContext) {
-                return SizedBox(
-                  height: MediaQuery.of(context).size.height * AppConstant.modalPageHeight,
-                  child: CardsPage());
-              },
-            );
-
-          },
+        BlocBuilder<CardsBloc,CardsBlocState>(
+          builder:(context,state)=> CustomListile(
+            icon: AppIcon.cardIcon,
+            title: 'Card',
+            trailingValue: state is CardsBlocState_loaded ? state.cards.length.toString() : '',
+            onTap: () async {
+          
+               showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                builder: (modalContext) {
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height * AppConstant.modalPageHeight,
+                  child: MultiBlocProvider(providers: [
+                    BlocProvider.value(value: BlocProvider.of<CardsBloc>(context))
+                  ],   child: CardsPage()),
+                    );
+                },
+              );
+          
+            },
+          ),
         ),
         CustomListile(
           icon: AppIcon.identityIcon,

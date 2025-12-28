@@ -1,10 +1,12 @@
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/cards_bloc.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
 import 'package:bit_key/shared/widgets/search_textfiled.dart';
 import 'package:family_bottom_sheet/family_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CardsPage extends StatelessWidget {
   const CardsPage({super.key});
@@ -36,62 +38,27 @@ class CardsPage extends StatelessWidget {
               ),
               SearchTextfiled(),
 
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    spacing: AppConstant.appPadding,
-                    children: [
-                      CustomListile(
-                        title: 'github',
-                        subTitle: 'sangsangden@gmail',
+              BlocBuilder<CardsBloc, CardsBlocState>(
+                builder: (context, state) {
+                  if (state is CardsBlocState_loaded) {
+                    return Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          spacing: AppConstant.appPadding,
+                          children: List.generate(state.cards.length, (index) {
+                            final card = state.cards[index];
+                            return CustomListile(
+                              title: card.itemName,
+                              subTitle: card.cardHolderName,
+                            );
+                          }),
+                        ),
                       ),
-                      CustomListile(
-                        title: 'github',
-                        subTitle: 'sangsangden@gmail',
-                      ),
-                      CustomListile(
-                        title: 'github',
-                        subTitle: 'sangsangden@gmail',
-                      ),
-                      CustomListile(
-                        title: 'github',
-                        subTitle: 'sangsangden@gmail',
-                      ),
-                      CustomListile(
-                        title: 'github',
-                        subTitle: 'sangsangden@gmail',
-                      ),
-                      CustomListile(
-                        title: 'github',
-                        subTitle: 'sangsangden@gmail',
-                      ),
-                      CustomListile(
-                        title: 'github',
-                        subTitle: 'sangsangden@gmail',
-                      ),
-                      CustomListile(
-                        title: 'github',
-                        subTitle: 'sangsangden@gmail',
-                      ),
-                      CustomListile(
-                        title: 'github',
-                        subTitle: 'sangsangden@gmail',
-                      ),
-                      CustomListile(
-                        title: 'github',
-                        subTitle: 'sangsangden@gmail',
-                      ),
-                      CustomListile(
-                        title: 'github',
-                        subTitle: 'sangsangden@gmail',
-                      ),
-                      CustomListile(
-                        title: 'github',
-                        subTitle: 'sangsangden@gmail',
-                      ),
-                    ],
-                  ),
-                ),
+                    );
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
               ),
             ],
           ),

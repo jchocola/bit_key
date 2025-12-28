@@ -7,6 +7,7 @@ import 'package:bit_key/features/feature_vault/domain/entity/card.dart'
     show Card;
 import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/page/creating_card/bloc/create_card_bloc.dart';
 import 'package:bit_key/main.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
 import 'package:bit_key/shared/widgets/custom_textfield.dart';
@@ -98,9 +99,21 @@ class _CreatingCardPageState extends State<CreatingCardPage> {
         number: cardNumberController.text,
         brand: brand,
         expMonth: expMonth,
-        expYear: expYearController.text.isNotEmpty  ? int.parse(expYearController.text) : null,
-        secCode: secCodeController.text.isNotEmpty ? int.parse(secCodeController.text) : null,
+        expYear: expYearController.text.isNotEmpty
+            ? int.parse(expYearController.text)
+            : null,
+        secCode: secCodeController.text.isNotEmpty
+            ? int.parse(secCodeController.text)
+            : null,
       );
+
+      // CREATINF CARD
+      context.read<CreateCardBloc>().add(
+        CreateCardBlocEvent_createCard(card: card),
+      );
+
+      // Pop
+      Navigator.of(context).pop();
 
       logger.d(card.toString());
     } catch (e) {

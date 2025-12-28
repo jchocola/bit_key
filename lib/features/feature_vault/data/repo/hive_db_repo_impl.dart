@@ -45,9 +45,15 @@ class HiveDbRepoImpl implements LocalDbRepository {
   }
 
   @override
-  Future<List<Card>> getAllCard() {
-    // TODO: implement getAllCard
-    throw UnimplementedError();
+  Future<List<Card>> getAllCard() async {
+    try {
+      final listValues = _cardsBox.values;
+      final listModel = listValues.map((e) => e as CardModel).toList();
+      return listModel.map((e) => e.toEntity()).toList();
+    } catch (e) {
+      logger.e(e);
+      return [];
+    }
   }
 
   @override
@@ -64,9 +70,8 @@ class HiveDbRepoImpl implements LocalDbRepository {
       final listModel = values.map((e) => e as LoginModel).toList();
       return listModel.map((e) => e.toEntity()).toList();
     } catch (e) {
-       logger.e(e);
+      logger.e(e);
       return [];
-     
     }
   }
 
@@ -93,9 +98,14 @@ class HiveDbRepoImpl implements LocalDbRepository {
   }
 
   @override
-  Future<void> saveCard({required Card card}) {
-    // TODO: implement saveCard
-    throw UnimplementedError();
+  Future<void> saveCard({required Card card}) async {
+    try {
+      final cardModel = CardModel.fromEntity(card);
+      await _cardsBox.add(cardModel);
+      logger.d('Added new card');
+    } catch (e) {
+      logger.e(e);
+    }
   }
 
   @override

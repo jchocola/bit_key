@@ -12,10 +12,12 @@ import 'package:bit_key/features/feature_generate_pass/presentation/generating_p
 import 'package:bit_key/features/feature_setting/presentation/setting_page.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/cards_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/logins_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/my_vault_page.dart';
+import 'package:bit_key/features/feature_vault/presentation/page/creating_card/bloc/create_card_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_card/creating_card_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_folder/creating_folder_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_identity/creating_identity_page.dart';
@@ -82,6 +84,17 @@ class MyApp extends StatelessWidget {
             create: (context) =>
                 LoginsBloc(localDbRepository: getIt<LocalDbRepository>())
                   ..add(LoginsBlocEvent_loadLogins()),
+          ),
+
+          BlocProvider(
+            create: (context) =>
+                CardsBloc(localDbRepository: getIt<LocalDbRepository>())
+                  ..add(CardsBlocEvent_loadCards()),
+          ),
+
+          BlocProvider(
+            create: (context) =>
+                CreateCardBloc(localDbRepository: getIt<LocalDbRepository>()),
           ),
         ],
         child: MainPage(),
@@ -177,15 +190,19 @@ class _MainPageState extends State<MainPage> {
               BlocProvider.value(
                 value: BlocProvider.of<FoldersBloc>(parentContext),
               ),
-               BlocProvider.value(
-                value: BlocProvider.of<FoldersBloc>(parentContext),
+
+              BlocProvider.value(
+                value: BlocProvider.of<CreateCardBloc>(parentContext),
               ),
             ],
             child: CreatingCardPage(),
           ),
         );
       },
-    );
+    ).then((_) {
+      // RELOAD CARDS
+      context.read<CardsBloc>().add(CardsBlocEvent_loadCards());
+    });
   }
 
   void onCreateIdentityTapped(BuildContext parentContext) async {
@@ -198,7 +215,6 @@ class _MainPageState extends State<MainPage> {
         ),
       ),
     );
-    
   }
 
   @override
