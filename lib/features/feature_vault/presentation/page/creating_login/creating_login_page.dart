@@ -136,9 +136,7 @@ class _CreatingLoginPageState extends State<CreatingLoginPage> {
                     hintText: 'Item name (required)',
                   ),
 
-                  ///
-                  /// TODO : PICK FOLDERS
-                  ///
+                
                   BlocBuilder<FoldersBloc, FoldersBlocState>(
                     builder: (context, state) => PopupMenuButton(
                       child: Text(selectedFolder ?? 'None'),
