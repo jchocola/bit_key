@@ -2,12 +2,14 @@ import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/core/theme/app_color.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/delete_confirm.dart';
 import 'package:bit_key/shared/widgets/big_button.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
 import 'package:bit_key/shared/widgets/search_textfiled.dart';
 import 'package:family_bottom_sheet/family_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
 
 class ViewInfoPage extends StatelessWidget {
@@ -42,48 +44,26 @@ class ViewInfoPage extends StatelessWidget {
 
               Expanded(
                 child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: AppConstant.appPadding,
-                    children: [
-                      CustomListile(
-                        onTap: () {},
-                        title: 'github',
-                        subTitle: 'sangsangden@gmail',
-                        trailingValue: 'IT',
-                      ),
+                  child: BlocBuilder<PickedItemBloc, PickedItemBlocState>(
+                    builder: (context, state) {
+                      if (state is PickedItemBlocState_loaded) {
+                        if (state.login != null) {
+                          return _buildLogin(context);
+                        }
 
-                      Text('CREDENTIALS'),
-                      _credentialsInfo(),
+                        if (state.card != null) {
+                          return _buildCard(context);
+                        }
 
-                      Text(
-                        'Created : 9 Nov 2022 , 21:59',
-                        style: theme.textTheme.bodySmall,
-                      ),
-                      Text(
-                        'Last Edited : 9 Nov 2022 , 21:59',
-                        style: theme.textTheme.bodySmall,
-                      ),
-
-                      Row(
-                        spacing: AppConstant.appPadding,
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: BigButton(
-                              title: 'Delete',
-                              onTap: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => DeleteConfirm(),
-                                );
-                              },
-                            ),
-                          ),
-                          Expanded(flex: 3, child: BigButton(title: 'Edit')),
-                        ],
-                      ),
-                    ],
+                        if (state.identity != null) {
+                          return _buildIdentity(context);
+                        } else {
+                          return CircularProgressIndicator();
+                        }
+                      } else {
+                        return CircularProgressIndicator();
+                      }
+                    },
                   ),
                 ),
               ),
@@ -92,6 +72,58 @@ class ViewInfoPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildLogin(BuildContext context) {
+    final theme = Theme.of(context); 
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: AppConstant.appPadding,
+      children: [
+        CustomListile(
+          onTap: () {},
+          title: 'github',
+          subTitle: 'sangsangden@gmail',
+          trailingValue: 'IT',
+        ),
+
+        Text('CREDENTIALS'),
+        _credentialsInfo(),
+
+        Text('Created : 9 Nov 2022 , 21:59', style: theme.textTheme.bodySmall),
+        Text(
+          'Last Edited : 9 Nov 2022 , 21:59',
+          style: theme.textTheme.bodySmall,
+        ),
+
+        Row(
+          spacing: AppConstant.appPadding,
+          children: [
+            Expanded(
+              flex: 1,
+              child: BigButton(
+                title: 'Delete',
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => DeleteConfirm(),
+                  );
+                },
+              ),
+            ),
+            Expanded(flex: 3, child: BigButton(title: 'Edit')),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCard(BuildContext context) {
+    return Column(children: [Text('Card')]);
+  }
+
+  Widget _buildIdentity(BuildContext context) {
+    return Column(children: [Text('Identity')]);
   }
 }
 

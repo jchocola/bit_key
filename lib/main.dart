@@ -18,6 +18,7 @@ import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.da
 import 'package:bit_key/features/feature_vault/presentation/bloc/identities_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/no_folders_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/folder_info_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/logins_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/my_vault_page.dart';
@@ -126,6 +127,11 @@ class MyApp extends StatelessWidget {
             create: (context) =>
                 FolderDetailBloc(localDbRepository: getIt<LocalDbRepository>())
           ),
+
+          BlocProvider(
+            create: (context) =>
+                PickedItemBloc()
+          ), 
         ],
         child: MainPage(),
       ),
