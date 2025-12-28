@@ -16,6 +16,7 @@ import 'package:bit_key/features/feature_vault/presentation/bloc/cards_bloc.dart
 import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/identities_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/no_folders_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/logins_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/my_vault_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_card/bloc/create_card_bloc.dart';
@@ -110,6 +111,12 @@ class MyApp extends StatelessWidget {
             create: (context) => CreateIdentityBloc(
               localDbRepository: getIt<LocalDbRepository>(),
             ),
+          ),
+
+            BlocProvider(
+            create: (context) => NoFoldersBloc(
+              localDbRepository: getIt<LocalDbRepository>(),
+            )..add(NoFoldersBlocEvent_load()),
           ),
         ],
         child: MainPage(),

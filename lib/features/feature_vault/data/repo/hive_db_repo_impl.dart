@@ -154,4 +154,43 @@ class HiveDbRepoImpl implements LocalDbRepository {
     // TODO: implement updateLogin
     throw UnimplementedError();
   }
+
+  @override
+  Future<List<Card>> getCardsWithoutFolder() async {
+    try {
+      final allCard = await getAllCard();
+
+      final filteredCards = allCard.where((e) => e.folderName == null).toList();
+      return filteredCards;
+    } catch (e) {
+      logger.e(e);
+      return [];
+    }
+  }
+
+  @override
+  Future<List<Identity>> getIdentiesWithoutFolder() async{
+    try {
+      final identities = await getAllIdentity();
+
+      final filteredIdentities = identities.where((e) => e.folderName == null).toList();
+      return filteredIdentities;
+    } catch (e) {
+      logger.e(e);
+      return [];
+    }
+  }
+
+  @override
+  Future<List<Login>> getLoginsWithoutFolder() async{
+     try {
+      final logins = await getAllLogin();
+
+      final filteredLogins = logins.where((e) => e.folderName == null).toList();
+      return filteredLogins;
+    } catch (e) {
+      logger.e(e);
+      return [];
+    }
+  }
 }

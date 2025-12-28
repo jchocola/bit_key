@@ -27,16 +27,6 @@ class GeneratorPassword extends StatelessWidget {
               
             },
           ),
-
-          // BlocBuilder<PassGeneratorBloc, PassGeneratorBlocState>(
-          //   builder: (context, state) {
-          //     if (state is PassGeneratorBlocState_state) {
-          //       return Text(state.passwordStrength?.strength ?? '');
-          //     } else {
-          //       return CircleAvatar();
-          //     }
-          //   },
-          // ),
           PassGeneratorParameters(),
         ],
       ),
