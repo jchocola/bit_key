@@ -21,7 +21,7 @@ class FoldersWidget extends StatelessWidget {
               spacing: AppConstant.appPadding,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Folders'),
+                Text('Folders (${state.folders.length})'),
                 ...List.generate(state.folders.length, (index) {
                   return CustomListile(
                     title: state.folders[index],

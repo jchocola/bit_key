@@ -113,10 +113,10 @@ class MyApp extends StatelessWidget {
             ),
           ),
 
-            BlocProvider(
-            create: (context) => NoFoldersBloc(
-              localDbRepository: getIt<LocalDbRepository>(),
-            )..add(NoFoldersBlocEvent_load()),
+          BlocProvider(
+            create: (context) =>
+                NoFoldersBloc(localDbRepository: getIt<LocalDbRepository>())
+                  ..add(NoFoldersBlocEvent_load()),
           ),
         ],
         child: MainPage(),
@@ -194,6 +194,9 @@ class _MainPageState extends State<MainPage> {
     ).then((_) {
       // RELOAD LOGINS LIST WHEN BOMMTOM MODAL CLOSED
       context.read<LoginsBloc>().add(LoginsBlocEvent_loadLogins());
+
+      // RELOAD NO FOLDERS
+      context.read<NoFoldersBloc>().add(NoFoldersBlocEvent_load());
     });
   }
 
@@ -224,6 +227,9 @@ class _MainPageState extends State<MainPage> {
     ).then((_) {
       // RELOAD CARDS
       context.read<CardsBloc>().add(CardsBlocEvent_loadCards());
+
+       // RELOAD NO FOLDERS
+      context.read<NoFoldersBloc>().add(NoFoldersBlocEvent_load());
     });
   }
 
@@ -240,8 +246,12 @@ class _MainPageState extends State<MainPage> {
               value: BlocProvider.of<CreateIdentityBloc>(parentContext),
             ),
 
-             BlocProvider.value(
+            BlocProvider.value(
               value: BlocProvider.of<IdentitiesBloc>(parentContext),
+            ),
+
+            BlocProvider.value(
+              value: BlocProvider.of<NoFoldersBloc>(parentContext),
             ),
           ],
           child: CreatingIdentityPage(),

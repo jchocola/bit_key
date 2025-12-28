@@ -7,6 +7,7 @@ import 'package:bit_key/features/feature_vault/domain/entity/identity.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/identities_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/no_folders_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_identity/bloc/create_identity_bloc.dart';
 import 'package:bit_key/main.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
@@ -91,6 +92,9 @@ class _CreatingIdentityPageState extends State<CreatingIdentityPage> {
 
       // RELOAD IDENTITES
       context.read<IdentitiesBloc>().add(IdentitiesBlocEvent_loadIdentities());
+
+       // RELOAD NO FOLDERS
+      context.read<NoFoldersBloc>().add(NoFoldersBlocEvent_load());
     } catch (e) {
       logger.e(e);
     }
