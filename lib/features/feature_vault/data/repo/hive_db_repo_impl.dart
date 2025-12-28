@@ -169,11 +169,13 @@ class HiveDbRepoImpl implements LocalDbRepository {
   }
 
   @override
-  Future<List<Identity>> getIdentiesWithoutFolder() async{
+  Future<List<Identity>> getIdentiesWithoutFolder() async {
     try {
       final identities = await getAllIdentity();
 
-      final filteredIdentities = identities.where((e) => e.folderName == null).toList();
+      final filteredIdentities = identities
+          .where((e) => e.folderName == null)
+          .toList();
       return filteredIdentities;
     } catch (e) {
       logger.e(e);
@@ -182,12 +184,61 @@ class HiveDbRepoImpl implements LocalDbRepository {
   }
 
   @override
-  Future<List<Login>> getLoginsWithoutFolder() async{
-     try {
+  Future<List<Login>> getLoginsWithoutFolder() async {
+    try {
       final logins = await getAllLogin();
 
       final filteredLogins = logins.where((e) => e.folderName == null).toList();
       return filteredLogins;
+    } catch (e) {
+      logger.e(e);
+      return [];
+    }
+  }
+
+  @override
+  Future<List<Card>> getCardsWithFolderName({
+    required String folderName,
+  }) async {
+    try {
+      final allCards = await getAllCard();
+
+      final filteredListCards = allCards
+          .where((e) => e.folderName == folderName)
+          .toList();
+      return filteredListCards;
+    } catch (e) {
+      logger.e(e);
+      return [];
+    }
+  }
+
+  @override
+  Future<List<Identity>> getIdentitiesWithFolderName({
+    required String folderName,
+  }) async {
+     try {
+      final allIdentities = await getAllIdentity();
+
+      final filteredList = allIdentities
+          .where((e) => e.folderName == folderName)
+          .toList();
+      return filteredList;
+    } catch (e) {
+      logger.e(e);
+      return [];
+    }
+  }
+
+  @override
+  Future<List<Login>> getLoginsWithFolderName({required String folderName}) async {
+     try {
+      final allLogins = await getAllLogin();
+
+      final filteredList = allLogins
+          .where((e) => e.folderName == folderName)
+          .toList();
+      return filteredList;
     } catch (e) {
       logger.e(e);
       return [];

@@ -26,7 +26,7 @@ class FoldersWidget extends StatelessWidget {
                   return CustomListile(
                     title: state.folders[index],
                     icon: AppIcon.folderIcon,
-                    trailingValue: '0',
+                    trailingValue: state.counts[index].toString(),
                     onTap: () {
                       // set selected folder
                       context.read<FoldersBloc>().add(

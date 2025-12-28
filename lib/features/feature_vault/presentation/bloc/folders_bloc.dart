@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 
+import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -50,23 +51,27 @@ class FoldersBlocLoading extends FoldersBlocState {}
 
 class FoldersBlocLoaded extends FoldersBlocState {
   final List<String> folders;
-
+  final List<int> counts;
   final String? selectedFolder;
 
-  FoldersBlocLoaded({required this.folders, this.selectedFolder});
+  FoldersBlocLoaded({
+    required this.folders,
+    this.selectedFolder,
+    required this.counts,
+  });
 
   @override
-  List<Object?> get props => [folders, selectedFolder];
-
-
+  List<Object?> get props => [folders, selectedFolder, counts];
 
   FoldersBlocLoaded copyWith({
     List<String>? folders,
     String? selectedFolder,
+    List<int>? counts,
   }) {
     return FoldersBlocLoaded(
       folders: folders ?? this.folders,
-      selectedFolder: selectedFolder?? this.selectedFolder,
+      selectedFolder: selectedFolder ?? this.selectedFolder,
+      counts: counts ?? this.counts,
     );
   }
 }
@@ -80,16 +85,37 @@ class FoldersBlocSuccess extends FoldersBlocState {}
 ///
 class FoldersBloc extends Bloc<FoldersBlocEvent, FoldersBlocState> {
   final FolderRepository folderRepository;
-  FoldersBloc({required this.folderRepository}) : super(FoldersBlocInit()) {
+  final LocalDbRepository localDbRepository;
+  FoldersBloc({required this.folderRepository, required this.localDbRepository})
+    : super(FoldersBlocInit()) {
     ///
     /// LOAD FOLDERS
     ///
     on<FoldersBlocEvent_loadFolders>((event, emit) async {
       logger.d('Load folder');
       try {
+        // get all folders
         final folders = await folderRepository.getAllFolder();
         logger.i('Folders : ${folders.length}');
-        emit(FoldersBlocLoaded(folders: folders));
+
+        //get counts for every folder
+        final List<int> counts = [];
+        for (var i in folders) {
+          final cardCount = await localDbRepository.getCardsWithFolderName(
+            folderName: i,
+          );
+          final loginCount = await localDbRepository.getLoginsWithFolderName(
+            folderName: i,
+          );
+          final identityCount = await localDbRepository
+              .getIdentitiesWithFolderName(folderName: i);
+
+          counts.add(
+            cardCount.length + loginCount.length + identityCount.length,
+          );
+        }
+
+        emit(FoldersBlocLoaded(folders: folders, counts: counts));
       } catch (e) {
         logger.e(e);
         emit(FoldersBlocError());

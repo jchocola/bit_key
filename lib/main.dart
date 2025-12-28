@@ -74,9 +74,10 @@ class MyApp extends StatelessWidget {
           ),
 
           BlocProvider(
-            create: (context) =>
-                FoldersBloc(folderRepository: getIt<FolderRepository>())
-                  ..add(FoldersBlocEvent_loadFolders()),
+            create: (context) => FoldersBloc(
+              folderRepository: getIt<FolderRepository>(),
+              localDbRepository: getIt<LocalDbRepository>(),
+            )..add(FoldersBlocEvent_loadFolders()),
           ),
 
           BlocProvider(
@@ -197,6 +198,9 @@ class _MainPageState extends State<MainPage> {
 
       // RELOAD NO FOLDERS
       context.read<NoFoldersBloc>().add(NoFoldersBlocEvent_load());
+
+      // RELOAD FOLDERS
+      context.read<FoldersBloc>().add(FoldersBlocEvent_loadFolders());
     });
   }
 
@@ -228,8 +232,11 @@ class _MainPageState extends State<MainPage> {
       // RELOAD CARDS
       context.read<CardsBloc>().add(CardsBlocEvent_loadCards());
 
-       // RELOAD NO FOLDERS
+      // RELOAD NO FOLDERS
       context.read<NoFoldersBloc>().add(NoFoldersBlocEvent_load());
+      
+        // RELOAD FOLDERS
+      context.read<FoldersBloc>().add(FoldersBlocEvent_loadFolders());
     });
   }
 

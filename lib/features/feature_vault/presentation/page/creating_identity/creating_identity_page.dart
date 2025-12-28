@@ -95,6 +95,9 @@ class _CreatingIdentityPageState extends State<CreatingIdentityPage> {
 
        // RELOAD NO FOLDERS
       context.read<NoFoldersBloc>().add(NoFoldersBlocEvent_load());
+
+        // RELOAD FOLDERS
+      context.read<FoldersBloc>().add(FoldersBlocEvent_loadFolders());
     } catch (e) {
       logger.e(e);
     }
