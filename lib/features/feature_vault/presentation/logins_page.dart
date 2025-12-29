@@ -1,7 +1,9 @@
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
+import 'package:bit_key/features/feature_vault/domain/entity/login.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/view_info_page.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
 import 'package:bit_key/shared/widgets/search_textfiled.dart';
@@ -14,6 +16,31 @@ class LoginsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     void _onLoginTapped({required Login login}) {
+      // SET PICK LOGIN
+      context.read<PickedItemBloc>().add(
+        PickedItemBlocEvent_pickLogin(login: login),
+      );
+
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (modalContext) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: BlocProvider.of<PickedItemBloc>(context))
+            ],
+            child: SizedBox(
+              height:
+                  MediaQuery.of(context).size.height *
+                  AppConstant.modalPageHeight,
+              child: ViewInfoPage(),
+            ),
+          );
+        },
+      );
+    }
+
     final theme = Theme.of(context);
     return GestureDetector(
       onTap: () {
@@ -48,6 +75,7 @@ class LoginsPage extends StatelessWidget {
                           spacing: AppConstant.appPadding,
                           children: List.generate(state.logins.length, (index) {
                             return CustomListile(
+                              onTap: () => _onLoginTapped(login: state.logins[index]),
                               icon: AppIcon.loginIcon,
                               title: state.logins[index].itemName,
                               subTitle: state.logins[index].login,

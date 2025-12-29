@@ -5,6 +5,7 @@ import 'package:bit_key/core/theme/app_color.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/cards_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/identities_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/cards_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/identify_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/logins_page.dart';
@@ -37,8 +38,15 @@ class TypesWidget extends StatelessWidget {
                     height:
                         MediaQuery.of(context).size.height *
                         AppConstant.modalPageHeight,
-                    child: BlocProvider.value(
-                      value: BlocProvider.of<LoginsBloc>(context),
+                    child: MultiBlocProvider(
+                      providers: [
+                        BlocProvider.value(
+                          value: BlocProvider.of<LoginsBloc>(context),
+                        ),
+                         BlocProvider.value(
+                          value: BlocProvider.of<PickedItemBloc>(context),
+                        ),
+                      ],
                       child: LoginsPage(),
                     ),
                   );
@@ -71,6 +79,9 @@ class TypesWidget extends StatelessWidget {
                         BlocProvider.value(
                           value: BlocProvider.of<CardsBloc>(context),
                         ),
+                          BlocProvider.value(
+                          value: BlocProvider.of<PickedItemBloc>(context),
+                        ),
                       ],
                       child: CardsPage(),
                     ),
@@ -100,6 +111,9 @@ class TypesWidget extends StatelessWidget {
                       providers: [
                         BlocProvider.value(
                           value: BlocProvider.of<IdentitiesBloc>(context),
+                        ),
+                          BlocProvider.value(
+                          value: BlocProvider.of<PickedItemBloc>(context),
                         ),
                       ],
                       child: IdentifyPage(),

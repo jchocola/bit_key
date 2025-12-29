@@ -1,7 +1,10 @@
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
+import 'package:bit_key/features/feature_vault/domain/entity/identity.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/identities_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/view_info_page.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
 import 'package:bit_key/shared/widgets/search_textfiled.dart';
 import 'package:family_bottom_sheet/family_bottom_sheet.dart';
@@ -13,6 +16,32 @@ class IdentifyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+         void _onIdentityTapped({required Identity identity}) {
+      // SET PICK IDENTITY
+      context.read<PickedItemBloc>().add(
+        PickedItemBlocEvent_pickIdentity(identity: identity),
+      );
+
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (modalContext) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: BlocProvider.of<PickedItemBloc>(context))
+            ],
+            child: SizedBox(
+              height:
+                  MediaQuery.of(context).size.height *
+                  AppConstant.modalPageHeight,
+              child: ViewInfoPage(),
+            ),
+          );
+        },
+      );
+    }
+
+
     final theme = Theme.of(context);
     return GestureDetector(
       onTap: () {
@@ -52,6 +81,7 @@ class IdentifyPage extends StatelessWidget {
                             return CustomListile(
                               title: identity.itemName,
                               subTitle: identity.firstName,
+                              onTap: () => _onIdentityTapped(identity: identity),
                             );
                           }),
                         ),
