@@ -1,13 +1,17 @@
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
+import 'package:bit_key/features/feature_vault/domain/entity/card.dart';
+import 'package:bit_key/features/feature_vault/domain/entity/identity.dart';
+import 'package:bit_key/features/feature_vault/domain/entity/login.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/folder_detail_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/view_info_page.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
 import 'package:bit_key/shared/widgets/search_textfiled.dart';
 import 'package:family_bottom_sheet/family_bottom_sheet.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Card;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FolderInfoPage extends StatelessWidget {
@@ -15,6 +19,82 @@ class FolderInfoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+     void _onLoginTapped({required Login login}) {
+      // SET PICK LOGIN
+      context.read<PickedItemBloc>().add(
+        PickedItemBlocEvent_pickLogin(login: login),
+      );
+
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (modalContext) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: BlocProvider.of<PickedItemBloc>(context))
+            ],
+            child: SizedBox(
+              height:
+                  MediaQuery.of(context).size.height *
+                  AppConstant.modalPageHeight,
+              child: ViewInfoPage(),
+            ),
+          );
+        },
+      );
+    }
+
+       void _onCardTapped({required Card card}) {
+      // SET PICK CARD
+      context.read<PickedItemBloc>().add(
+        PickedItemBlocEvent_pickCard(card: card),
+      );
+
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (modalContext) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: BlocProvider.of<PickedItemBloc>(context))
+            ],
+            child: SizedBox(
+              height:
+                  MediaQuery.of(context).size.height *
+                  AppConstant.modalPageHeight,
+              child: ViewInfoPage(),
+            ),
+          );
+        },
+      );
+    }
+
+      void _onIdentityTapped({required Identity identity}) {
+      // SET PICK IDENTITY
+      context.read<PickedItemBloc>().add(
+        PickedItemBlocEvent_pickIdentity(identity: identity),
+      );
+
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (modalContext) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: BlocProvider.of<PickedItemBloc>(context))
+            ],
+            child: SizedBox(
+              height:
+                  MediaQuery.of(context).size.height *
+                  AppConstant.modalPageHeight,
+              child: ViewInfoPage(),
+            ),
+          );
+        },
+      );
+    }
+
     final theme = Theme.of(context);
     return GestureDetector(
       onTap: () {
@@ -65,6 +145,7 @@ class FolderInfoPage extends StatelessWidget {
                                       (index) {
                                         final login = state.logins[index];
                                         return CustomListile(
+                                          onTap: ()=> _onLoginTapped(login: login),
                                           title: login.itemName,
                                           icon: AppIcon.loginIcon,
                                         );
@@ -83,6 +164,7 @@ class FolderInfoPage extends StatelessWidget {
                                       (index) {
                                         final card = state.cards[index];
                                         return CustomListile(
+                                          onTap: () => _onCardTapped(card: card),
                                           title: card.itemName,
                                           icon: AppIcon.cardIcon,
                                         );
@@ -102,6 +184,7 @@ class FolderInfoPage extends StatelessWidget {
                                         final identity =
                                             state.identities[index];
                                         return CustomListile(
+                                          onTap: () => _onIdentityTapped(identity: identity),
                                           title: identity.itemName,
                                           icon: AppIcon.identityIcon,
                                         );
