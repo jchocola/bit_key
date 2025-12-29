@@ -201,7 +201,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
     required String folderName,
   }) async {
     try {
-      final allCards = await getAllCard();
+      final allCards = await getActiveCard();
 
       final filteredListCards = allCards
           .where((e) => e.folderName == folderName)
@@ -218,7 +218,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
     required String folderName,
   }) async {
     try {
-      final allIdentities = await getAllIdentity();
+      final allIdentities = await getActiveIdentity();
 
       final filteredList = allIdentities
           .where((e) => e.folderName == folderName)
@@ -235,7 +235,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
     required String folderName,
   }) async {
     try {
-      final allLogins = await getAllLogin();
+      final allLogins = await getActiveLogin();
 
       final filteredList = allLogins
           .where((e) => e.folderName == folderName)
