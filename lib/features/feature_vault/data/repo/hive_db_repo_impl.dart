@@ -244,4 +244,58 @@ class HiveDbRepoImpl implements LocalDbRepository {
       return [];
     }
   }
+  
+  @override
+  Future<List<Card>> getCardsInBin() {
+    // TODO: implement getCardsInBin
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<List<Identity>> getIdentitiesInBin() {
+    // TODO: implement getIdentitiesInBin
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<List<Login>> getLoginsInBin() {
+    // TODO: implement getLoginsInBin
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> moveCardToBin({required Card card}) {
+    // TODO: implement moveCardToBin
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> moveIdentityToBin({required Identity identity}) {
+    // TODO: implement moveIdentityToBin
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> moveLoginToBin({required Login login}) {
+    // TODO: implement moveLoginToBin
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> restoreCardFromBin({required Card card}) {
+    // TODO: implement restoreCardFromBin
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> restoreIdentityFromBin({required Identity card}) {
+    // TODO: implement restoreIdentityFromBin
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> restoreLoginFromBin({required Login card}) {
+    // TODO: implement restoreLoginFromBin
+    throw UnimplementedError();
+  }
 }
