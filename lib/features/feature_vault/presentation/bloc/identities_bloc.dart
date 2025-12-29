@@ -52,8 +52,8 @@ class IdentitiesBloc extends Bloc<IdentitiesBlocEvent, IdentitiesBlocState> {
     ///
     on<IdentitiesBlocEvent_loadIdentities>((event, emit) async {
       try {
-        logger.i('Load identites');
-        final list = await localDbRepository.getAllIdentity();
+        logger.i('Load active identites');
+        final list = await localDbRepository.getActiveIdentity();
         logger.i('Loaded identites : ${list.length}');
         emit(IdentitiesBlocState_loaded(identities: list));
       } catch (e) {

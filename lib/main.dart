@@ -12,6 +12,7 @@ import 'package:bit_key/features/feature_generate_pass/presentation/generating_p
 import 'package:bit_key/features/feature_setting/presentation/setting_page.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/bin_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/cards_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/folder_detail_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
@@ -131,7 +132,12 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) =>
                 PickedItemBloc(localDbRepository: getIt<LocalDbRepository>())
-          ), 
+          ),
+
+           BlocProvider(
+            create: (context) =>
+                BinBloc(localDbRepository: getIt<LocalDbRepository>())..add(BinBlocEvent_load())
+          ),  
         ],
         child: MainPage(),
       ),

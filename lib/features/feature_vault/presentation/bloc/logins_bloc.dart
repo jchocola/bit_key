@@ -51,8 +51,9 @@ class LoginsBloc extends Bloc<LoginsBlocEvent, LoginsBlocState> {
     ///
     on<LoginsBlocEvent_loadLogins>((event, emit) async {
       try {
-        logger.d('Load login list');
-        final loginList = await localDbRepository.getAllLogin();
+        logger.d('Load Active login list');
+
+        final loginList = await localDbRepository.getActiveLogin();
         logger.d('loaded login list : ${loginList.length}');
 
         emit(LoginsBlocState_loaded(logins: loginList));

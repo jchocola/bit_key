@@ -288,9 +288,8 @@ class HiveDbRepoImpl implements LocalDbRepository {
       final cardIndex = await getCardIndexInBox(card: card);
       logger.d('CardIndex : ${cardIndex}');
       final CardModel model = CardModel.fromEntity(card);
-      model.copyWith(isHide: true);
 
-      await _cardsBox.putAt(cardIndex, model);
+      await _cardsBox.putAt(cardIndex, model.copyWith(isHide: true));
       logger.d('Moved card to bin ${card.itemName}');
     } catch (e) {
       logger.e(e);
@@ -376,6 +375,45 @@ class HiveDbRepoImpl implements LocalDbRepository {
     } catch (e) {
       logger.e(e);
       throw AppException.login_not_exist_in_box;
+    }
+  }
+
+  @override
+  Future<List<Card>> getActiveCard() async {
+    try {
+      final allCards = await getAllCard();
+      return allCards
+          .where((e) => e.isHide == false || e.isHide == null)
+          .toList();
+    } catch (e) {
+      logger.e(e);
+      return [];
+    }
+  }
+
+  @override
+  Future<List<Identity>> getActiveIdentity() async{
+    try {
+      final allIdentity = await getAllIdentity();
+      return allIdentity
+          .where((e) => e.isHide == false || e.isHide == null)
+          .toList();
+    } catch (e) {
+      logger.e(e);
+      return [];
+    }
+  }
+
+  @override
+  Future<List<Login>> getActiveLogin()async {
+      try {
+      final allLogins = await getAllLogin();
+      return allLogins
+          .where((e) => e.isHide == false || e.isHide == null)
+          .toList();
+    } catch (e) {
+      logger.e(e);
+      return [];
     }
   }
 }

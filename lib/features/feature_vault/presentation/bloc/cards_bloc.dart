@@ -52,8 +52,8 @@ class CardsBloc extends Bloc<CardsBlocEvent, CardsBlocState> {
     ///
     on<CardsBlocEvent_loadCards>((event, emit) async {
       try {
-        logger.d('Load cards');
-        final cards = await localDbRepository.getAllCard();
+        logger.d('Load active cards');
+        final cards = await localDbRepository.getActiveCard();
         logger.d('Cards: ${cards.length}');
         
         emit(CardsBlocState_loaded(cards: cards));

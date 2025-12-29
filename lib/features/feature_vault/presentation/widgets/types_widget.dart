@@ -2,6 +2,7 @@ import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/core/theme/app_color.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/bin_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/cards_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/identities_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dart';
@@ -81,6 +82,9 @@ class TypesWidget extends StatelessWidget {
                         ),
                           BlocProvider.value(
                           value: BlocProvider.of<PickedItemBloc>(context),
+                        ),
+                        BlocProvider.value(
+                          value: BlocProvider.of<BinBloc>(context),
                         ),
                       ],
                       child: CardsPage(),

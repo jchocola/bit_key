@@ -6,8 +6,11 @@ import 'package:bit_key/features/feature_vault/domain/entity/card.dart'
     show Card;
 import 'package:bit_key/features/feature_vault/domain/entity/identity.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/login.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/bin_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/cards_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/delete_confirm.dart';
+import 'package:bit_key/main.dart';
 import 'package:bit_key/shared/widgets/big_button.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
 import 'package:bit_key/shared/widgets/search_textfiled.dart';
@@ -155,10 +158,37 @@ class ViewInfoPage extends StatelessWidget {
                     context: context,
                     builder: (modalContext) => MultiBlocProvider(
                       providers: [
-                        BlocProvider.value(value: BlocProvider.of<PickedItemBloc>(context))
+                        BlocProvider.value(
+                          value: BlocProvider.of<PickedItemBloc>(context),
+                        ),
+
+                         BlocProvider.value(
+                          value: BlocProvider.of<CardsBloc>(context),
+                        ),
                       ],
                       child: DeleteConfirm(
-                          onConfirmPressed: () => context.read<PickedItemBloc>().add(PickedItemBlocEvent_moveCardToBin()),
+                        onConfirmPressed: () {
+                          try {
+                             // MOVE CARD TO BIN
+                          context.read<PickedItemBloc>().add(
+                            PickedItemBlocEvent_moveCardToBin(),
+                          );
+
+                          // POP
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+
+                          // reload cards
+                          context.read<CardsBloc>().add(
+                            CardsBlocEvent_loadCards(),
+                          );
+
+                          // reload bin
+                          context.read<BinBloc>().add(BinBlocEvent_load());
+                          } catch (e) {
+                            logger.e(e);
+                          }
+                        },
                       ),
                     ),
                   );
@@ -199,9 +229,7 @@ class ViewInfoPage extends StatelessWidget {
                 onTap: () {
                   showDialog(
                     context: context,
-                    builder: (context) => DeleteConfirm(
-                    
-                    ),
+                    builder: (context) => DeleteConfirm(),
                   );
                 },
               ),
@@ -333,7 +361,7 @@ class _identityCredentialsInfo extends StatelessWidget {
           // Company name
           _specialListile(title: 'Company', value: identity?.company),
 
-            SizedBox(height: AppConstant.appPadding,),
+          SizedBox(height: AppConstant.appPadding),
           Text('Identification'),
 
           // last name
@@ -344,7 +372,11 @@ class _identityCredentialsInfo extends StatelessWidget {
           ),
           const Divider(),
           // last name
-          _specialListile(title: 'Passport', value: identity?.passportName, withHide: true,),
+          _specialListile(
+            title: 'Passport',
+            value: identity?.passportName,
+            withHide: true,
+          ),
           const Divider(),
           // last name
           _specialListile(
@@ -352,7 +384,7 @@ class _identityCredentialsInfo extends StatelessWidget {
             value: identity?.licenseNumber,
           ),
 
-           SizedBox(height: AppConstant.appPadding,),
+          SizedBox(height: AppConstant.appPadding),
           Text('Contact Info'),
 
           // last name
@@ -361,8 +393,7 @@ class _identityCredentialsInfo extends StatelessWidget {
           // last name
           _specialListile(title: 'Phone', value: identity?.phone),
 
-
-           SizedBox(height: AppConstant.appPadding,),
+          SizedBox(height: AppConstant.appPadding),
           Text('Address'),
           // last name
           _specialListile(title: 'Address1', value: identity?.address1),
