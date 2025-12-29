@@ -1,5 +1,6 @@
-// ignore_for_file: camel_case_typesR
+// ignore_for_file: camel_case_typesR, camel_case_types
 
+import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
 import 'package:bit_key/main.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,6 +38,8 @@ class PickedItemBlocEvent_pickIdentity extends PickedItemBlocEvent {
   List<Object?> get props => [identity];
 }
 
+class PickedItemBlocEvent_moveCardToBin extends PickedItemBlocEvent {}
+
 ///
 /// STATE
 ///
@@ -56,7 +59,7 @@ class PickedItemBlocState_loaded extends PickedItemBlocState {
   PickedItemBlocState_loaded({this.login, this.card, this.identity});
 
   @override
-  List<Object?> get props => [login,card,identity];
+  List<Object?> get props => [login, card, identity];
 }
 
 class PickedItemBlocState_error extends PickedItemBlocState {}
@@ -67,7 +70,9 @@ class PickedItemBlocState_success extends PickedItemBlocState {}
 /// BLOC
 ///
 class PickedItemBloc extends Bloc<PickedItemBlocEvent, PickedItemBlocState> {
-  PickedItemBloc() : super(PickedItemBlocState_init()) {
+  final LocalDbRepository localDbRepository;
+  PickedItemBloc({required this.localDbRepository})
+    : super(PickedItemBlocState_init()) {
     ///
     /// PICK LOGIN
     ///
@@ -90,6 +95,27 @@ class PickedItemBloc extends Bloc<PickedItemBlocEvent, PickedItemBlocState> {
     on<PickedItemBlocEvent_pickIdentity>((event, emit) {
       logger.d('Pick Identity ${event.identity.toString()}');
       emit(PickedItemBlocState_loaded(identity: event.identity));
+    });
+
+    ///
+    /// MOVE CARD TO BIN
+    ///
+    on<PickedItemBlocEvent_moveCardToBin>((event, emit) async {
+      try {
+        logger.d('Move card to bin');
+        final currentState = state;
+        if (currentState is PickedItemBlocState_loaded) {
+          if (currentState.card != null) {
+            await localDbRepository.moveCardToBin(card: currentState.card!);
+          } else {
+           logger.e('Card empty'); 
+          }
+        } else {
+          logger.e('Some error');
+        }
+      } catch (e) {
+        logger.e(e);
+      }
     });
   }
 }

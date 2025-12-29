@@ -153,7 +153,14 @@ class ViewInfoPage extends StatelessWidget {
                 onTap: () {
                   showDialog(
                     context: context,
-                    builder: (context) => DeleteConfirm(),
+                    builder: (modalContext) => MultiBlocProvider(
+                      providers: [
+                        BlocProvider.value(value: BlocProvider.of<PickedItemBloc>(context))
+                      ],
+                      child: DeleteConfirm(
+                          onConfirmPressed: () => context.read<PickedItemBloc>().add(PickedItemBlocEvent_moveCardToBin()),
+                      ),
+                    ),
                   );
                 },
               ),
@@ -192,7 +199,9 @@ class ViewInfoPage extends StatelessWidget {
                 onTap: () {
                   showDialog(
                     context: context,
-                    builder: (context) => DeleteConfirm(),
+                    builder: (context) => DeleteConfirm(
+                    
+                    ),
                   );
                 },
               ),

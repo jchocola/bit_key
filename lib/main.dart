@@ -130,7 +130,7 @@ class MyApp extends StatelessWidget {
 
           BlocProvider(
             create: (context) =>
-                PickedItemBloc()
+                PickedItemBloc(localDbRepository: getIt<LocalDbRepository>())
           ), 
         ],
         child: MainPage(),

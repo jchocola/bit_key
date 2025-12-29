@@ -217,7 +217,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
   Future<List<Identity>> getIdentitiesWithFolderName({
     required String folderName,
   }) async {
-     try {
+    try {
       final allIdentities = await getAllIdentity();
 
       final filteredList = allIdentities
@@ -231,8 +231,10 @@ class HiveDbRepoImpl implements LocalDbRepository {
   }
 
   @override
-  Future<List<Login>> getLoginsWithFolderName({required String folderName}) async {
-     try {
+  Future<List<Login>> getLoginsWithFolderName({
+    required String folderName,
+  }) async {
+    try {
       final allLogins = await getAllLogin();
 
       final filteredList = allLogins
@@ -244,58 +246,136 @@ class HiveDbRepoImpl implements LocalDbRepository {
       return [];
     }
   }
-  
+
   @override
-  Future<List<Card>> getCardsInBin() {
-    // TODO: implement getCardsInBin
-    throw UnimplementedError();
+  Future<List<Card>> getCardsInBin() async {
+    try {
+      final allCards = await getAllCard();
+      return allCards.where((card) => card.isHide == true).toList();
+    } catch (e) {
+      logger.e(e);
+      return [];
+    }
   }
-  
+
   @override
-  Future<List<Identity>> getIdentitiesInBin() {
-    // TODO: implement getIdentitiesInBin
-    throw UnimplementedError();
+  Future<List<Identity>> getIdentitiesInBin() async {
+    try {
+      final allIdentities = await getAllIdentity();
+      return allIdentities
+          .where((identity) => identity.isHide == true)
+          .toList();
+    } catch (e) {
+      logger.e(e);
+      return [];
+    }
   }
-  
+
   @override
-  Future<List<Login>> getLoginsInBin() {
-    // TODO: implement getLoginsInBin
-    throw UnimplementedError();
+  Future<List<Login>> getLoginsInBin() async {
+    try {
+      final allLogins = await getAllLogin();
+      return allLogins.where((login) => login.isHide == true).toList();
+    } catch (e) {
+      logger.e(e);
+      return [];
+    }
   }
-  
+
   @override
-  Future<void> moveCardToBin({required Card card}) {
-    // TODO: implement moveCardToBin
-    throw UnimplementedError();
+  Future<void> moveCardToBin({required Card card}) async {
+    try {
+      final cardIndex = await getCardIndexInBox(card: card);
+      logger.d('CardIndex : ${cardIndex}');
+      final CardModel model = CardModel.fromEntity(card);
+      model.copyWith(isHide: true);
+
+      await _cardsBox.putAt(cardIndex, model);
+      logger.d('Moved card to bin ${card.itemName}');
+    } catch (e) {
+      logger.e(e);
+    }
   }
-  
+
   @override
-  Future<void> moveIdentityToBin({required Identity identity}) {
-    // TODO: implement moveIdentityToBin
-    throw UnimplementedError();
+  Future<void> moveIdentityToBin({required Identity identity}) async {
+    try {} catch (e) {
+      logger.e(e);
+    }
   }
-  
+
   @override
   Future<void> moveLoginToBin({required Login login}) {
     // TODO: implement moveLoginToBin
     throw UnimplementedError();
   }
-  
+
   @override
   Future<void> restoreCardFromBin({required Card card}) {
     // TODO: implement restoreCardFromBin
     throw UnimplementedError();
   }
-  
+
   @override
-  Future<void> restoreIdentityFromBin({required Identity card}) {
+  Future<void> restoreIdentityFromBin({required Identity identity}) {
     // TODO: implement restoreIdentityFromBin
     throw UnimplementedError();
   }
-  
+
   @override
   Future<void> restoreLoginFromBin({required Login card}) {
     // TODO: implement restoreLoginFromBin
     throw UnimplementedError();
+  }
+
+  @override
+  Future<int> getCardIndexInBox({required Card card}) async {
+    try {
+      final allCard = await getAllCard();
+
+      for (int i = 0; i < allCard.length; i++) {
+        if (allCard[i].id == card.id) {
+          return i;
+        }
+      }
+      throw AppException.card_not_exist_in_box;
+    } catch (e) {
+      logger.e(e);
+      throw AppException.card_not_exist_in_box;
+    }
+  }
+
+  @override
+  Future<int> getIdentityIndexInBox({required Identity identity}) async {
+    try {
+      final identites = await getAllIdentity();
+      for (int i = 0; i < identites.length; i++) {
+        if (identites[i].id == identity.id) {
+          return i;
+        }
+      }
+
+      throw AppException.identity_not_exist_in_box;
+    } catch (e) {
+      logger.e(e);
+      throw AppException.identity_not_exist_in_box;
+    }
+  }
+
+  @override
+  Future<int> getLoginIndexInBox({required Login login}) async {
+    try {
+      final logins = await getAllLogin();
+      for (int i = 0; i < logins.length; i++) {
+        if (logins[i].id == login.id) {
+          return i;
+        }
+      }
+
+      throw AppException.login_not_exist_in_box;
+    } catch (e) {
+      logger.e(e);
+      throw AppException.login_not_exist_in_box;
+    }
   }
 }

@@ -6,4 +6,8 @@ enum AppException {
   failed_to_delete_folder,
 
   failed_to_save_login,
+
+  card_not_exist_in_box,
+  identity_not_exist_in_box,
+  login_not_exist_in_box,
 }
