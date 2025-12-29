@@ -8,6 +8,7 @@ import 'package:bit_key/features/feature_vault/domain/entity/identity.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/login.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/bin_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/cards_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/identities_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/delete_confirm.dart';
 import 'package:bit_key/main.dart';
@@ -86,6 +87,10 @@ class ViewInfoPage extends StatelessWidget {
     );
   }
 
+
+///
+/// LOGINS 
+///
   Widget _buildLogin(BuildContext context, {required Login login}) {
     final theme = Theme.of(context);
     return Column(
@@ -130,6 +135,10 @@ class ViewInfoPage extends StatelessWidget {
     );
   }
 
+
+///
+/// CARDS
+///
   Widget _buildCard(BuildContext context, {required Card card}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -202,6 +211,10 @@ class ViewInfoPage extends StatelessWidget {
     );
   }
 
+
+///
+/// IDENTITY
+///
   Widget _buildIdentity(BuildContext context, {required Identity identity}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,7 +242,41 @@ class ViewInfoPage extends StatelessWidget {
                 onTap: () {
                   showDialog(
                     context: context,
-                    builder: (context) => DeleteConfirm(),
+                    builder: (modalContext) => MultiBlocProvider(
+                      providers: [
+                         BlocProvider.value(
+                          value: BlocProvider.of<PickedItemBloc>(context),
+                        ),
+
+                         BlocProvider.value(
+                          value: BlocProvider.of<IdentitiesBloc>(context),
+                        ),
+                      ],
+                      child: DeleteConfirm(
+                        onConfirmPressed: () {
+                           try {
+                               // MOVE IDENTITY TO BIN
+                            context.read<PickedItemBloc>().add(
+                              PickedItemBlocEvent_moveIdentityToBin(),
+                            );
+                      
+                            // POP
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                      
+                            // reload identities
+                            context.read<IdentitiesBloc>().add(
+                              IdentitiesBlocEvent_loadIdentities(),
+                            );
+                      
+                            // reload bin
+                            context.read<BinBloc>().add(BinBlocEvent_load());
+                            } catch (e) {
+                              logger.e(e);
+                            }
+                        },
+                      ),
+                    ),
                   );
                 },
               ),

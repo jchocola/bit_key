@@ -40,6 +40,10 @@ class PickedItemBlocEvent_pickIdentity extends PickedItemBlocEvent {
 
 class PickedItemBlocEvent_moveCardToBin extends PickedItemBlocEvent {}
 
+class PickedItemBlocEvent_moveLoginToBin extends PickedItemBlocEvent {}
+
+class PickedItemBlocEvent_moveIdentityToBin extends PickedItemBlocEvent {}
+
 ///
 /// STATE
 ///
@@ -117,5 +121,51 @@ class PickedItemBloc extends Bloc<PickedItemBlocEvent, PickedItemBlocState> {
         logger.e(e);
       }
     });
+
+
+   ///
+    /// MOVE LOGIN TO BIN
+    ///
+    on<PickedItemBlocEvent_moveLoginToBin>((event, emit) async {
+      try {
+        logger.d('Move login to bin');
+        final currentState = state;
+        if (currentState is PickedItemBlocState_loaded) {
+          if (currentState.login != null) {
+            await localDbRepository.moveLoginToBin(login: currentState.login!);
+          } else {
+           logger.e('Login empty'); 
+          }
+        } else {
+          logger.e('Some error');
+        }
+      } catch (e) {
+        logger.e(e);
+      }
+    });
+
+
+     ///
+    /// MOVE IDENTITY TO BIN
+    ///
+    on<PickedItemBlocEvent_moveIdentityToBin>((event, emit) async {
+      try {
+        logger.d('Move identity to bin');
+        final currentState = state;
+        if (currentState is PickedItemBlocState_loaded) {
+          if (currentState.identity != null) {
+            await localDbRepository.moveIdentityToBin(identity: currentState.identity!);
+          } else {
+           logger.e('Identity empty'); 
+          }
+        } else {
+          logger.e('Some error');
+        }
+      } catch (e) {
+        logger.e(e);
+      }
+    });
+
+  
   }
 }

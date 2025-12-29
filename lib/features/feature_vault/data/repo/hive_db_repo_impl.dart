@@ -298,7 +298,14 @@ class HiveDbRepoImpl implements LocalDbRepository {
 
   @override
   Future<void> moveIdentityToBin({required Identity identity}) async {
-    try {} catch (e) {
+    try {
+         final identityIndex = await getIdentityIndexInBox(identity: identity);
+      logger.d('Identity index : ${identityIndex}');
+      final IdentityModel model = IdentityModel.fromEntity(identity);
+
+      await _identitiesBox.putAt(identityIndex, model.copyWith(isHide: true));
+      logger.d('Moved card to bin ${identity.itemName}');
+    } catch (e) {
       logger.e(e);
     }
   }

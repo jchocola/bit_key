@@ -26,6 +26,10 @@ class TypesWidget extends StatelessWidget {
       children: [
         Text('Types'),
 
+
+        ///
+        /// LOGIN
+        ///
         BlocBuilder<LoginsBloc, LoginsBlocState>(
           builder: (context, state) => CustomListile(
             icon: AppIcon.loginIcon,
@@ -59,6 +63,11 @@ class TypesWidget extends StatelessWidget {
                 : '',
           ),
         ),
+
+
+        ///
+        /// CARDS
+        ///
         BlocBuilder<CardsBloc, CardsBlocState>(
           builder: (context, state) => CustomListile(
             icon: AppIcon.cardIcon,
@@ -95,6 +104,11 @@ class TypesWidget extends StatelessWidget {
             },
           ),
         ),
+
+
+        ///
+        /// IDENTITIES
+        ///
         BlocBuilder<IdentitiesBloc, IdentitiesBlocState>(
           builder: (context, state) => CustomListile(
             icon: AppIcon.identityIcon,
@@ -118,6 +132,9 @@ class TypesWidget extends StatelessWidget {
                         ),
                           BlocProvider.value(
                           value: BlocProvider.of<PickedItemBloc>(context),
+                        ),
+                        BlocProvider.value(
+                          value: BlocProvider.of<BinBloc>(context),
                         ),
                       ],
                       child: IdentifyPage(),

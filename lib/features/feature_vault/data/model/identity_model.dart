@@ -1,5 +1,8 @@
-import 'package:bit_key/features/feature_vault/domain/entity/identity.dart';
+import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
+
+import 'package:bit_key/features/feature_vault/domain/entity/identity.dart';
+
 part 'identity_model.g.dart';
 @HiveType(typeId: 1)
 class IdentityModel {
@@ -119,4 +122,50 @@ class IdentityModel {
       country: identity.country,
       postcode: identity.postcode,
       );
+
+  IdentityModel copyWith({
+    String? id,
+    String? itemName,
+    String? folderName,
+    bool? isHide,
+    String? firstName,
+    String? middleName,
+    String? lastName,
+    String? userName,
+    String? company,
+    String? nationalInsuranceNumber,
+    String? passportName,
+    String? licenseNumber,
+    String? email,
+    String? phone,
+    String? address1,
+    String? address2,
+    String? address3,
+    String? cityTown,
+    String? country,
+    String? postcode,
+  }) {
+    return IdentityModel(
+      id: id ?? this.id,
+      itemName: itemName ?? this.itemName,
+      folderName: folderName  ?? this.folderName,
+      isHide: isHide ?? this.isHide,
+      firstName: firstName ?? this.firstName,
+      middleName: middleName ?? this.middleName,
+      lastName: lastName ?? this.lastName,
+      userName: userName ?? this.userName,
+      company: company ?? this.company,
+      nationalInsuranceNumber: nationalInsuranceNumber ?? this.nationalInsuranceNumber,
+      passportName: passportName ?? this.passportName,
+      licenseNumber: licenseNumber ?? this.licenseNumber,
+      email: email ?? this.email,
+      phone: phone ?? this.phone,
+      address1: address1 ?? this.address1,
+      address2: address2 ?? this.address2,
+      address3: address3 ?? this.address3,
+      cityTown: cityTown ?? this.cityTown,
+      country: country ?? this.country,
+      postcode: postcode?? this.postcode,
+    );
+  }
 }
