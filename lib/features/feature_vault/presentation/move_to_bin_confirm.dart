@@ -4,8 +4,8 @@ import 'package:bit_key/shared/widgets/big_button.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
 
-class DeleteConfirm extends StatelessWidget {
-  const DeleteConfirm({super.key, this.onConfirmPressed});
+class MoveToBinConfirm extends StatelessWidget {
+  const MoveToBinConfirm({super.key, this.onConfirmPressed});
   final void Function()? onConfirmPressed;
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,10 @@ class DeleteConfirm extends StatelessWidget {
                 },
                 child: Text('Cancel'),
               ),
-              ElevatedButton(onPressed: onConfirmPressed, child: Text('Confirm')),
+              ElevatedButton(
+                onPressed: onConfirmPressed,
+                child: Text('Confirm'),
+              ),
             ],
           ),
         ),

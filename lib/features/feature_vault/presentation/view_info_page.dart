@@ -15,7 +15,7 @@ import 'package:bit_key/features/feature_vault/presentation/bloc/identities_bloc
 import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/no_folders_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
-import 'package:bit_key/features/feature_vault/presentation/delete_confirm.dart';
+import 'package:bit_key/features/feature_vault/presentation/move_to_bin_confirm.dart';
 import 'package:bit_key/main.dart';
 import 'package:bit_key/shared/widgets/big_button.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
@@ -137,7 +137,7 @@ class ViewInfoPage extends StatelessWidget {
                           value: BlocProvider.of<LoginsBloc>(context),
                         ),
                       ],
-                      child: DeleteConfirm(
+                      child: MoveToBinConfirm(
                         onConfirmPressed: () async {
                           try {
                             final completer = Completer<void>();
@@ -167,7 +167,7 @@ class ViewInfoPage extends StatelessWidget {
                             // reload folders
                             context.read<FoldersBloc>().add(
                               FoldersBlocEvent_loadFolders(),
-                            );     
+                            );
 
                             // POP
                             Navigator.pop(context);
@@ -228,7 +228,7 @@ class ViewInfoPage extends StatelessWidget {
                           value: BlocProvider.of<CardsBloc>(context),
                         ),
                       ],
-                      child: DeleteConfirm(
+                      child: MoveToBinConfirm(
                         onConfirmPressed: () async {
                           try {
                             final completer = Completer<void>();
@@ -258,7 +258,7 @@ class ViewInfoPage extends StatelessWidget {
                             // reload folders
                             context.read<FoldersBloc>().add(
                               FoldersBlocEvent_loadFolders(),
-                            );     
+                            );
 
                             // POP
                             Navigator.pop(context);
@@ -320,13 +320,15 @@ class ViewInfoPage extends StatelessWidget {
                           value: BlocProvider.of<IdentitiesBloc>(context),
                         ),
                       ],
-                      child: DeleteConfirm(
-                        onConfirmPressed: ()async {
+                      child: MoveToBinConfirm(
+                        onConfirmPressed: () async {
                           try {
                             final completer = Completer<void>();
                             // MOVE IDENTITY TO BIN
                             context.read<PickedItemBloc>().add(
-                              PickedItemBlocEvent_moveIdentityToBin(completer: completer),
+                              PickedItemBlocEvent_moveIdentityToBin(
+                                completer: completer,
+                              ),
                             );
 
                             // wait until moved to bin
@@ -340,7 +342,7 @@ class ViewInfoPage extends StatelessWidget {
                             // reload bin
                             context.read<BinBloc>().add(BinBlocEvent_load());
 
-                              // reload no folder
+                            // reload no folder
                             context.read<NoFoldersBloc>().add(
                               NoFoldersBlocEvent_load(),
                             );
@@ -348,7 +350,7 @@ class ViewInfoPage extends StatelessWidget {
                             // reload folders
                             context.read<FoldersBloc>().add(
                               FoldersBlocEvent_loadFolders(),
-                            );     
+                            );
                             // POP
                             Navigator.pop(context);
                             Navigator.pop(context);

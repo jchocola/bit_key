@@ -5,6 +5,7 @@ import 'package:bit_key/features/feature_vault/domain/entity/card.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/bin_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/cards_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/delete_all_from_bin_confirm.dart';
 import 'package:bit_key/features/feature_vault/presentation/view_info_page.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
 import 'package:flutter/material.dart' hide Card;
@@ -31,9 +32,7 @@ class BinPage extends StatelessWidget {
                 value: BlocProvider.of<PickedItemBloc>(context),
               ),
               BlocProvider.value(value: BlocProvider.of<CardsBloc>(context)),
-               BlocProvider.value(
-                          value: BlocProvider.of<BinBloc>(context),
-                        ),
+              BlocProvider.value(value: BlocProvider.of<BinBloc>(context)),
             ],
             child: SizedBox(
               height:
@@ -61,34 +60,47 @@ class BinPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Bin', style: theme.textTheme.titleMedium),
-                  IconButton(
+                  TextButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      showDialog(context: context, builder: (context) {
+                        return DeleteAllFromBinConfirm(
+                          onConfirmPressed: () {
+                            // context.read<BinBloc>().add(
+                            //       BinBlocEvent_deleteAllFromBin(),
+                            //     );
+                            Navigator.pop(context);
+                          },
+                        );
+                      });
                     },
-                    icon: Icon(AppIcon.cancelIcon),
+                    child: Text('Clear all', style: theme.textTheme.bodySmall,),
                   ),
                 ],
               ),
-             // SearchTextfiled(),
 
+              // SearchTextfiled(),
               BlocBuilder<BinBloc, BinBlocState>(
                 builder: (context, state) {
                   if (state is BinBlocState_loaded) {
                     return Expanded(
                       child: SingleChildScrollView(
                         child: Column(
+                          spacing: AppConstant.appPadding,
                           children: [
                             ///
                             /// LOGINS
                             ///
-                              Column(
+                            Column(
                               spacing: AppConstant.appPadding,
-                              children: List.generate(state.logins .length, (index) {
+                              children: List.generate(state.logins.length, (
+                                index,
+                              ) {
                                 final login = state.logins[index];
                                 return CustomListile(
                                   //onTap: () => _onCardTapped(card: card),
                                   title: login.itemName,
                                   subTitle: login.login,
+                                  icon: AppIcon.loginIcon,
                                 );
                               }),
                             ),
@@ -98,12 +110,15 @@ class BinPage extends StatelessWidget {
                             ///
                             Column(
                               spacing: AppConstant.appPadding,
-                              children: List.generate(state.cards .length, (index) {
+                              children: List.generate(state.cards.length, (
+                                index,
+                              ) {
                                 final card = state.cards[index];
                                 return CustomListile(
                                   onTap: () => _onCardTapped(card: card),
                                   title: card.itemName,
                                   subTitle: card.cardHolderName,
+                                  icon: AppIcon.cardIcon,
                                 );
                               }),
                             ),
@@ -111,14 +126,17 @@ class BinPage extends StatelessWidget {
                             ///
                             /// IDENTITIES
                             ///
-                              Column(
+                            Column(
                               spacing: AppConstant.appPadding,
-                              children: List.generate(state.identities .length, (index) {
+                              children: List.generate(state.identities.length, (
+                                index,
+                              ) {
                                 final identities = state.identities[index];
                                 return CustomListile(
-                                 // onTap: () => _onCardTapped(card: card),
+                                  // onTap: () => _onCardTapped(card: card),
                                   title: identities.itemName,
                                   subTitle: identities.firstName,
+                                  icon: AppIcon.identityIcon,
                                 );
                               }),
                             ),
