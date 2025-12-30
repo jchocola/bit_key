@@ -304,16 +304,24 @@ class HiveDbRepoImpl implements LocalDbRepository {
       final IdentityModel model = IdentityModel.fromEntity(identity);
 
       await _identitiesBox.putAt(identityIndex, model.copyWith(isHide: true));
-      logger.d('Moved card to bin ${identity.itemName}');
+      logger.d('Moved identity to bin ${identity.itemName}');
     } catch (e) {
       logger.e(e);
     }
   }
 
   @override
-  Future<void> moveLoginToBin({required Login login}) {
-    // TODO: implement moveLoginToBin
-    throw UnimplementedError();
+  Future<void> moveLoginToBin({required Login login}) async {
+   try {
+         final loginIndex = await getLoginIndexInBox(login: login);
+      logger.d('Login index : ${loginIndex}');
+      final LoginModel model = LoginModel.fromEntity(login);
+
+      await _loginsBox.putAt(loginIndex, model.copyWith(isHide: true));
+      logger.d('Moved login to bin ${login.itemName}');
+    } catch (e) {
+      logger.e(e);
+    }
   }
 
   @override

@@ -51,6 +51,9 @@ class TypesWidget extends StatelessWidget {
                          BlocProvider.value(
                           value: BlocProvider.of<PickedItemBloc>(context),
                         ),
+                        BlocProvider.value(
+                          value: BlocProvider.of<BinBloc>(context),
+                        ),
                       ],
                       child: LoginsPage(),
                     ),

@@ -1,5 +1,8 @@
-import 'package:bit_key/features/feature_vault/domain/entity/login.dart';
+import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
+
+import 'package:bit_key/features/feature_vault/domain/entity/login.dart';
+
 part 'login_model.g.dart';
 
 @HiveType(typeId: 0)
@@ -47,4 +50,24 @@ class LoginModel {
     url: login.url,
     isHide: login.isHide,
   );
+
+  LoginModel copyWith({
+    String? id,
+    String? itemName,
+    String? folderName,
+    String? login,
+    String? password,
+    String? url,
+    bool? isHide,
+  }) {
+    return LoginModel(
+      id: id ?? this.id,
+      itemName: itemName ?? this.itemName,
+      folderName: folderName ?? this.folderName,
+      login: login ?? this.login,
+      password: password ?? this.password,
+      url: url ?? this.url,
+      isHide: isHide ?? this.isHide,
+    );
+  }
 }

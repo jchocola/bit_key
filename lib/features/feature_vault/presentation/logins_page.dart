@@ -2,6 +2,7 @@ import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/login.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/bin_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/view_info_page.dart';
@@ -28,7 +29,11 @@ class LoginsPage extends StatelessWidget {
         builder: (modalContext) {
           return MultiBlocProvider(
             providers: [
-              BlocProvider.value(value: BlocProvider.of<PickedItemBloc>(context))
+              BlocProvider.value(value: BlocProvider.of<PickedItemBloc>(context)),
+               BlocProvider.value(value: BlocProvider.of<LoginsBloc>(context)),
+              BlocProvider.value(
+                          value: BlocProvider.of<BinBloc>(context),
+                        ),
             ],
             child: SizedBox(
               height:

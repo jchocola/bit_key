@@ -1,5 +1,7 @@
 // ignore_for_file: camel_case_typesR, camel_case_types
 
+import 'dart:async';
+
 import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
 import 'package:bit_key/main.dart';
 import 'package:equatable/equatable.dart';
@@ -38,7 +40,10 @@ class PickedItemBlocEvent_pickIdentity extends PickedItemBlocEvent {
   List<Object?> get props => [identity];
 }
 
-class PickedItemBlocEvent_moveCardToBin extends PickedItemBlocEvent {}
+class PickedItemBlocEvent_moveCardToBin extends PickedItemBlocEvent {
+  final Completer<void>? completer;
+  PickedItemBlocEvent_moveCardToBin({this.completer});
+}
 
 class PickedItemBlocEvent_moveLoginToBin extends PickedItemBlocEvent {}
 
@@ -110,9 +115,14 @@ class PickedItemBloc extends Bloc<PickedItemBlocEvent, PickedItemBlocState> {
         final currentState = state;
         if (currentState is PickedItemBlocState_loaded) {
           if (currentState.card != null) {
-            await localDbRepository.moveCardToBin(card: currentState.card!);
+            await localDbRepository
+                .moveCardToBin(card: currentState.card!)
+                .then((_) {
+                  logger.f('Moved card to bin!!!!');
+                  event.completer?.complete();
+                });
           } else {
-           logger.e('Card empty'); 
+            logger.e('Card empty');
           }
         } else {
           logger.e('Some error');
@@ -122,8 +132,7 @@ class PickedItemBloc extends Bloc<PickedItemBlocEvent, PickedItemBlocState> {
       }
     });
 
-
-   ///
+    ///
     /// MOVE LOGIN TO BIN
     ///
     on<PickedItemBlocEvent_moveLoginToBin>((event, emit) async {
@@ -134,7 +143,7 @@ class PickedItemBloc extends Bloc<PickedItemBlocEvent, PickedItemBlocState> {
           if (currentState.login != null) {
             await localDbRepository.moveLoginToBin(login: currentState.login!);
           } else {
-           logger.e('Login empty'); 
+            logger.e('Login empty');
           }
         } else {
           logger.e('Some error');
@@ -144,8 +153,7 @@ class PickedItemBloc extends Bloc<PickedItemBlocEvent, PickedItemBlocState> {
       }
     });
 
-
-     ///
+    ///
     /// MOVE IDENTITY TO BIN
     ///
     on<PickedItemBlocEvent_moveIdentityToBin>((event, emit) async {
@@ -154,9 +162,11 @@ class PickedItemBloc extends Bloc<PickedItemBlocEvent, PickedItemBlocState> {
         final currentState = state;
         if (currentState is PickedItemBlocState_loaded) {
           if (currentState.identity != null) {
-            await localDbRepository.moveIdentityToBin(identity: currentState.identity!);
+            await localDbRepository.moveIdentityToBin(
+              identity: currentState.identity!,
+            );
           } else {
-           logger.e('Identity empty'); 
+            logger.e('Identity empty');
           }
         } else {
           logger.e('Some error');
@@ -165,7 +175,5 @@ class PickedItemBloc extends Bloc<PickedItemBlocEvent, PickedItemBlocState> {
         logger.e(e);
       }
     });
-
-  
   }
 }
