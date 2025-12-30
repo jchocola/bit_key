@@ -6,6 +6,7 @@ import 'package:bit_key/features/feature_vault/domain/entity/identity.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/login.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/bin_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/cards_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/identities_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/no_folders_bloc.dart';
@@ -39,6 +40,10 @@ class NoFoldersWidget extends StatelessWidget {
               BlocProvider.value(value: BlocProvider.of<BinBloc>(context)),
               BlocProvider.value(
                 value: BlocProvider.of<NoFoldersBloc>(context),
+
+              ),
+                BlocProvider.value(
+                value: BlocProvider.of<FoldersBloc>(context),
               ),
             ],
             child: SizedBox(
@@ -71,6 +76,10 @@ class NoFoldersWidget extends StatelessWidget {
               BlocProvider.value(value: BlocProvider.of<BinBloc>(context)),
               BlocProvider.value(
                 value: BlocProvider.of<NoFoldersBloc>(context),
+              ),
+
+                BlocProvider.value(
+                value: BlocProvider.of<FoldersBloc>(context),
               ),
             ],
             child: SizedBox(
@@ -106,6 +115,9 @@ class NoFoldersWidget extends StatelessWidget {
 
               BlocProvider.value(
                 value: BlocProvider.of<NoFoldersBloc>(context),
+              ),
+                BlocProvider.value(
+                value: BlocProvider.of<FoldersBloc>(context),
               ),
             ],
             child: SizedBox(
