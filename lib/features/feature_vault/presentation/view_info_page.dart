@@ -136,12 +136,18 @@ class ViewInfoPage extends StatelessWidget {
                         ),
                       ],
                       child: DeleteConfirm(
-                        onConfirmPressed: () {
+                        onConfirmPressed: () async {
                           try {
+                            final completer = Completer<void>();
+
                             // MOVE LOGIN TO BIN
                             context.read<PickedItemBloc>().add(
-                              PickedItemBlocEvent_moveLoginToBin(),
+                              PickedItemBlocEvent_moveLoginToBin(
+                                completer: completer,
+                              ),
                             );
+                            // wait until moved to bin
+                            await completer.future;
 
                             // reload cards
                             context.read<LoginsBloc>().add(
@@ -211,13 +217,15 @@ class ViewInfoPage extends StatelessWidget {
                         ),
                       ],
                       child: DeleteConfirm(
-                        onConfirmPressed: () async{
+                        onConfirmPressed: () async {
                           try {
                             final completer = Completer<void>();
                             // MOVE CARD TO BIN
                             context.read<PickedItemBloc>().add(
-                              PickedItemBlocEvent_moveCardToBin(completer: completer),
-                            );  
+                              PickedItemBlocEvent_moveCardToBin(
+                                completer: completer,
+                              ),
+                            );
 
                             // wait until moved to bin
                             await completer.future;
@@ -291,12 +299,16 @@ class ViewInfoPage extends StatelessWidget {
                         ),
                       ],
                       child: DeleteConfirm(
-                        onConfirmPressed: () {
+                        onConfirmPressed: ()async {
                           try {
+                            final completer = Completer<void>();
                             // MOVE IDENTITY TO BIN
                             context.read<PickedItemBloc>().add(
-                              PickedItemBlocEvent_moveIdentityToBin(),
+                              PickedItemBlocEvent_moveIdentityToBin(completer: completer),
                             );
+
+                            // wait until moved to bin
+                            await completer.future;
 
                             // reload identities
                             context.read<IdentitiesBloc>().add(

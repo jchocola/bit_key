@@ -45,9 +45,15 @@ class PickedItemBlocEvent_moveCardToBin extends PickedItemBlocEvent {
   PickedItemBlocEvent_moveCardToBin({this.completer});
 }
 
-class PickedItemBlocEvent_moveLoginToBin extends PickedItemBlocEvent {}
+class PickedItemBlocEvent_moveLoginToBin extends PickedItemBlocEvent {
+  final Completer<void>? completer;
+  PickedItemBlocEvent_moveLoginToBin({this.completer});
+}
 
-class PickedItemBlocEvent_moveIdentityToBin extends PickedItemBlocEvent {}
+class PickedItemBlocEvent_moveIdentityToBin extends PickedItemBlocEvent {
+  final Completer<void>? completer;
+  PickedItemBlocEvent_moveIdentityToBin({this.completer});
+}
 
 ///
 /// STATE
@@ -141,7 +147,12 @@ class PickedItemBloc extends Bloc<PickedItemBlocEvent, PickedItemBlocState> {
         final currentState = state;
         if (currentState is PickedItemBlocState_loaded) {
           if (currentState.login != null) {
-            await localDbRepository.moveLoginToBin(login: currentState.login!);
+            await localDbRepository
+                .moveLoginToBin(login: currentState.login!)
+                .then((_) {
+                  logger.f('Moved login to bin!!!!');
+                  event.completer?.complete();
+                });
           } else {
             logger.e('Login empty');
           }
@@ -162,9 +173,12 @@ class PickedItemBloc extends Bloc<PickedItemBlocEvent, PickedItemBlocState> {
         final currentState = state;
         if (currentState is PickedItemBlocState_loaded) {
           if (currentState.identity != null) {
-            await localDbRepository.moveIdentityToBin(
-              identity: currentState.identity!,
-            );
+            await localDbRepository
+                .moveIdentityToBin(identity: currentState.identity!)
+                .then((_) {
+                  logger.f('Moved identity to bin!!!!');
+                  event.completer?.complete();
+                });
           } else {
             logger.e('Identity empty');
           }
