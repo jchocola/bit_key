@@ -1,5 +1,7 @@
 // ignore_for_file: camel_case_types
 
+import 'dart:async';
+
 import 'package:bit_key/main.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +21,10 @@ abstract class BinBlocEvent extends Equatable {
 
 class BinBlocEvent_load extends BinBlocEvent {}
 
+class BinBlocEvent_deleteAllFromBin extends BinBlocEvent {
+  final Completer<void>? completer;
+  BinBlocEvent_deleteAllFromBin({this.completer});
+}
 ///
 /// STATE
 ///
@@ -77,6 +83,24 @@ class BinBloc extends Bloc<BinBlocEvent, BinBlocState> {
             totalCount: totalCount,
           ),
         );
+      } catch (e) {
+        logger.e(e);
+      }
+    });
+
+
+    ///
+    /// DELETE ALL FROM BIN
+    ///
+    on<BinBlocEvent_deleteAllFromBin>((event, emit) async {
+      try {
+        logger.d('Bin bloc delete all from bin');
+        await localDbRepository.deleteAllLoginsFromBin();
+        await localDbRepository.deleteAllCardsFromBin();
+        await localDbRepository.deleteAllIdentitiesFromBin();
+        event.completer?.complete();
+        logger.f('Bin bloc deleted all from bin');
+        add(BinBlocEvent_load());
       } catch (e) {
         logger.e(e);
       }

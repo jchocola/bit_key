@@ -20,6 +20,7 @@ abstract class LocalDbRepository {
   Future<void> restoreCardFromBin({required Card card});
   Future<List<Card>> getCardsInBin();
   Future<int> getCardIndexInBox({required Card card});
+  Future<void> deleteAllCardsFromBin();
 
   ///
   /// LOGIN
@@ -36,6 +37,7 @@ abstract class LocalDbRepository {
   Future<void> restoreLoginFromBin({required Login card});
   Future<List<Login>> getLoginsInBin();
   Future<int> getLoginIndexInBox({required Login login});
+  Future<void> deleteAllLoginsFromBin();
 
   ///
   /// IDENTITY
@@ -54,4 +56,5 @@ abstract class LocalDbRepository {
   Future<void> restoreIdentityFromBin({required Identity identity});
   Future<List<Identity>> getIdentitiesInBin();
   Future<int> getIdentityIndexInBox({required Identity identity});
+  Future<void> deleteAllIdentitiesFromBin();
 }

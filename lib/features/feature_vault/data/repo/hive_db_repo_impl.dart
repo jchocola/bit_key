@@ -474,4 +474,48 @@ class HiveDbRepoImpl implements LocalDbRepository {
       return [];
     }
   }
+  
+  @override
+  Future<void> deleteAllCardsFromBin() async{
+    try {
+      final cardsInBin = await getCardsInBin();
+      for (final card in cardsInBin) {
+        final cardIndex = await getCardIndexInBox(card: card);
+        await _cardsBox.deleteAt(cardIndex);
+        logger.d('Deleted card from bin : ${card.itemName}');
+      }
+    } catch (e) {
+      logger.e(e);
+    } 
+  }
+  
+  @override
+  Future<void> deleteAllIdentitiesFromBin()async {
+    try {
+      final identitiesInBin = await getIdentitiesInBin();
+      for (final identity in identitiesInBin) {
+        final identityIndex = await getIdentityIndexInBox(identity: identity);
+        await _identitiesBox.deleteAt(identityIndex);
+        logger.d('Deleted identity from bin : ${identity.itemName}');
+      }
+    } catch (e) {
+      logger.e(e);
+    }
+   
+  }
+  
+  @override
+  Future<void> deleteAllLoginsFromBin() async{
+    try {
+      final loginsInBin = await getLoginsInBin();
+      for (final login in loginsInBin) {
+        final loginIndex = await getLoginIndexInBox(login: login);
+        await _loginsBox.deleteAt(loginIndex);
+        logger.d('Deleted login from bin : ${login.itemName}');
+      }
+    } catch (e) {
+      logger.e(e);
+    }
+   
+  }
 }
