@@ -10,6 +10,7 @@ import 'package:bit_key/features/feature_vault/domain/entity/identity.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/login.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/bin_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/cards_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/identities_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/no_folders_bloc.dart';
@@ -163,6 +164,11 @@ class ViewInfoPage extends StatelessWidget {
                               NoFoldersBlocEvent_load(),
                             );
 
+                            // reload folders
+                            context.read<FoldersBloc>().add(
+                              FoldersBlocEvent_loadFolders(),
+                            );     
+
                             // POP
                             Navigator.pop(context);
                             Navigator.pop(context);
@@ -249,6 +255,11 @@ class ViewInfoPage extends StatelessWidget {
                               NoFoldersBlocEvent_load(),
                             );
 
+                            // reload folders
+                            context.read<FoldersBloc>().add(
+                              FoldersBlocEvent_loadFolders(),
+                            );     
+
                             // POP
                             Navigator.pop(context);
                             Navigator.pop(context);
@@ -334,6 +345,10 @@ class ViewInfoPage extends StatelessWidget {
                               NoFoldersBlocEvent_load(),
                             );
 
+                            // reload folders
+                            context.read<FoldersBloc>().add(
+                              FoldersBlocEvent_loadFolders(),
+                            );     
                             // POP
                             Navigator.pop(context);
                             Navigator.pop(context);

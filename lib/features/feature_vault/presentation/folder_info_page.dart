@@ -4,8 +4,13 @@ import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/card.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/identity.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/login.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/bin_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/cards_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/folder_detail_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/identities_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/no_folders_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/view_info_page.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
@@ -32,7 +37,19 @@ class FolderInfoPage extends StatelessWidget {
         builder: (modalContext) {
           return MultiBlocProvider(
             providers: [
-              BlocProvider.value(value: BlocProvider.of<PickedItemBloc>(context))
+              BlocProvider.value(value: BlocProvider.of<PickedItemBloc>(context)),
+              BlocProvider.value(value: BlocProvider.of<LoginsBloc>(context)),
+              BlocProvider.value(
+                value: BlocProvider.of<BinBloc>(context),
+              ),
+              BlocProvider.value(
+                value: BlocProvider.of<NoFoldersBloc>(context),
+              ),
+              BlocProvider.value(value: BlocProvider.of<CardsBloc>(context)),
+              BlocProvider.value(value: BlocProvider.of<IdentitiesBloc>(context)),
+              BlocProvider.value(
+                value: BlocProvider.of<FoldersBloc>(context),
+              ),
             ],
             child: SizedBox(
               height:
@@ -57,7 +74,19 @@ class FolderInfoPage extends StatelessWidget {
         builder: (modalContext) {
           return MultiBlocProvider(
             providers: [
-              BlocProvider.value(value: BlocProvider.of<PickedItemBloc>(context))
+             BlocProvider.value(value: BlocProvider.of<PickedItemBloc>(context)),
+              BlocProvider.value(value: BlocProvider.of<LoginsBloc>(context)),
+              BlocProvider.value(
+                value: BlocProvider.of<BinBloc>(context),
+              ),
+              BlocProvider.value(
+                value: BlocProvider.of<NoFoldersBloc>(context),
+              ),
+              BlocProvider.value(value: BlocProvider.of<CardsBloc>(context)),
+              BlocProvider.value(value: BlocProvider.of<IdentitiesBloc>(context)),
+              BlocProvider.value(
+                value: BlocProvider.of<FoldersBloc>(context),
+              ),
             ],
             child: SizedBox(
               height:
@@ -82,7 +111,19 @@ class FolderInfoPage extends StatelessWidget {
         builder: (modalContext) {
           return MultiBlocProvider(
             providers: [
-              BlocProvider.value(value: BlocProvider.of<PickedItemBloc>(context))
+              BlocProvider.value(value: BlocProvider.of<PickedItemBloc>(context)),
+              BlocProvider.value(value: BlocProvider.of<LoginsBloc>(context)),
+              BlocProvider.value(
+                value: BlocProvider.of<BinBloc>(context),
+              ),
+              BlocProvider.value(
+                value: BlocProvider.of<NoFoldersBloc>(context),
+              ),
+              BlocProvider.value(value: BlocProvider.of<CardsBloc>(context)),
+              BlocProvider.value(value: BlocProvider.of<IdentitiesBloc>(context)),
+              BlocProvider.value(
+                value: BlocProvider.of<FoldersBloc>(context),
+              ),
             ],
             child: SizedBox(
               height:
