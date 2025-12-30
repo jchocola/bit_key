@@ -71,9 +71,12 @@ class NoFoldersBloc extends Bloc<NoFoldersBlocEvent, NoFoldersBlocState> {
     on<NoFoldersBlocEvent_load>((event, emit) async {
       try {
         logger.d('No folders bloc event load:');
-        final logins = await localDbRepository.getLoginsWithoutFolder();
-        final cards = await localDbRepository.getCardsWithoutFolder();
-        final identities = await localDbRepository.getIdentiesWithoutFolder();
+        final logins = await localDbRepository.getActiveLoginsWithoutFolder();
+        final cards = await localDbRepository.getActiveCardsWithoutFolder();
+        final identities = await localDbRepository.getActiveIdentiesWithoutFolder();
+
+
+
         final total = logins.length + cards.length + identities.length;
         emit(
           NoFoldersBlocState_loaded(

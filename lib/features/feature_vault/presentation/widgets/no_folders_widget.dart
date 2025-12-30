@@ -1,8 +1,13 @@
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
-import 'package:bit_key/features/feature_vault/domain/entity/card.dart' show Card;
+import 'package:bit_key/features/feature_vault/domain/entity/card.dart'
+    show Card;
 import 'package:bit_key/features/feature_vault/domain/entity/identity.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/login.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/bin_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/cards_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/identities_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/no_folders_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/view_info_page.dart';
@@ -15,7 +20,6 @@ class NoFoldersWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     void _onLoginTapped({required Login login}) {
       // SET PICK LOGIN
       context.read<PickedItemBloc>().add(
@@ -28,7 +32,14 @@ class NoFoldersWidget extends StatelessWidget {
         builder: (modalContext) {
           return MultiBlocProvider(
             providers: [
-              BlocProvider.value(value: BlocProvider.of<PickedItemBloc>(context))
+              BlocProvider.value(
+                value: BlocProvider.of<PickedItemBloc>(context),
+              ),
+              BlocProvider.value(value: BlocProvider.of<LoginsBloc>(context)),
+              BlocProvider.value(value: BlocProvider.of<BinBloc>(context)),
+              BlocProvider.value(
+                value: BlocProvider.of<NoFoldersBloc>(context),
+              ),
             ],
             child: SizedBox(
               height:
@@ -41,8 +52,7 @@ class NoFoldersWidget extends StatelessWidget {
       );
     }
 
-
-     void _onCardTapped({required Card card}) {
+    void _onCardTapped({required Card card}) {
       // SET PICK CARD
       context.read<PickedItemBloc>().add(
         PickedItemBlocEvent_pickCard(card: card),
@@ -54,7 +64,14 @@ class NoFoldersWidget extends StatelessWidget {
         builder: (modalContext) {
           return MultiBlocProvider(
             providers: [
-              BlocProvider.value(value: BlocProvider.of<PickedItemBloc>(context))
+              BlocProvider.value(
+                value: BlocProvider.of<PickedItemBloc>(context),
+              ),
+              BlocProvider.value(value: BlocProvider.of<CardsBloc>(context)),
+              BlocProvider.value(value: BlocProvider.of<BinBloc>(context)),
+              BlocProvider.value(
+                value: BlocProvider.of<NoFoldersBloc>(context),
+              ),
             ],
             child: SizedBox(
               height:
@@ -67,8 +84,7 @@ class NoFoldersWidget extends StatelessWidget {
       );
     }
 
-
-     void _onIdentityTapped({required Identity identity}) {
+    void _onIdentityTapped({required Identity identity}) {
       // SET PICK IDENTITY
       context.read<PickedItemBloc>().add(
         PickedItemBlocEvent_pickIdentity(identity: identity),
@@ -80,7 +96,17 @@ class NoFoldersWidget extends StatelessWidget {
         builder: (modalContext) {
           return MultiBlocProvider(
             providers: [
-              BlocProvider.value(value: BlocProvider.of<PickedItemBloc>(context))
+              BlocProvider.value(
+                value: BlocProvider.of<PickedItemBloc>(context),
+              ),
+              BlocProvider.value(
+                value: BlocProvider.of<IdentitiesBloc>(context),
+              ),
+              BlocProvider.value(value: BlocProvider.of<BinBloc>(context)),
+
+              BlocProvider.value(
+                value: BlocProvider.of<NoFoldersBloc>(context),
+              ),
             ],
             child: SizedBox(
               height:
@@ -118,7 +144,7 @@ class NoFoldersWidget extends StatelessWidget {
                 ) {
                   final login = state.loginsWihtoutFolder[index];
                   return CustomListile(
-                    onTap: ()=> _onLoginTapped(login: login),
+                    onTap: () => _onLoginTapped(login: login),
                     title: login.itemName,
                     icon: AppIcon.loginIcon,
                   );
@@ -143,7 +169,7 @@ class NoFoldersWidget extends StatelessWidget {
                 ) {
                   final card = state.cardsWithoutFolder[index];
                   return CustomListile(
-                      onTap: ()=> _onCardTapped(card: card),
+                    onTap: () => _onCardTapped(card: card),
                     title: card.itemName,
                     icon: AppIcon.cardIcon,
                   );
@@ -168,7 +194,7 @@ class NoFoldersWidget extends StatelessWidget {
                 ) {
                   final identity = state.identitiesWithoutFolder[index];
                   return CustomListile(
-                      onTap: ()=> _onIdentityTapped(identity: identity),
+                    onTap: () => _onIdentityTapped(identity: identity),
                     title: identity.itemName,
                     icon: AppIcon.identityIcon,
                   );

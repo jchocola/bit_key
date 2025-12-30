@@ -12,6 +12,7 @@ import 'package:bit_key/features/feature_vault/presentation/bloc/bin_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/cards_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/identities_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/no_folders_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/delete_confirm.dart';
 import 'package:bit_key/main.dart';
@@ -157,6 +158,11 @@ class ViewInfoPage extends StatelessWidget {
                             // reload bin
                             context.read<BinBloc>().add(BinBlocEvent_load());
 
+                            // reload no folder
+                            context.read<NoFoldersBloc>().add(
+                              NoFoldersBlocEvent_load(),
+                            );
+
                             // POP
                             Navigator.pop(context);
                             Navigator.pop(context);
@@ -238,6 +244,11 @@ class ViewInfoPage extends StatelessWidget {
                             // reload bin
                             context.read<BinBloc>().add(BinBlocEvent_load());
 
+                            // reload no folder
+                            context.read<NoFoldersBloc>().add(
+                              NoFoldersBlocEvent_load(),
+                            );
+
                             // POP
                             Navigator.pop(context);
                             Navigator.pop(context);
@@ -317,6 +328,11 @@ class ViewInfoPage extends StatelessWidget {
 
                             // reload bin
                             context.read<BinBloc>().add(BinBlocEvent_load());
+
+                              // reload no folder
+                            context.read<NoFoldersBloc>().add(
+                              NoFoldersBlocEvent_load(),
+                            );
 
                             // POP
                             Navigator.pop(context);

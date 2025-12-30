@@ -6,6 +6,7 @@ import 'package:bit_key/features/feature_vault/presentation/bloc/bin_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/cards_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/identities_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/no_folders_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/cards_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/identify_page.dart';
@@ -54,6 +55,9 @@ class TypesWidget extends StatelessWidget {
                         BlocProvider.value(
                           value: BlocProvider.of<BinBloc>(context),
                         ),
+                         BlocProvider.value(
+                          value: BlocProvider.of<NoFoldersBloc>(context),
+                        ),
                       ],
                       child: LoginsPage(),
                     ),
@@ -98,6 +102,9 @@ class TypesWidget extends StatelessWidget {
                         BlocProvider.value(
                           value: BlocProvider.of<BinBloc>(context),
                         ),
+                        BlocProvider.value(
+                          value: BlocProvider.of<NoFoldersBloc>(context),
+                        ),
                       ],
                       child: CardsPage(),
                     ),
@@ -138,6 +145,9 @@ class TypesWidget extends StatelessWidget {
                         ),
                         BlocProvider.value(
                           value: BlocProvider.of<BinBloc>(context),
+                        ),
+                        BlocProvider.value(
+                          value: BlocProvider.of<NoFoldersBloc>(context),
                         ),
                       ],
                       child: IdentifyPage(),

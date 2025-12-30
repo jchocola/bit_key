@@ -4,6 +4,7 @@ import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/login.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/bin_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/no_folders_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/view_info_page.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
@@ -34,6 +35,9 @@ class LoginsPage extends StatelessWidget {
               BlocProvider.value(
                           value: BlocProvider.of<BinBloc>(context),
                         ),
+              BlocProvider.value(
+                          value: BlocProvider.of<NoFoldersBloc>(context),
+                        ),          
             ],
             child: SizedBox(
               height:

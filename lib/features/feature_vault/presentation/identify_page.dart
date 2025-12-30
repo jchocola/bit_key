@@ -4,6 +4,7 @@ import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/identity.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/bin_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/identities_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/no_folders_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/view_info_page.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
@@ -17,7 +18,7 @@ class IdentifyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-         void _onIdentityTapped({required Identity identity}) {
+    void _onIdentityTapped({required Identity identity}) {
       // SET PICK IDENTITY
       context.read<PickedItemBloc>().add(
         PickedItemBlocEvent_pickIdentity(identity: identity),
@@ -29,9 +30,16 @@ class IdentifyPage extends StatelessWidget {
         builder: (modalContext) {
           return MultiBlocProvider(
             providers: [
-              BlocProvider.value(value: BlocProvider.of<PickedItemBloc>(context)),
-               BlocProvider.value(value: BlocProvider.of<IdentitiesBloc>(context)),
-                BlocProvider.value(value: BlocProvider.of<BinBloc>(context))
+              BlocProvider.value(
+                value: BlocProvider.of<PickedItemBloc>(context),
+              ),
+              BlocProvider.value(
+                value: BlocProvider.of<IdentitiesBloc>(context),
+              ),
+              BlocProvider.value(value: BlocProvider.of<BinBloc>(context)),
+              BlocProvider.value(
+                value: BlocProvider.of<NoFoldersBloc>(context),
+              ),
             ],
             child: SizedBox(
               height:
@@ -43,7 +51,6 @@ class IdentifyPage extends StatelessWidget {
         },
       );
     }
-
 
     final theme = Theme.of(context);
     return GestureDetector(
@@ -84,7 +91,8 @@ class IdentifyPage extends StatelessWidget {
                             return CustomListile(
                               title: identity.itemName,
                               subTitle: identity.firstName,
-                              onTap: () => _onIdentityTapped(identity: identity),
+                              onTap: () =>
+                                  _onIdentityTapped(identity: identity),
                             );
                           }),
                         ),

@@ -14,6 +14,7 @@ abstract class LocalDbRepository {
   Future<List<Card>> getAllCard();
   Future<List<Card>> getActiveCard();
   Future<List<Card>> getCardsWithoutFolder();
+  Future<List<Card>> getActiveCardsWithoutFolder(); 
   Future<List<Card>> getCardsWithFolderName({required String folderName});
   Future<void> moveCardToBin({required Card card});
   Future<void> restoreCardFromBin({required Card card});
@@ -29,6 +30,7 @@ abstract class LocalDbRepository {
   Future<List<Login>> getAllLogin();
   Future<List<Login>> getActiveLogin();
   Future<List<Login>> getLoginsWithoutFolder();
+  Future<List<Login>> getActiveLoginsWithoutFolder();
   Future<List<Login>> getLoginsWithFolderName({required String folderName});
   Future<void> moveLoginToBin({required Login login});
   Future<void> restoreLoginFromBin({required Login card});
@@ -44,6 +46,7 @@ abstract class LocalDbRepository {
   Future<List<Identity>> getAllIdentity();
    Future<List<Identity>> getActiveIdentity();
   Future<List<Identity>> getIdentiesWithoutFolder();
+  Future<List<Identity>> getActiveIdentiesWithoutFolder();
   Future<List<Identity>> getIdentitiesWithFolderName({
     required String folderName,
   });
