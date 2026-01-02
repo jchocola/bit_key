@@ -33,6 +33,15 @@ class BinBlocEvent_restoreItem extends BinBlocEvent {
 
   @override
   List<Object?> get props => [item, completer];
+}
+
+class BinBlocEvent_deletePermantlyItem extends BinBlocEvent {
+  final Object item;
+  final Completer <void>? completer;
+  BinBlocEvent_deletePermantlyItem({required this.item, this.completer});
+
+  @override
+  List<Object?> get props => [item, completer];
 } 
 ///
 /// STATE
@@ -131,6 +140,28 @@ class BinBloc extends Bloc<BinBlocEvent, BinBlocState> {
           await localDbRepository.restoreIdentityFromBin(identity: item);
         }
         logger.f('Bin bloc restored item');
+        event.completer?.complete();
+        add(BinBlocEvent_load());
+      } catch (e) {
+        logger.e(e);
+      }
+    });
+
+    ///
+    /// DELETE PERMANENTLY ITEM
+    ///
+    on<BinBlocEvent_deletePermantlyItem>((event, emit) async {
+      try {
+        logger.d('Bin bloc delete permantly item');
+        final item = event.item;
+        if (item is Login) {
+          await localDbRepository.deleteLogin(login: item);
+        } else if (item is Card) {
+          await localDbRepository.deleteCard(card: item);
+        } else if (item is Identity) {
+          await localDbRepository.deleteIdentity(identtity: item);
+        }
+        logger.f('Bin bloc deleted permantly item');
         event.completer?.complete();
         add(BinBlocEvent_load());
       } catch (e) {

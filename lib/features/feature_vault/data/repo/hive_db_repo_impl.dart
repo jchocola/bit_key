@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_brace_in_string_interps
+
 import 'package:bit_key/core/exception/app_exception.dart';
 import 'package:bit_key/features/feature_vault/data/model/card_model.dart';
 import 'package:bit_key/features/feature_vault/data/model/identity_model.dart';
@@ -27,21 +29,36 @@ class HiveDbRepoImpl implements LocalDbRepository {
   HiveDbRepoImpl({required this.pathDir});
 
   @override
-  Future<void> deleteCard({required Card card}) {
-    // TODO: implement deleteCard
-    throw UnimplementedError();
+  Future<void> deleteCard({required Card card}) async{
+    try {
+      final cardIndex = await getCardIndexInBox(card: card);
+      await _cardsBox.deleteAt(cardIndex);
+      logger.d('Deleted card');
+    } catch (e) {
+      logger.e(e);
+    }
   }
 
   @override
-  Future<void> deleteIdentity({required Identity identtity}) {
-    // TODO: implement deleteIdentity
-    throw UnimplementedError();
+  Future<void> deleteIdentity({required Identity identtity}) async{
+    try {
+      final identityIndex = await getIdentityIndexInBox(identity: identtity);
+      await _identitiesBox.deleteAt(identityIndex);
+      logger.d('Deleted identity');
+    } catch (e) {
+      logger.e(e);
+    }
   }
 
   @override
-  Future<void> deleteLogin({required Login login}) {
-    // TODO: implement deleteLogin
-    throw UnimplementedError();
+  Future<void> deleteLogin({required Login login}) async{
+    try {
+      final loginIndex = await getLoginIndexInBox(login: login);
+      await _loginsBox.deleteAt(loginIndex);
+      logger.d('Deleted login');
+    } catch (e) {
+      logger.e(e);
+    }
   }
 
   @override

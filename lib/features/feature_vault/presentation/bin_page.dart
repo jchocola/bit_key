@@ -106,7 +106,29 @@ class BinPage extends StatelessWidget {
                   ),
 
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      try {
+                        final Completer<void> _completer = Completer<void>();
+                        // delete login permanently
+                        context.read<BinBloc>().add(
+                          BinBlocEvent_deletePermantlyItem(
+                            item: login,
+                            completer: _completer,
+                          ),
+                        );
+
+                        // close modal
+                        Navigator.pop(modalContext);
+
+                        // wait until done
+                        await _completer.future;
+
+                        // reload bin
+                        context.read<BinBloc>().add(BinBlocEvent_load());
+                      } catch (e) {
+                        logger.e(e);
+                      }
+                    },
                     child: Text(
                       'DELETE',
                       style: theme.textTheme.bodyMedium?.copyWith(
@@ -198,7 +220,29 @@ class BinPage extends StatelessWidget {
                   ),
 
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      try {
+                        final Completer<void> _completer = Completer<void>();
+                        // delete login permanently
+                        context.read<BinBloc>().add(
+                          BinBlocEvent_deletePermantlyItem(
+                            item: card,
+                            completer: _completer,
+                          ),
+                        );
+
+                        // close modal
+                        Navigator.pop(modalContext);
+
+                        // wait until done
+                        await _completer.future;
+
+                        // reload bin
+                        context.read<BinBloc>().add(BinBlocEvent_load());
+                      } catch (e) {
+                        logger.e(e);
+                      }
+                    },
                     child: Text(
                       'DELETE',
                       style: theme.textTheme.bodyMedium?.copyWith(
@@ -290,7 +334,29 @@ class BinPage extends StatelessWidget {
                   ),
 
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      try {
+                        final Completer<void> _completer = Completer<void>();
+                        // delete login permanently
+                        context.read<BinBloc>().add(
+                          BinBlocEvent_deletePermantlyItem(
+                            item: identity,
+                            completer: _completer,
+                          ),
+                        );
+
+                        // close modal
+                        Navigator.pop(modalContext);
+
+                        // wait until done
+                        await _completer.future;
+
+                        // reload bin
+                        context.read<BinBloc>().add(BinBlocEvent_load());
+                      } catch (e) {
+                        logger.e(e);
+                      }
+                    },
                     child: Text(
                       'DELETE',
                       style: theme.textTheme.bodyMedium?.copyWith(
