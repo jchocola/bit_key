@@ -76,4 +76,9 @@ class Identity extends Equatable {
     postcode,
     isHide
   ];
+
+  @override
+  String toString() {
+    return 'Identity(id: $id, itemName: $itemName, folderName: $folderName, isHide: $isHide, firstName: $firstName, middleName: $middleName, lastName: $lastName, userName: $userName, company: $company, nationalInsuranceNumber: $nationalInsuranceNumber, passportName: $passportName, licenseNumber: $licenseNumber, email: $email, phone: $phone, address1: $address1, address2: $address2, address3: $address3, cityTown: $cityTown, country: $country, postcode: $postcode)';
+  }
 }

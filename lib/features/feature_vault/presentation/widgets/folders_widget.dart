@@ -1,6 +1,13 @@
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/bin_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/cards_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/folder_detail_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/identities_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/no_folders_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/folder_info_page.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
 import 'package:flutter/material.dart';
@@ -21,16 +28,23 @@ class FoldersWidget extends StatelessWidget {
               spacing: AppConstant.appPadding,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Folders'),
+                Text('Folders (${state.folders.length})'),
                 ...List.generate(state.folders.length, (index) {
                   return CustomListile(
                     title: state.folders[index],
                     icon: AppIcon.folderIcon,
-                    trailingValue: '0',
+                    trailingValue: state.counts[index].toString(),
                     onTap: () {
                       // set selected folder
                       context.read<FoldersBloc>().add(
                         FolderBlocEvent_selectFolder(
+                          folderName: state.folders[index],
+                        ),
+                      );
+
+                      // load folder detail info
+                      context.read<FolderDetailBloc>().add(
+                        FolderDetailBlocEvent_load(
                           folderName: state.folders[index],
                         ),
                       );
@@ -41,10 +55,38 @@ class FoldersWidget extends StatelessWidget {
                         context: context,
                         builder: (modalContext) {
                           return SizedBox(
-                            height: MediaQuery.of(context).size.height * AppConstant.modalPageHeight,
-                            child: BlocProvider.value(
-                              value: BlocProvider.of<FoldersBloc>(context),
-                              child: FolderInfoPage()),
+                            height:
+                                MediaQuery.of(context).size.height *
+                                AppConstant.modalPageHeight,
+                            child: MultiBlocProvider(
+                              providers: [
+                                BlocProvider.value(
+                                  value: BlocProvider.of<FoldersBloc>(context),
+                                ),
+                                BlocProvider.value(
+                                  value: BlocProvider.of<FolderDetailBloc>(context),
+                                ),
+                                 BlocProvider.value(
+                                  value: BlocProvider.of<PickedItemBloc>(context),
+                                 ),
+                                 BlocProvider.value(
+                                  value: BlocProvider.of<BinBloc>(context),
+                                 ),
+                                  BlocProvider.value(
+                                    value: BlocProvider.of<NoFoldersBloc>(context),
+                                  ),
+                                   BlocProvider.value(
+                                  value: BlocProvider.of<LoginsBloc>(context),
+                                 ),
+                                  BlocProvider.value(
+                                  value: BlocProvider.of<CardsBloc>(context),
+                                 ),
+                                  BlocProvider.value(
+                                  value: BlocProvider.of<IdentitiesBloc>(context),
+                                 ),
+                              ],
+                              child: FolderInfoPage(),
+                            ),
                           );
                         },
                       );

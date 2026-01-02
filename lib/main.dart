@@ -11,29 +11,49 @@ import 'package:bit_key/features/feature_generate_pass/presentation/bloc/pass_ge
 import 'package:bit_key/features/feature_generate_pass/presentation/generating_page.dart';
 import 'package:bit_key/features/feature_setting/presentation/setting_page.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
+import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/bin_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/cards_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/folder_detail_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/identities_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/no_folders_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/folder_info_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/logins_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/my_vault_page.dart';
+import 'package:bit_key/features/feature_vault/presentation/page/creating_card/bloc/create_card_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_card/creating_card_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_folder/creating_folder_page.dart';
+import 'package:bit_key/features/feature_vault/presentation/page/creating_identity/bloc/create_identity_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_identity/creating_identity_page.dart';
+import 'package:bit_key/features/feature_vault/presentation/page/creating_login/bloc/create_login_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_login/creating_login_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/widgets/vault_page_appbar.dart';
 import 'package:family_bottom_sheet/family_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:glassy_real_navbar/glassy_real_navbar.dart';
+import 'package:hive/hive.dart';
 import 'package:liquid_glass_renderer/experimental.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
 import 'package:logger/web.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:resizable_bottom_sheet/resizable_bottom_sheet.dart';
 
 final logger = Logger();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // DI
   await DI();
 
+  // init local db
+  await getIt<LocalDbRepository>().init();
+
+  // run app
   runApp(const MyApp());
 }
 
@@ -58,10 +78,66 @@ class MyApp extends StatelessWidget {
           ),
 
           BlocProvider(
-            create: (context) =>
-                FoldersBloc(folderRepository: getIt<FolderRepository>())
-                  ..add(FoldersBlocEvent_loadFolders()),
+            create: (context) => FoldersBloc(
+              folderRepository: getIt<FolderRepository>(),
+              localDbRepository: getIt<LocalDbRepository>(),
+            )..add(FoldersBlocEvent_loadFolders()),
           ),
+
+          BlocProvider(
+            create: (context) =>
+                CreateLoginBloc(localDbRepository: getIt<LocalDbRepository>()),
+          ),
+
+          BlocProvider(
+            create: (context) =>
+                LoginsBloc(localDbRepository: getIt<LocalDbRepository>())
+                  ..add(LoginsBlocEvent_loadLogins()),
+          ),
+
+          BlocProvider(
+            create: (context) =>
+                CardsBloc(localDbRepository: getIt<LocalDbRepository>())
+                  ..add(CardsBlocEvent_loadCards()),
+          ),
+
+          BlocProvider(
+            create: (context) =>
+                CreateCardBloc(localDbRepository: getIt<LocalDbRepository>()),
+          ),
+
+          BlocProvider(
+            create: (context) =>
+                IdentitiesBloc(localDbRepository: getIt<LocalDbRepository>())
+                  ..add(IdentitiesBlocEvent_loadIdentities()),
+          ),
+
+          BlocProvider(
+            create: (context) => CreateIdentityBloc(
+              localDbRepository: getIt<LocalDbRepository>(),
+            ),
+          ),
+
+          BlocProvider(
+            create: (context) =>
+                NoFoldersBloc(localDbRepository: getIt<LocalDbRepository>())
+                  ..add(NoFoldersBlocEvent_load()),
+          ),
+
+          BlocProvider(
+            create: (context) =>
+                FolderDetailBloc(localDbRepository: getIt<LocalDbRepository>())
+          ),
+
+          BlocProvider(
+            create: (context) =>
+                PickedItemBloc(localDbRepository: getIt<LocalDbRepository>())
+          ),
+
+           BlocProvider(
+            create: (context) =>
+                BinBloc(localDbRepository: getIt<LocalDbRepository>())..add(BinBlocEvent_load())
+          ),  
         ],
         child: MainPage(),
       ),
@@ -122,13 +198,29 @@ class _MainPageState extends State<MainPage> {
         return SizedBox(
           height:
               MediaQuery.of(context).size.height * AppConstant.modalPageHeight,
-          child: BlocProvider.value(
-            value: BlocProvider.of<FoldersBloc>(parentContext),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider.value(
+                value: BlocProvider.of<CreateLoginBloc>(parentContext),
+              ),
+              BlocProvider.value(
+                value: BlocProvider.of<FoldersBloc>(parentContext),
+              ),
+            ],
             child: CreatingLoginPage(),
           ),
         );
       },
-    );
+    ).then((_) {
+      // RELOAD LOGINS LIST WHEN BOMMTOM MODAL CLOSED
+      context.read<LoginsBloc>().add(LoginsBlocEvent_loadLogins());
+
+      // RELOAD NO FOLDERS
+      context.read<NoFoldersBloc>().add(NoFoldersBlocEvent_load());
+
+      // RELOAD FOLDERS
+      context.read<FoldersBloc>().add(FoldersBlocEvent_loadFolders());
+    });
   }
 
   void onCreateCardTapped(BuildContext parentContext) async {
@@ -141,41 +233,57 @@ class _MainPageState extends State<MainPage> {
         return SizedBox(
           height:
               MediaQuery.of(context).size.height * AppConstant.modalPageHeight,
-          child: BlocProvider.value(
-            value: BlocProvider.of<FoldersBloc>(parentContext),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider.value(
+                value: BlocProvider.of<FoldersBloc>(parentContext),
+              ),
+
+              BlocProvider.value(
+                value: BlocProvider.of<CreateCardBloc>(parentContext),
+              ),
+            ],
             child: CreatingCardPage(),
           ),
         );
       },
-    );
+    ).then((_) {
+      // RELOAD CARDS
+      context.read<CardsBloc>().add(CardsBlocEvent_loadCards());
+
+      // RELOAD NO FOLDERS
+      context.read<NoFoldersBloc>().add(NoFoldersBlocEvent_load());
+
+        // RELOAD FOLDERS
+      context.read<FoldersBloc>().add(FoldersBlocEvent_loadFolders());
+    });
   }
 
   void onCreateIdentityTapped(BuildContext parentContext) async {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => BlocProvider.value(
-            value: BlocProvider.of<FoldersBloc>(parentContext),
-            child: CreatingIdentityPage(
+      MaterialPageRoute(
+        builder: (context) => MultiBlocProvider(
+          providers: [
+            BlocProvider.value(
+              value: BlocProvider.of<FoldersBloc>(parentContext),
             ),
-          ),
-        ));
+            BlocProvider.value(
+              value: BlocProvider.of<CreateIdentityBloc>(parentContext),
+            ),
 
-    // showModalBottomSheet(
-    //   context: parentContext,
-    //   // showDragHandle: true,
-    //   useRootNavigator: true,
-    //   isScrollControlled: true,
-    //   builder: (modalContext) {
-    //     return FractionallySizedBox(
-    //     heightFactor: AppConstant.modalPageHeight,
-    //       child: BlocProvider.value(
-    //         value: BlocProvider.of<FoldersBloc>(parentContext),
-    //         child: CreatingIdentityPage(
-    //         ),
-    //       ),
-    //     );
-    //   },
-    // );
+            BlocProvider.value(
+              value: BlocProvider.of<IdentitiesBloc>(parentContext),
+            ),
+
+            BlocProvider.value(
+              value: BlocProvider.of<NoFoldersBloc>(parentContext),
+            ),
+          ],
+          child: CreatingIdentityPage(),
+        ),
+      ),
+    );
   }
 
   @override

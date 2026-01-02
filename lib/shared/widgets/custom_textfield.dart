@@ -10,11 +10,13 @@ class CustomTextfield extends StatefulWidget {
     this.hintText,
     this.obscure = false,
     this.withEye = false,
+    this.inputType = TextInputType.text
   });
   final TextEditingController? controller;
   final String? hintText;
   final bool obscure;
   final bool withEye;
+  final TextInputType inputType;
 
   @override
   State<CustomTextfield> createState() => _CustomTextfieldState();
@@ -44,7 +46,9 @@ class _CustomTextfieldState extends State<CustomTextfield> {
         obscureText: obscureValue,
         cursorColor: AppColor.primary,
         mouseCursor: MouseCursor.defer,
+        keyboardType: widget.inputType,
         decoration: InputDecoration(
+          
           hintText: widget.hintText,
 
           suffixIcon: widget.withEye

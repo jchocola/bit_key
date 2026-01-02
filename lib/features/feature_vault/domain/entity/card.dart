@@ -37,4 +37,9 @@ class Card extends Equatable {
     secCode,
     isHide,
   ];
+
+  @override
+  String toString() {
+    return 'Card(id: $id, itemName: $itemName, isHide: $isHide, folderName: $folderName, cardHolderName: $cardHolderName, number: $number, brand: $brand, expMonth: $expMonth, expYear: $expYear, secCode: $secCode)';
+  }
 }
