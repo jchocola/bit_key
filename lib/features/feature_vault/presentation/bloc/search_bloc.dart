@@ -19,10 +19,13 @@ abstract class SearchBlocEvent extends Equatable {
 
 class SearchBlocEvent_startSearch extends SearchBlocEvent {
   final String query;
-  SearchBlocEvent_startSearch({required this.query});
+  final bool? isLogin;
+  final bool? isCard;
+  final bool? isIdentity;
+  SearchBlocEvent_startSearch({required this.query, this.isLogin, this.isCard, this.isIdentity});
 
   @override
-  List<Object?> get props => [query];
+  List<Object?> get props => [query, isLogin, isCard, isIdentity];
 }
 
 ///
@@ -61,7 +64,6 @@ class SearchBloc extends Bloc<SearchBlocEvent, SearchBlocState> {
     /// EVENT HANDLERS
     ///
     on<SearchBlocEvent_startSearch>((event, emit) async {
-
       logger.d('Event: SearchBlocEvent_startSearch with query: ${event.query}');
       if (event.query.isEmpty) {
         emit(SearchBlocState_initial());
@@ -72,12 +74,49 @@ class SearchBloc extends Bloc<SearchBlocEvent, SearchBlocState> {
       final cards = await localDbRepository.searchCards(event.query);
       final identities = await localDbRepository.searchIdentities(event.query);
 
-      emit(SearchBlocState_searching(
-        logins: logins,
-        cards: cards,
-        identities: identities,
-        totalResults: logins.length + cards.length + identities.length,
-      ));
+      if (event.isLogin == true) {
+        emit(
+          SearchBlocState_searching(
+            logins: logins,
+            cards: [],
+            identities: [],
+            totalResults: logins.length,
+          ),
+        );
+        return;
+      }
+      if (event.isCard == true) {
+        emit(
+          SearchBlocState_searching(
+            logins: [],
+            cards: cards,
+            identities: [],
+            totalResults: cards.length,
+          ),
+        );
+        return;
+      }
+
+      if (event.isIdentity == true) {
+        emit(
+          SearchBlocState_searching(
+            logins: [],
+            cards: [],
+            identities: identities,
+            totalResults: identities.length,
+          ),
+        );
+        return;
+      }
+
+      emit(
+        SearchBlocState_searching(
+          logins: logins,
+          cards: cards,
+          identities: identities,
+          totalResults: logins.length + cards.length + identities.length,
+        ),
+      );
     });
   }
 }

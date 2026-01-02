@@ -7,7 +7,9 @@ import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.da
 import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/no_folders_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/search_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/view_info_page.dart';
+import 'package:bit_key/features/feature_vault/presentation/widgets/searched_widget.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
 import 'package:bit_key/shared/widgets/search_textfiled.dart';
 import 'package:family_bottom_sheet/family_bottom_sheet.dart';
@@ -19,7 +21,7 @@ class LoginsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     void _onLoginTapped({required Login login}) {
+    void _onLoginTapped({required Login login}) {
       // SET PICK LOGIN
       context.read<PickedItemBloc>().add(
         PickedItemBlocEvent_pickLogin(login: login),
@@ -31,17 +33,15 @@ class LoginsPage extends StatelessWidget {
         builder: (modalContext) {
           return MultiBlocProvider(
             providers: [
-              BlocProvider.value(value: BlocProvider.of<PickedItemBloc>(context)),
-               BlocProvider.value(value: BlocProvider.of<LoginsBloc>(context)),
               BlocProvider.value(
-                          value: BlocProvider.of<BinBloc>(context),
-                        ),
+                value: BlocProvider.of<PickedItemBloc>(context),
+              ),
+              BlocProvider.value(value: BlocProvider.of<LoginsBloc>(context)),
+              BlocProvider.value(value: BlocProvider.of<BinBloc>(context)),
               BlocProvider.value(
-                          value: BlocProvider.of<NoFoldersBloc>(context),
-                        ),
-                          BlocProvider.value(
-                value: BlocProvider.of<FoldersBloc>(context),
-              ),          
+                value: BlocProvider.of<NoFoldersBloc>(context),
+              ),
+              BlocProvider.value(value: BlocProvider.of<FoldersBloc>(context)),
             ],
             child: SizedBox(
               height:
@@ -77,7 +77,17 @@ class LoginsPage extends StatelessWidget {
                   ),
                 ],
               ),
-              SearchTextfiled(),
+
+              ///
+              /// SEARCH
+              ///
+              // SearchTextfiled(
+              //   onChanged: (value) {
+              //     context.read<SearchBloc>().add(
+              //       SearchBlocEvent_startSearch(query: value, isLogin: true),
+              //     );
+              //   },
+              // ),
 
               BlocBuilder<LoginsBloc, LoginsBlocState>(
                 builder: (context, state) {
@@ -88,7 +98,8 @@ class LoginsPage extends StatelessWidget {
                           spacing: AppConstant.appPadding,
                           children: List.generate(state.logins.length, (index) {
                             return CustomListile(
-                              onTap: () => _onLoginTapped(login: state.logins[index]),
+                              onTap: () =>
+                                  _onLoginTapped(login: state.logins[index]),
                               icon: AppIcon.loginIcon,
                               title: state.logins[index].itemName,
                               subTitle: state.logins[index].login,

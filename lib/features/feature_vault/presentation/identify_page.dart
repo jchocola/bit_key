@@ -79,7 +79,7 @@ class IdentifyPage extends StatelessWidget {
                   ),
                 ],
               ),
-              SearchTextfiled(),
+              //SearchTextfiled(),
 
               BlocBuilder<IdentitiesBloc, IdentitiesBlocState>(
                 builder: (context, state) {
