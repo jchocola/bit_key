@@ -3,7 +3,6 @@ import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/widgets/acc_sec_appbar.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class AccSecurityPage extends StatelessWidget {
   const AccSecurityPage({super.key});
