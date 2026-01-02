@@ -20,6 +20,7 @@ import 'package:bit_key/features/feature_vault/presentation/bloc/identities_bloc
 import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/no_folders_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/search_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/folder_info_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/logins_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/my_vault_page.dart';
@@ -137,7 +138,12 @@ class MyApp extends StatelessWidget {
            BlocProvider(
             create: (context) =>
                 BinBloc(localDbRepository: getIt<LocalDbRepository>())..add(BinBlocEvent_load())
-          ),  
+          ), 
+          BlocProvider(
+            create: (context) => SearchBloc(
+              localDbRepository: getIt<LocalDbRepository>(),
+            ),
+          ), 
         ],
         child: MainPage(),
       ),

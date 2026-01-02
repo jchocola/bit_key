@@ -79,7 +79,7 @@ class CardsPage extends StatelessWidget {
                   ),
                 ],
               ),
-              SearchTextfiled(),
+              //SearchTextfiled(),
 
               BlocBuilder<CardsBloc, CardsBlocState>(
                 builder: (context, state) {

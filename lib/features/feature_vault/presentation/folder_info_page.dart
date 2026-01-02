@@ -165,7 +165,7 @@ class FolderInfoPage extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SearchTextfiled(),
+                   // SearchTextfiled(),
 
                     BlocBuilder<FolderDetailBloc, FolderDetailBlocState>(
                       builder: (context, state) {

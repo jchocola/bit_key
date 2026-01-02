@@ -9,6 +9,7 @@ import 'package:bit_key/features/feature_vault/presentation/bloc/identities_bloc
 import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/no_folders_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/search_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/cards_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/identify_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/logins_page.dart';
@@ -27,7 +28,6 @@ class TypesWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Types'),
-
 
         ///
         /// LOGIN
@@ -50,18 +50,21 @@ class TypesWidget extends StatelessWidget {
                         BlocProvider.value(
                           value: BlocProvider.of<LoginsBloc>(context),
                         ),
-                         BlocProvider.value(
+                        BlocProvider.value(
                           value: BlocProvider.of<PickedItemBloc>(context),
                         ),
                         BlocProvider.value(
                           value: BlocProvider.of<BinBloc>(context),
                         ),
-                         BlocProvider.value(
+                        BlocProvider.value(
                           value: BlocProvider.of<NoFoldersBloc>(context),
                         ),
-                          BlocProvider.value(
-                value: BlocProvider.of<FoldersBloc>(context),
-              ),
+                        BlocProvider.value(
+                          value: BlocProvider.of<FoldersBloc>(context),
+                        ),
+                        BlocProvider.value(
+                          value: BlocProvider.of<SearchBloc>(context),
+                        ),
                       ],
                       child: LoginsPage(),
                     ),
@@ -74,7 +77,6 @@ class TypesWidget extends StatelessWidget {
                 : '',
           ),
         ),
-
 
         ///
         /// CARDS
@@ -100,7 +102,7 @@ class TypesWidget extends StatelessWidget {
                         BlocProvider.value(
                           value: BlocProvider.of<CardsBloc>(context),
                         ),
-                          BlocProvider.value(
+                        BlocProvider.value(
                           value: BlocProvider.of<PickedItemBloc>(context),
                         ),
                         BlocProvider.value(
@@ -109,9 +111,12 @@ class TypesWidget extends StatelessWidget {
                         BlocProvider.value(
                           value: BlocProvider.of<NoFoldersBloc>(context),
                         ),
-                          BlocProvider.value(
-                value: BlocProvider.of<FoldersBloc>(context),
-              ),
+                        BlocProvider.value(
+                          value: BlocProvider.of<FoldersBloc>(context),
+                        ),
+                        BlocProvider.value(
+                          value: BlocProvider.of<SearchBloc>(context),
+                        ),
                       ],
                       child: CardsPage(),
                     ),
@@ -121,7 +126,6 @@ class TypesWidget extends StatelessWidget {
             },
           ),
         ),
-
 
         ///
         /// IDENTITIES
@@ -147,7 +151,7 @@ class TypesWidget extends StatelessWidget {
                         BlocProvider.value(
                           value: BlocProvider.of<IdentitiesBloc>(context),
                         ),
-                          BlocProvider.value(
+                        BlocProvider.value(
                           value: BlocProvider.of<PickedItemBloc>(context),
                         ),
                         BlocProvider.value(
@@ -156,9 +160,12 @@ class TypesWidget extends StatelessWidget {
                         BlocProvider.value(
                           value: BlocProvider.of<NoFoldersBloc>(context),
                         ),
-                          BlocProvider.value(
-                value: BlocProvider.of<FoldersBloc>(context),
-              ),
+                        BlocProvider.value(
+                          value: BlocProvider.of<FoldersBloc>(context),
+                        ),
+                        BlocProvider.value(
+                          value: BlocProvider.of<SearchBloc>(context),
+                        ),
                       ],
                       child: IdentifyPage(),
                     ),
