@@ -34,7 +34,7 @@ abstract class LocalDbRepository {
   Future<List<Login>> getActiveLoginsWithoutFolder();
   Future<List<Login>> getLoginsWithFolderName({required String folderName});
   Future<void> moveLoginToBin({required Login login});
-  Future<void> restoreLoginFromBin({required Login card});
+  Future<void> restoreLoginFromBin({required Login login});
   Future<List<Login>> getLoginsInBin();
   Future<int> getLoginIndexInBox({required Login login});
   Future<void> deleteAllLoginsFromBin();

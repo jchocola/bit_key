@@ -325,21 +325,46 @@ class HiveDbRepoImpl implements LocalDbRepository {
   }
 
   @override
-  Future<void> restoreCardFromBin({required Card card}) {
-    // TODO: implement restoreCardFromBin
-    throw UnimplementedError();
+  Future<void> restoreCardFromBin({required Card card})async {
+    try {
+      final cardIndex = await getCardIndexInBox(card: card);
+      logger.d('Card index : ${cardIndex}');
+      final CardModel model = CardModel.fromEntity(card);
+
+      await _cardsBox.putAt(cardIndex, model.copyWith(isHide: false));
+      logger.d('Restored card from bin ${card.itemName}');
+    } catch (e) {
+      logger.e(e);
+    }
   }
 
   @override
-  Future<void> restoreIdentityFromBin({required Identity identity}) {
-    // TODO: implement restoreIdentityFromBin
-    throw UnimplementedError();
+  Future<void> restoreIdentityFromBin({required Identity identity}) async {
+    try {
+      final identityIndex = await getIdentityIndexInBox(identity: identity);
+      logger.d('Identity index : ${identityIndex}');
+      final IdentityModel model = IdentityModel.fromEntity(identity);
+
+      await _identitiesBox.putAt(identityIndex, model.copyWith(isHide: false));
+      logger.d('Restored identity from bin ${identity.itemName}');
+    } catch (e) {
+      logger.e(e);
+    }
   }
 
   @override
-  Future<void> restoreLoginFromBin({required Login card}) {
-    // TODO: implement restoreLoginFromBin
-    throw UnimplementedError();
+  Future<void> restoreLoginFromBin({required Login login}) async {
+    try {
+      final loginIndex = await getLoginIndexInBox(login: login);
+      logger.d('Login index : ${loginIndex}');
+      final LoginModel model = LoginModel.fromEntity(login);
+
+      await _loginsBox.putAt(loginIndex, model.copyWith(isHide: false));
+      logger.d('Restored login from bin ${login.itemName}');
+    } catch (e) {
+      logger.e(e);
+    }
+  
   }
 
   @override

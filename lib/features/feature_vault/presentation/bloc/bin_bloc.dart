@@ -25,6 +25,15 @@ class BinBlocEvent_deleteAllFromBin extends BinBlocEvent {
   final Completer<void>? completer;
   BinBlocEvent_deleteAllFromBin({this.completer});
 }
+
+class BinBlocEvent_restoreItem extends BinBlocEvent {
+  final Object item;
+  final Completer <void>? completer;
+  BinBlocEvent_restoreItem({required this.item, this.completer});
+
+  @override
+  List<Object?> get props => [item, completer];
+} 
 ///
 /// STATE
 ///
@@ -100,6 +109,29 @@ class BinBloc extends Bloc<BinBlocEvent, BinBlocState> {
         await localDbRepository.deleteAllIdentitiesFromBin();
         event.completer?.complete();
         logger.f('Bin bloc deleted all from bin');
+        add(BinBlocEvent_load());
+      } catch (e) {
+        logger.e(e);
+      }
+    });
+
+
+    ///
+    /// RESTORE ITEM
+    ///
+    on<BinBlocEvent_restoreItem>((event, emit) async {
+      try {
+        logger.d('Bin bloc restore item');
+        final item = event.item;
+        if (item is Login) {
+          await localDbRepository.restoreLoginFromBin(login: item);
+        } else if (item is Card) {
+          await localDbRepository.restoreCardFromBin(card: item);
+        } else if (item is Identity) {
+          await localDbRepository.restoreIdentityFromBin(identity: item);
+        }
+        logger.f('Bin bloc restored item');
+        event.completer?.complete();
         add(BinBlocEvent_load());
       } catch (e) {
         logger.e(e);
