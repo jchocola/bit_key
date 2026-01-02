@@ -1,7 +1,9 @@
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/theme/app_color.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/search_bloc.dart';
 import 'package:bit_key/shared/widgets/search_textfiled.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
 
 class VaultPageAppbar extends StatelessWidget {
@@ -26,7 +28,11 @@ class VaultPageAppbar extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('My vault'),
-            SearchTextfiled()
+            SearchTextfiled(
+              onChanged: (value) {
+                context.read<SearchBloc>().add(SearchBlocEvent_startSearch(query: value));
+              },
+            )
           ],
         ))));
   }

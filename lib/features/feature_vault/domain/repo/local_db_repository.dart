@@ -21,6 +21,7 @@ abstract class LocalDbRepository {
   Future<List<Card>> getCardsInBin();
   Future<int> getCardIndexInBox({required Card card});
   Future<void> deleteAllCardsFromBin();
+  Future<List<Card>> searchCards(String query);
 
   ///
   /// LOGIN
@@ -38,6 +39,7 @@ abstract class LocalDbRepository {
   Future<List<Login>> getLoginsInBin();
   Future<int> getLoginIndexInBox({required Login login});
   Future<void> deleteAllLoginsFromBin();
+  Future<List<Login>> searchLogins(String query);
 
   ///
   /// IDENTITY
@@ -57,4 +59,5 @@ abstract class LocalDbRepository {
   Future<List<Identity>> getIdentitiesInBin();
   Future<int> getIdentityIndexInBox({required Identity identity});
   Future<void> deleteAllIdentitiesFromBin();
+  Future<List<Identity>> searchIdentities(String query);
 }

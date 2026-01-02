@@ -4,8 +4,9 @@ import 'package:bit_key/core/theme/app_color.dart';
 import 'package:flutter/material.dart';
 
 class SearchTextfiled extends StatelessWidget {
-  const SearchTextfiled({super.key});
+  const SearchTextfiled({super.key, this.onChanged});
 
+  final void Function(String)? onChanged;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -14,6 +15,7 @@ class SearchTextfiled extends StatelessWidget {
         Icon(AppIcon.searchIcon),
         Flexible(
           child: TextField(
+            onChanged: onChanged,
             cursorColor: AppColor.primary,
             mouseCursor: MouseCursor.defer,
             decoration: InputDecoration(

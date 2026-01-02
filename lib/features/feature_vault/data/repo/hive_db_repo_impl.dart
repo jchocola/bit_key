@@ -29,7 +29,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
   HiveDbRepoImpl({required this.pathDir});
 
   @override
-  Future<void> deleteCard({required Card card}) async{
+  Future<void> deleteCard({required Card card}) async {
     try {
       final cardIndex = await getCardIndexInBox(card: card);
       await _cardsBox.deleteAt(cardIndex);
@@ -40,7 +40,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
   }
 
   @override
-  Future<void> deleteIdentity({required Identity identtity}) async{
+  Future<void> deleteIdentity({required Identity identtity}) async {
     try {
       final identityIndex = await getIdentityIndexInBox(identity: identtity);
       await _identitiesBox.deleteAt(identityIndex);
@@ -51,7 +51,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
   }
 
   @override
-  Future<void> deleteLogin({required Login login}) async{
+  Future<void> deleteLogin({required Login login}) async {
     try {
       final loginIndex = await getLoginIndexInBox(login: login);
       await _loginsBox.deleteAt(loginIndex);
@@ -316,7 +316,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
   @override
   Future<void> moveIdentityToBin({required Identity identity}) async {
     try {
-         final identityIndex = await getIdentityIndexInBox(identity: identity);
+      final identityIndex = await getIdentityIndexInBox(identity: identity);
       logger.d('Identity index : ${identityIndex}');
       final IdentityModel model = IdentityModel.fromEntity(identity);
 
@@ -329,8 +329,8 @@ class HiveDbRepoImpl implements LocalDbRepository {
 
   @override
   Future<void> moveLoginToBin({required Login login}) async {
-   try {
-         final loginIndex = await getLoginIndexInBox(login: login);
+    try {
+      final loginIndex = await getLoginIndexInBox(login: login);
       logger.d('Login index : ${loginIndex}');
       final LoginModel model = LoginModel.fromEntity(login);
 
@@ -342,7 +342,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
   }
 
   @override
-  Future<void> restoreCardFromBin({required Card card})async {
+  Future<void> restoreCardFromBin({required Card card}) async {
     try {
       final cardIndex = await getCardIndexInBox(card: card);
       logger.d('Card index : ${cardIndex}');
@@ -381,7 +381,6 @@ class HiveDbRepoImpl implements LocalDbRepository {
     } catch (e) {
       logger.e(e);
     }
-  
   }
 
   @override
@@ -449,7 +448,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
   }
 
   @override
-  Future<List<Identity>> getActiveIdentity() async{
+  Future<List<Identity>> getActiveIdentity() async {
     try {
       final allIdentity = await getAllIdentity();
       return allIdentity
@@ -462,8 +461,8 @@ class HiveDbRepoImpl implements LocalDbRepository {
   }
 
   @override
-  Future<List<Login>> getActiveLogin()async {
-      try {
+  Future<List<Login>> getActiveLogin() async {
+    try {
       final allLogins = await getAllLogin();
       return allLogins
           .where((e) => e.isHide == false || e.isHide == null)
@@ -473,27 +472,35 @@ class HiveDbRepoImpl implements LocalDbRepository {
       return [];
     }
   }
-  
+
   @override
-  Future<List<Card>> getActiveCardsWithoutFolder() async{
-     try {
+  Future<List<Card>> getActiveCardsWithoutFolder() async {
+    try {
       final allCard = await getAllCard();
 
-      final filteredCards = allCard.where((e) => e.folderName == null && (e.isHide == false || e.isHide == null)).toList();
+      final filteredCards = allCard
+          .where(
+            (e) =>
+                e.folderName == null && (e.isHide == false || e.isHide == null),
+          )
+          .toList();
       return filteredCards;
     } catch (e) {
       logger.e(e);
       return [];
     }
   }
-  
+
   @override
-  Future<List<Identity>> getActiveIdentiesWithoutFolder() async{
+  Future<List<Identity>> getActiveIdentiesWithoutFolder() async {
     try {
       final identities = await getAllIdentity();
 
       final filteredIdentities = identities
-          .where((e) => e.folderName == null && (e.isHide == false || e.isHide == null))
+          .where(
+            (e) =>
+                e.folderName == null && (e.isHide == false || e.isHide == null),
+          )
           .toList();
       return filteredIdentities;
     } catch (e) {
@@ -501,14 +508,17 @@ class HiveDbRepoImpl implements LocalDbRepository {
       return [];
     }
   }
-  
+
   @override
-  Future<List<Login>> getActiveLoginsWithoutFolder() async{
+  Future<List<Login>> getActiveLoginsWithoutFolder() async {
     try {
       final logins = await getAllLogin();
 
       final filteredLogins = logins
-          .where((e) => e.folderName == null && (e.isHide == false || e.isHide == null))
+          .where(
+            (e) =>
+                e.folderName == null && (e.isHide == false || e.isHide == null),
+          )
           .toList();
       return filteredLogins;
     } catch (e) {
@@ -516,9 +526,9 @@ class HiveDbRepoImpl implements LocalDbRepository {
       return [];
     }
   }
-  
+
   @override
-  Future<void> deleteAllCardsFromBin() async{
+  Future<void> deleteAllCardsFromBin() async {
     try {
       final cardsInBin = await getCardsInBin();
       for (final card in cardsInBin) {
@@ -528,11 +538,11 @@ class HiveDbRepoImpl implements LocalDbRepository {
       }
     } catch (e) {
       logger.e(e);
-    } 
+    }
   }
-  
+
   @override
-  Future<void> deleteAllIdentitiesFromBin()async {
+  Future<void> deleteAllIdentitiesFromBin() async {
     try {
       final identitiesInBin = await getIdentitiesInBin();
       for (final identity in identitiesInBin) {
@@ -543,11 +553,10 @@ class HiveDbRepoImpl implements LocalDbRepository {
     } catch (e) {
       logger.e(e);
     }
-   
   }
-  
+
   @override
-  Future<void> deleteAllLoginsFromBin() async{
+  Future<void> deleteAllLoginsFromBin() async {
     try {
       final loginsInBin = await getLoginsInBin();
       for (final login in loginsInBin) {
@@ -558,6 +567,82 @@ class HiveDbRepoImpl implements LocalDbRepository {
     } catch (e) {
       logger.e(e);
     }
-   
+  }
+
+  @override
+  Future<List<Card>> searchCards(String query) async {
+    try {
+      final allCards = await getAllCard();
+
+      final filteredCards = allCards
+          .where((card) =>
+              card.itemName.toLowerCase().contains(query.toLowerCase()) ||
+              (card.number != null &&
+                  card.number!
+                      .toLowerCase()
+                      .contains(query.toLowerCase())) ||
+              (card.cardHolderName != null &&
+                  card.cardHolderName!
+                      .toLowerCase()
+                      .contains(query.toLowerCase())) 
+              )
+          .toList();
+      return filteredCards;
+    } catch (e) {
+      logger.e(e);
+       return [];
+    }
+  }
+
+  @override
+  Future<List<Identity>> searchIdentities(String query) async{
+    try {
+      final allIdentities = await getAllIdentity();
+
+      final filteredIdentities = allIdentities
+          .where((identity) =>
+              identity.itemName.toLowerCase().contains(query.toLowerCase()) ||
+              (identity.firstName != null &&
+                  identity.firstName!
+                      .toLowerCase()
+                      .contains(query.toLowerCase())) ||
+              (identity.lastName != null &&
+                  identity.lastName!
+                      .toLowerCase()
+                      .contains(query.toLowerCase())) ||
+              (identity.email != null &&
+                  identity.email!
+                      .toLowerCase()
+                      .contains(query.toLowerCase())))
+          .toList();
+      return filteredIdentities;
+    } catch (e) {
+      logger.e(e);
+       return [];
+    }
+  }
+
+  @override
+  Future<List<Login>> searchLogins(String query) async{
+   try {
+      final allLogins = await getAllLogin();
+
+      final filteredLogins = allLogins
+          .where((login) =>
+              login.itemName.toLowerCase().contains(query.toLowerCase()) ||
+              (login.login != null &&
+                  login.login!
+                      .toLowerCase()
+                      .contains(query.toLowerCase())) ||
+              (login.password != null &&
+                  login.password!
+                      .toLowerCase()
+                      .contains(query.toLowerCase())))
+          .toList();
+      return filteredLogins;
+    } catch (e) {
+      logger.e(e);
+       return [];
+    }
   }
 }
