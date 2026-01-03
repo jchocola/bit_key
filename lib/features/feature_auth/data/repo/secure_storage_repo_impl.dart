@@ -3,7 +3,6 @@
 import 'package:bit_key/features/feature_auth/domain/repo/secure_storage_repository.dart';
 import 'package:bit_key/main.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart' as security;
 
 class SecureStorageRepoImpl implements SecureStorageRepository {
   final FlutterSecureStorage secureStorage;
@@ -118,12 +117,34 @@ class SecureStorageRepoImpl implements SecureStorageRepository {
     }
   }
 
-
   @override
   Future<String> generateSalt() {
-    // TODO: implement generateSalt
-    throw UnimplementedError();
+    try {
+      // For simplicity, using a timestamp as a salt. In production, use a more secure method.
+      final salt = DateTime.now().millisecondsSinceEpoch.toString();
+      return Future.value(salt);
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
   }
 
- 
+  @override
+  Future<bool> isMasterPasswordValid(String USER_MASTER_PASSWORD) {
+    try {
+      return getControlSumString().then((controlSumString) {
+        return getSalt().then((salt) {
+          if (controlSumString == null || salt == null) {
+            return false;
+          }
+          final expectedControlSumString =
+              'control_sum_${USER_MASTER_PASSWORD}_$salt';
+          return controlSumString == expectedControlSumString;
+        });
+      });
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
 }

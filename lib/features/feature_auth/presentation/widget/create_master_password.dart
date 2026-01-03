@@ -4,8 +4,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
 
-class CreateMasterPassword extends StatelessWidget {
+class CreateMasterPassword extends StatefulWidget {
   const CreateMasterPassword({super.key});
+
+  @override
+  State<CreateMasterPassword> createState() => _CreateMasterPasswordState();
+}
+
+class _CreateMasterPasswordState extends State<CreateMasterPassword> {
+  late TextEditingController masterPasswordController;
+  late TextEditingController confirmMasterPasswordController;
+
+  @override
+  void initState() {
+    
+    super.initState();
+    masterPasswordController = TextEditingController();
+    confirmMasterPasswordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    masterPasswordController.dispose();
+    confirmMasterPasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +43,14 @@ class CreateMasterPassword extends StatelessWidget {
           spacing: AppConstant.appPadding,
           children: [
             CustomTextfield(
+              controller: masterPasswordController,
               hintText: 'Master Password',
               withEye: true,
               obscure: true,
             ),
 
             CustomTextfield(
+              controller: confirmMasterPasswordController,
               hintText: 'Confirm Master Password',
               withEye: true,
               obscure: true,

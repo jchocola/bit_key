@@ -32,7 +32,7 @@ SETTINGS PAGE
     - VAULT SETTINGS
         - DELETE ALL DATA
         - IMPORT / EXPORT DATA
-        
+
     - LANGUAGE SETTINGS
         - SELECT LANGUAGE
         - TRANSLATE APP
@@ -48,6 +48,12 @@ SETTINGS PAGE
         - FIREBASE ANALYTIC
         - CRASHLYTICS
         - MIXPANEL
+
+    - AUTH PAGE
+        - FIRST TIME SETUP ✅
+        - UNLOCK VAULT ✅
+        - FORGOT MASTER PASSWORD FLOW ✅
+        - LOG OUT FLOW ✅
 
 
 

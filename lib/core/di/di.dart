@@ -28,7 +28,7 @@ Future<void> DI() async {
   getIt.registerSingleton<LocalDbRepository>(HiveDbRepoImpl(pathDir: dir.path));
 
   final secureStorage = FlutterSecureStorage(
-     aOptions: AndroidOptions(encryptedSharedPreferences:  true, keyCipherAlgorithm: KeyCipherAlgorithm.AES_GCM_NoPadding),
+     aOptions: AndroidOptions(keyCipherAlgorithm: KeyCipherAlgorithm.AES_GCM_NoPadding),
   );
   getIt.registerSingleton<SecureStorageRepository>(SecureStorageRepoImpl(secureStorage: secureStorage));
 

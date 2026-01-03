@@ -19,5 +19,7 @@ abstract class SecureStorageRepository {
   // ENCRYPTION
   Future<void> clearAllSecureData();
 
+  // CHECK USER MASTER PASSWORD
+  Future<bool> isMasterPasswordValid(String USER_MASTER_PASSWORD);
 
 }

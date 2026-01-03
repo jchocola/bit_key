@@ -5,7 +5,9 @@ import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/core/theme/app_color.dart';
 import 'package:bit_key/core/theme/app_theme.dart';
+import 'package:bit_key/features/feature_auth/domain/repo/secure_storage_repository.dart';
 import 'package:bit_key/features/feature_auth/presentation/auth_page.dart';
+import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_generate_pass/domain/repositories/generator_repo.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/bloc/name_generator_bloc.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/bloc/pass_generator_bloc.dart';
@@ -145,6 +147,9 @@ class MyApp extends StatelessWidget {
               localDbRepository: getIt<LocalDbRepository>(),
             ),
           ), 
+          BlocProvider(
+            create: (context) => AuthBloc(secureStorageRepository: getIt<SecureStorageRepository>())..add(AppBlocEvent_LoadSaltAndControlSum()),
+          )
         ],
         child: AuthPage(),
         //child: MainPage(),
