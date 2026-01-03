@@ -27,9 +27,7 @@ class AppBlocEvent_UserFirstimeRegister extends AuthBlocEvent {
 
 class AppBlocEvent_UserUnlockVault extends AuthBlocEvent {
   final String? USER_MASTER_PASSWORD;
-  AppBlocEvent_UserUnlockVault({
-    required this.USER_MASTER_PASSWORD,
-  });
+  AppBlocEvent_UserUnlockVault({required this.USER_MASTER_PASSWORD});
   @override
   List<Object?> get props => [USER_MASTER_PASSWORD];
 }
@@ -77,9 +75,7 @@ class AuthBlocFailure extends AuthBlocState {
   final AppException? exception;
   AuthBlocFailure({this.exception});
   @override
-  List<Object?> get props => [
-    exception,
-  ];
+  List<Object?> get props => [exception];
 }
 
 //BLOC
@@ -130,7 +126,7 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
             'control_sum_${event.USER_MASTER_PASSWORD}_$newSalt';
 
         logger.i('Generated SALT: $newSalt');
-        logger.i('Generated CONTROL SUM STRING: $controlSumString');    
+        logger.i('Generated CONTROL SUM STRING: $controlSumString');
 
         await secureStorageRepository.setSalt(newSalt);
         await secureStorageRepository.setControlSumString(controlSumString);
@@ -151,16 +147,16 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
       }
     });
 
-
     ///
     /// USER UNLOCK VAULT
-    ///  
+    ///
     on<AppBlocEvent_UserUnlockVault>((event, emit) async {
       try {
         emit(AuthBlocLoading());
 
-        final isValid = await secureStorageRepository
-            .isMasterPasswordValid(event.USER_MASTER_PASSWORD!);
+        final isValid = await secureStorageRepository.isMasterPasswordValid(
+          event.USER_MASTER_PASSWORD!,
+        );
 
         if (!isValid) {
           throw AppException.invalid_master_password;
@@ -168,8 +164,13 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
 
         // For simplicity, using fixed strings as MASTER_KEY and SESSION_KEY.
         // In production, derive these securely from the master password.
-        final masterKey = 'MASTER_KEY_DERIVED_FROM_${event.USER_MASTER_PASSWORD}';
-        final sessionKey = 'SESSION_KEY_DERIVED_FROM_${event.USER_MASTER_PASSWORD}';
+        final masterKey =
+            'MASTER_KEY_DERIVED_FROM_${event.USER_MASTER_PASSWORD}';
+        final sessionKey =
+            'SESSION_KEY_DERIVED_FROM_${event.USER_MASTER_PASSWORD}';
+
+        logger.f('MASTER KEY: $masterKey');
+        logger.f('SESSION KEY: $sessionKey');
 
         emit(
           AuthBlocAuthenticated(

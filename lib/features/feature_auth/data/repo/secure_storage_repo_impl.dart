@@ -18,6 +18,7 @@ class SecureStorageRepoImpl implements SecureStorageRepository {
   Future<void> deleteControlSumString() async {
     try {
       await secureStorage.delete(key: CONTROL_SUM_STRING_KEY);
+      logger.i('Control Sum String deleted from secure storage');
     } catch (e) {
       logger.e(e);
       rethrow;
@@ -28,6 +29,7 @@ class SecureStorageRepoImpl implements SecureStorageRepository {
   Future<void> deleteSalt() async {
     try {
       await secureStorage.delete(key: SALT_KEY);
+      logger.i('SALT deleted from secure storage');
     } catch (e) {
       logger.e(e);
       rethrow;
@@ -35,9 +37,10 @@ class SecureStorageRepoImpl implements SecureStorageRepository {
   }
 
   @override
-  Future<void> deleteSessionKey() {
+  Future<void> deleteSessionKey() async{
     try {
-      return secureStorage.delete(key: SESSION_KEY);
+      await secureStorage.delete(key: SESSION_KEY);
+      logger.i('Session Key deleted from secure storage');
     } catch (e) {
       logger.e(e);
       rethrow;
