@@ -2,6 +2,7 @@ import 'package:animate_gradient/animate_gradient.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/di/di.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
+import 'package:bit_key/core/router/app_router_config.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/core/theme/app_color.dart';
 import 'package:bit_key/core/theme/app_theme.dart';
@@ -66,98 +67,101 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: appTheme,
-      home: MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (context) =>
-                PassGeneratorBloc(passGeneratorRepo: getIt<GeneratorRepo>()),
-          ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) =>
+              PassGeneratorBloc(passGeneratorRepo: getIt<GeneratorRepo>()),
+        ),
 
-          BlocProvider(
-            create: (context) =>
-                NameGeneratorBloc(generatorRepo: getIt<GeneratorRepo>()),
-          ),
+        BlocProvider(
+          create: (context) =>
+              NameGeneratorBloc(generatorRepo: getIt<GeneratorRepo>()),
+        ),
 
-          BlocProvider(
-            create: (context) => FoldersBloc(
-              folderRepository: getIt<FolderRepository>(),
-              localDbRepository: getIt<LocalDbRepository>(),
-            )..add(FoldersBlocEvent_loadFolders()),
-          ),
+        BlocProvider(
+          create: (context) => FoldersBloc(
+            folderRepository: getIt<FolderRepository>(),
+            localDbRepository: getIt<LocalDbRepository>(),
+          )..add(FoldersBlocEvent_loadFolders()),
+        ),
 
-          BlocProvider(
-            create: (context) =>
-                CreateLoginBloc(localDbRepository: getIt<LocalDbRepository>()),
-          ),
+        BlocProvider(
+          create: (context) =>
+              CreateLoginBloc(localDbRepository: getIt<LocalDbRepository>()),
+        ),
 
-          BlocProvider(
-            create: (context) =>
-                LoginsBloc(localDbRepository: getIt<LocalDbRepository>())
-                  ..add(LoginsBlocEvent_loadLogins()),
-          ),
+        BlocProvider(
+          create: (context) =>
+              LoginsBloc(localDbRepository: getIt<LocalDbRepository>())
+                ..add(LoginsBlocEvent_loadLogins()),
+        ),
 
-          BlocProvider(
-            create: (context) =>
-                CardsBloc(localDbRepository: getIt<LocalDbRepository>())
-                  ..add(CardsBlocEvent_loadCards()),
-          ),
+        BlocProvider(
+          create: (context) =>
+              CardsBloc(localDbRepository: getIt<LocalDbRepository>())
+                ..add(CardsBlocEvent_loadCards()),
+        ),
 
-          BlocProvider(
-            create: (context) =>
-                CreateCardBloc(localDbRepository: getIt<LocalDbRepository>()),
-          ),
+        BlocProvider(
+          create: (context) =>
+              CreateCardBloc(localDbRepository: getIt<LocalDbRepository>()),
+        ),
 
-          BlocProvider(
-            create: (context) =>
-                IdentitiesBloc(localDbRepository: getIt<LocalDbRepository>())
-                  ..add(IdentitiesBlocEvent_loadIdentities()),
-          ),
+        BlocProvider(
+          create: (context) =>
+              IdentitiesBloc(localDbRepository: getIt<LocalDbRepository>())
+                ..add(IdentitiesBlocEvent_loadIdentities()),
+        ),
 
-          BlocProvider(
-            create: (context) => CreateIdentityBloc(
-              localDbRepository: getIt<LocalDbRepository>(),
-            ),
-          ),
+        BlocProvider(
+          create: (context) =>
+              CreateIdentityBloc(localDbRepository: getIt<LocalDbRepository>()),
+        ),
 
-          BlocProvider(
-            create: (context) =>
-                NoFoldersBloc(localDbRepository: getIt<LocalDbRepository>())
-                  ..add(NoFoldersBlocEvent_load()),
-          ),
+        BlocProvider(
+          create: (context) =>
+              NoFoldersBloc(localDbRepository: getIt<LocalDbRepository>())
+                ..add(NoFoldersBlocEvent_load()),
+        ),
 
-          BlocProvider(
-            create: (context) =>
-                FolderDetailBloc(localDbRepository: getIt<LocalDbRepository>())
-          ),
+        BlocProvider(
+          create: (context) =>
+              FolderDetailBloc(localDbRepository: getIt<LocalDbRepository>()),
+        ),
 
-          BlocProvider(
-            create: (context) =>
-                PickedItemBloc(localDbRepository: getIt<LocalDbRepository>())
-          ),
+        BlocProvider(
+          create: (context) =>
+              PickedItemBloc(localDbRepository: getIt<LocalDbRepository>()),
+        ),
 
-           BlocProvider(
-            create: (context) =>
-                BinBloc(localDbRepository: getIt<LocalDbRepository>())..add(BinBlocEvent_load())
-          ), 
-          BlocProvider(
-            create: (context) => SearchBloc(
-              localDbRepository: getIt<LocalDbRepository>(),
-            ),
-          ), 
-          BlocProvider(
-            create: (context) => AuthBloc(secureStorageRepository: getIt<SecureStorageRepository>())..add(AppBlocEvent_LoadSaltAndControlSum()),
-          )
-        ],
-        child: AuthPage(),
-        //child: MainPage(),
+        BlocProvider(
+          create: (context) =>
+              BinBloc(localDbRepository: getIt<LocalDbRepository>())
+                ..add(BinBlocEvent_load()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              SearchBloc(localDbRepository: getIt<LocalDbRepository>()),
+        ),
+        BlocProvider(
+          create: (context) => AuthBloc(
+            secureStorageRepository: getIt<SecureStorageRepository>(),
+          )..add(AppBlocEvent_LoadSaltAndControlSum()),
+        ),
+      ],
+
+      // child: MainPage(),
+      child: MaterialApp.router(
+        routerConfig: appRouterConfig,
+        title: 'Flutter Demo',
+        theme: appTheme,
+
+        // debugShowMaterialGrid: true,
+        //  showPerformanceOverlay: true,
+        //showSemanticsDebugger: true,
+        debugShowCheckedModeBanner: false,
       ),
-      // debugShowMaterialGrid: true,
-      //  showPerformanceOverlay: true,
-      //showSemanticsDebugger: true,
-      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -267,7 +271,7 @@ class _MainPageState extends State<MainPage> {
       // RELOAD NO FOLDERS
       context.read<NoFoldersBloc>().add(NoFoldersBlocEvent_load());
 
-        // RELOAD FOLDERS
+      // RELOAD FOLDERS
       context.read<FoldersBloc>().add(FoldersBlocEvent_loadFolders());
     });
   }

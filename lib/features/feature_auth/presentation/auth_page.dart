@@ -11,6 +11,7 @@ import 'package:bit_key/shared/widgets/big_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
@@ -36,9 +37,8 @@ class AuthPage extends StatelessWidget {
                         );
                       } else if (state is AuthBlocAuthenticated) {
                         logger.i('User authenticated successfully.');
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => MainPage()),
-                        );
+
+                        context.go('/main');
                       }
                     },
                     builder: (context, state) {
@@ -47,7 +47,7 @@ class AuthPage extends StatelessWidget {
                       } else if (state is AuthBlocUnauthenticated) {
                         return _buildUnlockVault(context);
                       } else {
-                        return const SizedBox.shrink();
+                        return CircularProgressIndicator();
                       }
                     },
                   ),
