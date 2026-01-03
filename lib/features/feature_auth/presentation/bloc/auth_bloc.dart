@@ -12,24 +12,24 @@ abstract class AuthBlocEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class AppBlocEvent_LoadSaltAndControlSum extends AuthBlocEvent {}
+class AppBlocEvent_LoadSaltAndHashedMasterKey extends AuthBlocEvent {}
 
 class AppBlocEvent_UserFirstimeRegister extends AuthBlocEvent {
-  final String? USER_MASTER_PASSWORD;
-  final String? CONFIRM_MASTER_PASSWORD;
+  final String? MASTER_KEY;
+  final String? CONFIRM_MASTER_KEY;
   AppBlocEvent_UserFirstimeRegister({
-    required this.USER_MASTER_PASSWORD,
-    required this.CONFIRM_MASTER_PASSWORD,
+    required this.MASTER_KEY,
+    required this.CONFIRM_MASTER_KEY,
   });
   @override
-  List<Object?> get props => [USER_MASTER_PASSWORD, CONFIRM_MASTER_PASSWORD];
+  List<Object?> get props => [MASTER_KEY, CONFIRM_MASTER_KEY];
 }
 
-class AppBlocEvent_UserUnlockVault extends AuthBlocEvent {
-  final String? USER_MASTER_PASSWORD;
-  AppBlocEvent_UserUnlockVault({required this.USER_MASTER_PASSWORD});
+class AppBlocEvent_UserUnlockVaultViaMasterKey extends AuthBlocEvent {
+  final String? MASTER_KEY;
+  AppBlocEvent_UserUnlockVaultViaMasterKey({required this.MASTER_KEY});
   @override
-  List<Object?> get props => [USER_MASTER_PASSWORD];
+  List<Object?> get props => [MASTER_KEY];
 }
 
 // STATE
@@ -44,14 +44,14 @@ class AuthBlocLoading extends AuthBlocState {}
 
 class AuthBlocUnauthenticated extends AuthBlocState {
   final String SALT;
-  final String CONTROL_SUM_STRING;
+  final String HASHED_MASTER_KEY;
 
   AuthBlocUnauthenticated({
     required this.SALT,
-    required this.CONTROL_SUM_STRING,
+    required this.HASHED_MASTER_KEY,
   });
   @override
-  List<Object?> get props => [SALT, CONTROL_SUM_STRING];
+  List<Object?> get props => [SALT, HASHED_MASTER_KEY];
 }
 
 class AuthBlocFirstTimeUser extends AuthBlocState {}
@@ -59,16 +59,16 @@ class AuthBlocFirstTimeUser extends AuthBlocState {}
 class AuthBlocAuthenticated extends AuthBlocState {
   final String MASTER_KEY;
   final String SESSION_KEY;
-  final String USER_MASTER_PASSWORD;
+  final String ENCRYPTED_MASTER_KEY;
 
   AuthBlocAuthenticated({
     required this.MASTER_KEY,
     required this.SESSION_KEY,
-    required this.USER_MASTER_PASSWORD,
+    required this.ENCRYPTED_MASTER_KEY,
   });
 
   @override
-  List<Object?> get props => [SESSION_KEY, USER_MASTER_PASSWORD, MASTER_KEY];
+  List<Object?> get props => [SESSION_KEY, ENCRYPTED_MASTER_KEY, MASTER_KEY];
 }
 
 class AuthBlocFailure extends AuthBlocState {
@@ -85,11 +85,11 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
     ///
     /// LOAD SALT AND CONTROL SUM STRING
     ///
-    on<AppBlocEvent_LoadSaltAndControlSum>((event, emit) async {
+    on<AppBlocEvent_LoadSaltAndHashedMasterKey>((event, emit) async {
       try {
         final salt = await secureStorageRepository.getSalt();
         final controlSumStr = await secureStorageRepository
-            .getControlSumString();
+            .getHashedMasterKey();
 
         logger.f('SALT: $salt');
         logger.f('CONTROL SUM STRING: $controlSumStr');
@@ -99,10 +99,7 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
           return;
         }
         emit(
-          AuthBlocUnauthenticated(
-            SALT: salt,
-            CONTROL_SUM_STRING: controlSumStr,
-          ),
+          AuthBlocUnauthenticated(SALT: salt, HASHED_MASTER_KEY: controlSumStr),
         );
       } catch (e) {
         logger.e(e);
@@ -117,45 +114,48 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
       try {
         emit(AuthBlocLoading());
 
-        if (event.USER_MASTER_PASSWORD != event.CONFIRM_MASTER_PASSWORD) {
+        if (event.MASTER_KEY != event.CONFIRM_MASTER_KEY) {
           throw AppException.passwords_do_not_match;
         }
 
         final newSalt = await secureStorageRepository.generateSalt();
-        final controlSumString =
-            'control_sum_${event.USER_MASTER_PASSWORD}_$newSalt';
+        final newHashedMasterKey = await secureStorageRepository
+            .generateHashedMasterKey(
+              masterKey: event.MASTER_KEY!,
+              salt: newSalt,
+            );
 
         logger.i('Generated SALT: $newSalt');
-        logger.i('Generated CONTROL SUM STRING: $controlSumString');
+        logger.i('Generated HASHED MASTER KEY: $newHashedMasterKey');
 
         await secureStorageRepository.setSalt(newSalt);
-        await secureStorageRepository.setControlSumString(controlSumString);
+        await secureStorageRepository.setHashedMasterKey(newHashedMasterKey);
 
         logger.i('New SALT set: $newSalt');
-        logger.i('New CONTROL SUM STRING set: $controlSumString');
+        logger.i('New HASHED MASTER KEY: $newHashedMasterKey');
 
         emit(
           AuthBlocUnauthenticated(
             SALT: newSalt,
-            CONTROL_SUM_STRING: controlSumString,
+            HASHED_MASTER_KEY: newHashedMasterKey,
           ),
         );
       } catch (e) {
         logger.e(e);
         emit(AuthBlocFailure(exception: e as AppException?));
-        add(AppBlocEvent_LoadSaltAndControlSum());
+        add(AppBlocEvent_LoadSaltAndHashedMasterKey());
       }
     });
 
     ///
     /// USER UNLOCK VAULT
     ///
-    on<AppBlocEvent_UserUnlockVault>((event, emit) async {
+    on<AppBlocEvent_UserUnlockVaultViaMasterKey>((event, emit) async {
       try {
         emit(AuthBlocLoading());
 
-        final isValid = await secureStorageRepository.isMasterPasswordValid(
-          event.USER_MASTER_PASSWORD!,
+        final isValid = await secureStorageRepository.isMasterKeyValid(
+          event.MASTER_KEY!,
         );
 
         if (!isValid) {
@@ -164,25 +164,29 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
 
         // For simplicity, using fixed strings as MASTER_KEY and SESSION_KEY.
         // In production, derive these securely from the master password.
-        final masterKey =
-            'MASTER_KEY_DERIVED_FROM_${event.USER_MASTER_PASSWORD}';
-        final sessionKey =
-            'SESSION_KEY_DERIVED_FROM_${event.USER_MASTER_PASSWORD}';
+        final masterKey = event.MASTER_KEY!;
+        final sessionKey = await secureStorageRepository.generateSessionKey();
+        final encryptedMasterKey = await secureStorageRepository
+            .generateEncryptedMasterKey(
+              masterKey: masterKey,
+              sessionKey: sessionKey,
+            );
 
         logger.f('MASTER KEY: $masterKey');
         logger.f('SESSION KEY: $sessionKey');
+        logger.f('ENCRYPTED MASTER KEY: $encryptedMasterKey');
 
         emit(
           AuthBlocAuthenticated(
             MASTER_KEY: masterKey,
             SESSION_KEY: sessionKey,
-            USER_MASTER_PASSWORD: event.USER_MASTER_PASSWORD!,
+            ENCRYPTED_MASTER_KEY: encryptedMasterKey,
           ),
         );
       } catch (e) {
         logger.e(e);
         emit(AuthBlocFailure(exception: e as AppException?));
-        add(AppBlocEvent_LoadSaltAndControlSum());
+        add(AppBlocEvent_LoadSaltAndHashedMasterKey());
       }
     });
   }

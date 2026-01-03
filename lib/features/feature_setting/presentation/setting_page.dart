@@ -2,11 +2,14 @@ import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/di/di.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/features/feature_auth/domain/repo/secure_storage_repository.dart';
+import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/acc_security_page.dart';
 import 'package:bit_key/features/feature_setting/presentation/widgets/setting_appbar.dart';
+import 'package:bit_key/main.dart';
 import 'package:bit_key/shared/widgets/big_button.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({super.key});
@@ -49,8 +52,24 @@ class SettingPage extends StatelessWidget {
             onTap: () async {
               await getIt<SecureStorageRepository>().deleteControlSumString();
               await getIt<SecureStorageRepository>().deleteSalt();
-              
             },
+          ),
+
+          BlocBuilder<AuthBloc, AuthBlocState>(
+            builder: (context, state) => BigButton(
+              title: 'Get Master Key Via SessionKey and Encrypted Master Key',
+              onTap: () async {
+                if (state is AuthBlocAuthenticated) {
+                  final masterKey = await getIt<SecureStorageRepository>()
+                      .decryptEncryptedMasterKey(
+                        sessionKey: state.SESSION_KEY,
+                        encryptedMasterKey: state.ENCRYPTED_MASTER_KEY,
+                      );
+
+                  logger.f('Master key : ${masterKey}');
+                }
+              },
+            ),
           ),
         ],
       ),

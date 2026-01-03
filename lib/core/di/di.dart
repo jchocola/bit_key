@@ -12,6 +12,7 @@ import 'package:bit_key/main.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:pointycastle/pointycastle.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final getIt = GetIt.instance;
@@ -28,9 +29,21 @@ Future<void> DI() async {
   getIt.registerSingleton<LocalDbRepository>(HiveDbRepoImpl(pathDir: dir.path));
 
   final secureStorage = FlutterSecureStorage(
-     aOptions: AndroidOptions(keyCipherAlgorithm: KeyCipherAlgorithm.AES_GCM_NoPadding),
+    aOptions: AndroidOptions(
+      keyCipherAlgorithm: KeyCipherAlgorithm.AES_GCM_NoPadding,
+    ),
   );
-  getIt.registerSingleton<SecureStorageRepository>(SecureStorageRepoImpl(secureStorage: secureStorage));
+
+  final keyDerivator = KeyDerivator('argon2');
+  final AEADCipher paddedBlockCipher = AEADCipher('ChaCha20-Poly1305');
+
+  getIt.registerSingleton<SecureStorageRepository>(
+    SecureStorageRepoImpl(
+      secureStorage: secureStorage,
+      keyDerivator: keyDerivator,
+      aeadCipher: paddedBlockCipher,
+    ),
+  );
 
   logger.i('DI initialized');
 }

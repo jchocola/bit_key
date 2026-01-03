@@ -65,8 +65,8 @@ class AuthPage extends StatelessWidget {
       try {
         context.read<AuthBloc>().add(
           AppBlocEvent_UserFirstimeRegister(
-            USER_MASTER_PASSWORD: 'qwerty',
-            CONFIRM_MASTER_PASSWORD: 'qwerty',
+            MASTER_KEY: 'qwerty',
+            CONFIRM_MASTER_KEY: 'qwerty',
           ),
         );
       } catch (e) {
@@ -90,7 +90,7 @@ class AuthPage extends StatelessWidget {
     void _onUnlockVault() {
       try {
         context.read<AuthBloc>().add(
-          AppBlocEvent_UserUnlockVault(USER_MASTER_PASSWORD: 'qwerty'),
+          AppBlocEvent_UserUnlockVaultViaMasterKey(MASTER_KEY: 'qwerty'),
         );
       } catch (e) {
         logger.e('Error unlocking vault: $e');

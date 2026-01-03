@@ -147,7 +147,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => AuthBloc(
             secureStorageRepository: getIt<SecureStorageRepository>(),
-          )..add(AppBlocEvent_LoadSaltAndControlSum()),
+          )..add(AppBlocEvent_LoadSaltAndHashedMasterKey()),
         ),
       ],
 
