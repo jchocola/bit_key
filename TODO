@@ -23,15 +23,19 @@ SEARCH FUNCTION
 
 SETTINGS PAGE
     - ACC SECURITY
-        - FACE ID / TOUCH ID
-        - PIN CODE
+        - FACE ID / TOUCH ID (local_auth)
+        - PIN CODE 🚫
         - SESSION TIMEOUT 
-        - SHAKE TO LOCK
-        - CHANGE MASTER PASSWORD
+        - SHAKE TO LOCK (shake 3.0.0)
+        - CHANGE MASTER PASSWORD 🚫
+        - secure_application: ^4.1.0
 
     - VAULT SETTINGS
         - DELETE ALL DATA
         - IMPORT / EXPORT DATA
+            - PURE_DATA
+            - ENCRYPTED_DATA
+
 
     - LANGUAGE SETTINGS
         - SELECT LANGUAGE
@@ -62,7 +66,10 @@ CRUD ITEMS
 SECURITY 
     - CREATE MASTER KEY WHEN FIRST TIME ✅
     - ENCRYPT / DECRYPT LOGIN ✅
-    
+    - ENCRYPT / DECRYPT CARD
+    - ENCRYPT / DECRYPT IDENTITY
+
+
 
 
 
