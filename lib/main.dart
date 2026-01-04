@@ -97,14 +97,16 @@ class MyApp extends StatelessWidget {
           create: (context) => CreateLoginBloc(
             localDbRepository: getIt<LocalDbRepository>(),
             encryptionRepository: getIt<EncryptionRepository>(),
-            authBloc: context.read<AuthBloc>()
+            authBloc: context.read<AuthBloc>(),
           ),
         ),
 
         BlocProvider(
-          create: (context) =>
-              LoginsBloc(localDbRepository: getIt<LocalDbRepository>())
-                ..add(LoginsBlocEvent_loadLogins()),
+          create: (context) => LoginsBloc(
+            localDbRepository: getIt<LocalDbRepository>(),
+            encryptionRepository: getIt<EncryptionRepository>(),
+            authBloc: context.read<AuthBloc>(),
+          )..add(LoginsBlocEvent_loadLogins()),
         ),
 
         BlocProvider(
@@ -154,7 +156,6 @@ class MyApp extends StatelessWidget {
           create: (context) =>
               SearchBloc(localDbRepository: getIt<LocalDbRepository>()),
         ),
-        
       ],
 
       // child: MainPage(),

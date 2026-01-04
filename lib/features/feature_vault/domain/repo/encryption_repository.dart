@@ -23,6 +23,10 @@ abstract class EncryptionRepository {
     required Login encryptedLogin,
     required String masterKey,
   });
+  Future<List<Login>> decryptLoginList({
+    required List<Login> encryptedLogins,
+    required String masterKey,
+  });
 
   ///
   /// card
@@ -44,5 +48,4 @@ abstract class EncryptionRepository {
     required Identity encryptedIdentity,
     required String masterKey,
   });
-
 }

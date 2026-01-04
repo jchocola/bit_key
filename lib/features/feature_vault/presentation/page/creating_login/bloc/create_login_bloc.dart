@@ -52,9 +52,18 @@ class CreateLoginBloc extends Bloc<CreateLoginBlocEvent, CreateLoginBlocState> {
     ///
     on<CreateLoginBlocEvent_createLogin>((event, emit) async {
       try {
-        if (authBloc.state is AuthBlocAuthenticated) {
+        final authBlocState = authBloc.state;
+        if (authBlocState is AuthBlocAuthenticated) {
 
-              await localDbRepository.saveLogin(login: event.login);
+          final encryptedLogin = await encryptionRepository.encryptLogin(
+            login: event.login,
+            masterKey: authBlocState.MASTER_KEY,
+          );
+
+          logger.f('Login : ${event.login.toString()}');
+          logger.f('Encrypted Login : ${encryptedLogin.toString()}');
+
+          await localDbRepository.saveLogin(login: encryptedLogin);
         }
       } catch (e) {
         logger.e(e);

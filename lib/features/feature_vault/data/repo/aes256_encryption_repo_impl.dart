@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:aes256cipher/aes256cipher.dart';
 import 'package:bit_key/core/exception/app_exception.dart';
+import 'package:bit_key/features/feature_vault/data/model/card_model.dart';
+import 'package:bit_key/features/feature_vault/data/model/login_model.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/card.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/identity.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/login.dart';
@@ -71,38 +73,140 @@ class Aes256EncryptionRepoImpl implements EncryptionRepository {
   }
 
   @override
-  Future<Card> decryptCard({required Card encryptedCard, required String masterKey}) {
+  Future<Card> decryptCard({
+    required Card encryptedCard,
+    required String masterKey,
+  }) {
     // TODO: implement decryptCard
     throw UnimplementedError();
   }
 
   @override
-  Future<Identity> decryptIdentity({required Identity encryptedIdentity, required String masterKey}) {
+  Future<Identity> decryptIdentity({
+    required Identity encryptedIdentity,
+    required String masterKey,
+  }) {
     // TODO: implement decryptIdentity
     throw UnimplementedError();
   }
 
   @override
-  Future<Login> decryptLogin({required Login encryptedLogin, required String masterKey}) {
-    // TODO: implement decryptLogin
-    throw UnimplementedError();
+  Future<Login> decryptLogin({
+    required Login encryptedLogin,
+    required String masterKey,
+  }) async {
+    try {
+      final model = LoginModel.fromEntity(encryptedLogin);
+
+      // real data
+      String? username = model.login;
+      String? password = model.password;
+      String? url = model.url;
+
+      // decryption
+      if (username != null) {
+        username = await decrypt(encryptedStr: username, masterKey: masterKey);
+      }
+      if (password != null) {
+        password = await decrypt(encryptedStr: password, masterKey: masterKey);
+      }
+      if (url != null) {
+        url = await decrypt(encryptedStr: url, masterKey: masterKey);
+      }
+
+      final encryptedModel = model.copyWith(
+        login: username,
+        password: password,
+        url: url,
+      );
+
+      return encryptedModel.toEntity();
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
   }
 
   @override
-  Future<Card> encryptCard({required Card card, required String masterKey}) {
-    // TODO: implement encryptCard
-    throw UnimplementedError();
+  Future<Card> encryptCard({
+    required Card card,
+    required String masterKey,
+  }) async {
+    try {
+      // final CardModel model = CardModel.fromEntity(card);
+      throw UnimplementedError();
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
   }
 
   @override
-  Future<Identity> encryptIdentity({required Identity identity, required String masterKey}) {
+  Future<Identity> encryptIdentity({
+    required Identity identity,
+    required String masterKey,
+  }) {
     // TODO: implement encryptIdentity
     throw UnimplementedError();
   }
 
   @override
-  Future<Login> encryptLogin({required Login login, required String masterKey}) {
-    // TODO: implement encryptLogin
-    throw UnimplementedError();
+  Future<Login> encryptLogin({
+    required Login login,
+    required String masterKey,
+  }) async {
+    try {
+      // model
+      final model = LoginModel.fromEntity(login);
+
+      // real data
+      String? username = model.login;
+      String? password = model.password;
+      String? url = model.url;
+
+      // encryption
+      if (username != null) {
+        username = await encrypt(str: username, masterKey: masterKey);
+      }
+      if (password != null) {
+        password = await encrypt(str: password, masterKey: masterKey);
+      }
+      if (url != null) {
+        url = await encrypt(str: url, masterKey: masterKey);
+      }
+
+      final encryptedModel = model.copyWith(
+        login: username,
+        password: password,
+        url: url,
+      );
+
+      return encryptedModel.toEntity();
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<Login>> decryptLoginList({
+    required List<Login> encryptedLogins,
+    required String masterKey,
+  }) async {
+    try {
+      List<Login> decryptedList = [];
+
+      for (var e in encryptedLogins) {
+        final decrypted = await decryptLogin(
+          encryptedLogin: e,
+          masterKey: masterKey,
+        );
+        decryptedList.add(decrypted);
+      }
+      return decryptedList;
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
   }
 }
