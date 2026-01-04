@@ -69,6 +69,8 @@ class FolderDetailBloc
       try {
         logger.i('Folder detail load');
 
+
+      // get encrypted data
         final logins = await localDbRepository.getLoginsWithFolderName(
           folderName: event.folderName,
         );
@@ -80,6 +82,8 @@ class FolderDetailBloc
         );
 
         logger.i('Folder detail loaded');
+
+        // decryption
 
         emit(FolderDetailBlocState_loaded(logins: logins, cards: cards, identities: identities));
       } catch (e) {

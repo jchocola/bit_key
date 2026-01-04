@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:aes256cipher/aes256cipher.dart';
 import 'package:bit_key/core/exception/app_exception.dart';
 import 'package:bit_key/features/feature_vault/data/model/card_model.dart';
+import 'package:bit_key/features/feature_vault/data/model/identity_model.dart';
 import 'package:bit_key/features/feature_vault/data/model/login_model.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/card.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/identity.dart';
@@ -133,8 +134,28 @@ class Aes256EncryptionRepoImpl implements EncryptionRepository {
     required String masterKey,
   }) async {
     try {
-      // final CardModel model = CardModel.fromEntity(card);
-      throw UnimplementedError();
+      final model = CardModel.fromEntity(card);
+
+      // real data
+      String? cardHolder = model.cardHolderName;
+      String? cardNumber = model.number;
+      // TODO
+      // ENCRYPT SEC NUMBER
+
+      if (cardHolder != null) {
+        cardHolder = await encrypt(str: cardHolder, masterKey: masterKey);
+      }
+
+      if (cardNumber != null) {
+        cardNumber = await encrypt(str: cardNumber, masterKey: masterKey);
+      }
+
+      final encryptedModel = model.copyWith(
+        cardHolderName: cardHolder,
+        number: cardNumber,
+      );
+
+      return encryptedModel.toEntity();
     } catch (e) {
       logger.e(e);
       rethrow;
@@ -145,9 +166,82 @@ class Aes256EncryptionRepoImpl implements EncryptionRepository {
   Future<Identity> encryptIdentity({
     required Identity identity,
     required String masterKey,
-  }) {
-    // TODO: implement encryptIdentity
-    throw UnimplementedError();
+  }) async {
+    try {
+      final model = IdentityModel.fromEntity(identity);
+
+      // real data
+      String? username = model.userName;
+      String? company = model.company;
+      String? nationalInsuranceNumber = model.nationalInsuranceNumber;
+      String? passportName = model.passportName;
+      String? licenseNumber = model.licenseNumber;
+      String? email = model.email;
+      String? phone = model.phone;
+      String? address1 = model.address1;
+      String? address2 = model.address2;
+      String? address3 = model.address3;
+
+      // encryption
+      if (username != null) {
+        username = await encrypt(str: username, masterKey: masterKey);
+      }
+
+      if (company != null) {
+        username = await encrypt(str: company, masterKey: masterKey);
+      }
+
+      if (nationalInsuranceNumber != null) {
+        nationalInsuranceNumber = await encrypt(
+          str: nationalInsuranceNumber,
+          masterKey: masterKey,
+        );
+      }
+
+      if (passportName != null) {
+        passportName = await encrypt(str: passportName, masterKey: masterKey);
+      }
+
+      if (licenseNumber != null) {
+        licenseNumber = await encrypt(str: licenseNumber, masterKey: masterKey);
+      }
+      if (email != null) {
+        email = await encrypt(str: email, masterKey: masterKey);
+      }
+      if (phone != null) {
+        email = await encrypt(str: phone, masterKey: masterKey);
+      }
+
+      if (address1 != null) {
+        address1 = await encrypt(str: address1, masterKey: masterKey);
+      }
+
+      if (address2 != null) {
+        address2 = await encrypt(str: address2, masterKey: masterKey);
+      }
+      if (address3 != null) {
+        address3 = await encrypt(str: address3, masterKey: masterKey);
+      }
+
+      // encrypted model
+      final encryptedModel = model.copyWith(
+        userName: username,
+        company: company,
+        nationalInsuranceNumber: nationalInsuranceNumber,
+        passportName: passportName,
+        licenseNumber: licenseNumber,
+        email: email,
+        phone: phone,
+        address1: address1,
+        address2: address2,
+        address3: address3,
+      );
+
+      return encryptedModel.toEntity();
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
   }
 
   @override

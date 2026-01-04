@@ -1,4 +1,3 @@
-import 'package:animate_gradient/animate_gradient.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/di/di.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
@@ -7,7 +6,6 @@ import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/core/theme/app_color.dart';
 import 'package:bit_key/core/theme/app_theme.dart';
 import 'package:bit_key/features/feature_auth/domain/repo/secure_storage_repository.dart';
-import 'package:bit_key/features/feature_auth/presentation/auth_page.dart';
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_generate_pass/domain/repositories/generator_repo.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/bloc/name_generator_bloc.dart';
@@ -26,8 +24,6 @@ import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dar
 import 'package:bit_key/features/feature_vault/presentation/bloc/no_folders_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/search_bloc.dart';
-import 'package:bit_key/features/feature_vault/presentation/folder_info_page.dart';
-import 'package:bit_key/features/feature_vault/presentation/logins_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/my_vault_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_card/bloc/create_card_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_card/creating_card_page.dart';
@@ -36,18 +32,12 @@ import 'package:bit_key/features/feature_vault/presentation/page/creating_identi
 import 'package:bit_key/features/feature_vault/presentation/page/creating_identity/creating_identity_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_login/bloc/create_login_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_login/creating_login_page.dart';
-import 'package:bit_key/features/feature_vault/presentation/widgets/vault_page_appbar.dart';
-import 'package:family_bottom_sheet/family_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:glassy_real_navbar/glassy_real_navbar.dart';
-import 'package:hive/hive.dart';
-import 'package:liquid_glass_renderer/experimental.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
 import 'package:logger/web.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:resizable_bottom_sheet/resizable_bottom_sheet.dart';
+
 
 final logger = Logger();
 Future<void> main() async {
@@ -116,8 +106,11 @@ class MyApp extends StatelessWidget {
         ),
 
         BlocProvider(
-          create: (context) =>
-              CreateCardBloc(localDbRepository: getIt<LocalDbRepository>()),
+          create: (context) => CreateCardBloc(
+            localDbRepository: getIt<LocalDbRepository>(),
+            encryptionRepository: getIt<EncryptionRepository>(),
+            authBloc: context.read<AuthBloc>(),
+          ),
         ),
 
         BlocProvider(
@@ -127,8 +120,11 @@ class MyApp extends StatelessWidget {
         ),
 
         BlocProvider(
-          create: (context) =>
-              CreateIdentityBloc(localDbRepository: getIt<LocalDbRepository>()),
+          create: (context) => CreateIdentityBloc(
+            localDbRepository: getIt<LocalDbRepository>(),
+            authBloc: context.read<AuthBloc>(),
+            encryptionRepository: getIt<EncryptionRepository>(),
+          ),
         ),
 
         BlocProvider(

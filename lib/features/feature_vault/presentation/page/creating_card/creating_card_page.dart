@@ -251,13 +251,13 @@ class _CreatingCardPageState extends State<CreatingCardPage> {
               CustomTextfield(
                 inputType: TextInputType.number,
                 controller: expYearController,
-                hintText: 'Expiration year 🔒',
+                hintText: 'Expiration year',
               ),
 
               CustomTextfield(
                 inputType: TextInputType.number,
                 controller: secCodeController,
-                hintText: 'Security code 🔒',
+                hintText: 'Security code',
                 withEye: true,
                 obscure: true,
               ),

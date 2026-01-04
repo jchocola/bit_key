@@ -1,5 +1,7 @@
 // ignore_for_file: camel_case_types
 
+import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
+import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
 import 'package:bit_key/main.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,16 +44,34 @@ class CreateIdentityState_success extends CreateIdentityState {}
 class CreateIdentityBloc
     extends Bloc<CreateIdentityEvent, CreateIdentityState> {
   final LocalDbRepository localDbRepository;
-  CreateIdentityBloc({required this.localDbRepository})
-    : super(CreateIdentityState_init()) {
+  final AuthBloc authBloc;
+  final EncryptionRepository encryptionRepository;
+  CreateIdentityBloc({
+    required this.localDbRepository,
+    required this.authBloc,
+    required this.encryptionRepository,
+  }) : super(CreateIdentityState_init()) {
     ///
     /// CREATE IDENITY
     ///
     on<CreateIdentityEvent_createIdentity>((event, emit) async {
-      try {
-        await localDbRepository.saveIdentity(identity: event.identity);
-      } catch (e) {
-        logger.e(e);
+      final authBlocState = authBloc.state;
+
+      if (authBlocState is AuthBlocAuthenticated) {
+        try {
+          final encryptedIdentity = await encryptionRepository.encryptIdentity(
+            identity: event.identity,
+            masterKey: authBlocState.MASTER_KEY,
+          );
+
+          logger.f(event.identity.toString());
+          logger.f('Decrypted identity: ${encryptedIdentity.toString()}');
+
+
+          await localDbRepository.saveIdentity(identity: encryptedIdentity);
+        } catch (e) {
+          logger.e(e);
+        }
       }
     });
   }
