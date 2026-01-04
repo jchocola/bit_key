@@ -4,32 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
 
-class CreateMasterPassword extends StatefulWidget {
-  const CreateMasterPassword({super.key});
-
-  @override
-  State<CreateMasterPassword> createState() => _CreateMasterPasswordState();
-}
-
-class _CreateMasterPasswordState extends State<CreateMasterPassword> {
-  late TextEditingController masterPasswordController;
-  late TextEditingController confirmMasterPasswordController;
-
-  @override
-  void initState() {
-    
-    super.initState();
-    masterPasswordController = TextEditingController();
-    confirmMasterPasswordController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    masterPasswordController.dispose();
-    confirmMasterPasswordController.dispose();
-    super.dispose();
-  }
-
+class CreateMasterPassword extends StatelessWidget {
+  const CreateMasterPassword({super.key, this.confirmMasterPasswordController,this.masterPasswordController});
+  final TextEditingController? masterPasswordController;
+  final TextEditingController? confirmMasterPasswordController;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -64,6 +42,8 @@ class _CreateMasterPasswordState extends State<CreateMasterPassword> {
               'Your master password is used to encrypt and decrypt your data. Make sure to keep it safe and do not share it with anyone.',
               style: theme.textTheme.bodySmall,
             ),
+
+            Text('You cant change this masterkey . Please ', style: theme.textTheme.bodySmall,)
           ],
         ),
       ),

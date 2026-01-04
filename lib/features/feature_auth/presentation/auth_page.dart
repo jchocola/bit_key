@@ -5,7 +5,9 @@ import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_auth/presentation/widget/auth_page_appbar.dart';
 import 'package:bit_key/features/feature_auth/presentation/widget/create_master_password.dart';
+import 'package:bit_key/features/feature_auth/presentation/widget/first_time_setup.dart';
 import 'package:bit_key/features/feature_auth/presentation/widget/master_password_input.dart';
+import 'package:bit_key/features/feature_auth/presentation/widget/unlock_vault.dart';
 import 'package:bit_key/main.dart';
 import 'package:bit_key/shared/widgets/big_button.dart';
 import 'package:flutter/material.dart';
@@ -43,9 +45,9 @@ class AuthPage extends StatelessWidget {
                     },
                     builder: (context, state) {
                       if (state is AuthBlocFirstTimeUser) {
-                        return _buildFirstTimeSetup(context);
+                        return FirstTimeSetup();
                       } else if (state is AuthBlocUnauthenticated) {
-                        return _buildUnlockVault(context);
+                        return UnlockVault();
                       } else {
                         return CircularProgressIndicator();
                       }
@@ -60,49 +62,4 @@ class AuthPage extends StatelessWidget {
     );
   }
 
-  Widget _buildFirstTimeSetup(BuildContext context) {
-    void _onCreateMasterPassword() {
-      try {
-        context.read<AuthBloc>().add(
-          AppBlocEvent_UserFirstimeRegister(
-            MASTER_KEY: 'qwerty',
-            CONFIRM_MASTER_KEY: 'qwerty',
-          ),
-        );
-      } catch (e) {
-        logger.e('Error creating master password: $e');
-      }
-    }
-
-    return Column(
-      spacing: AppConstant.appPadding,
-      children: [
-        CreateMasterPassword(),
-        BigButton(
-          title: 'Create Master Password',
-          onTap: _onCreateMasterPassword,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildUnlockVault(BuildContext context) {
-    void _onUnlockVault() {
-      try {
-        context.read<AuthBloc>().add(
-          AppBlocEvent_UserUnlockVaultViaMasterKey(MASTER_KEY: 'qwerty'),
-        );
-      } catch (e) {
-        logger.e('Error unlocking vault: $e');
-      }
-    }
-
-    return Column(
-      spacing: AppConstant.appPadding,
-      children: [
-        MasterPasswordInput(),
-        BigButton(title: 'Unlock Vault', onTap: () => _onUnlockVault()),
-      ],
-    );
-  }
 }
