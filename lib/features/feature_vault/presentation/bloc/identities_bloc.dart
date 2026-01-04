@@ -1,6 +1,8 @@
 // ignore_for_file: camel_case_types
 
+import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/identity.dart';
+import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
 import 'package:bit_key/main.dart';
 import 'package:equatable/equatable.dart';
@@ -45,19 +47,34 @@ class IdentitiesBlocState_success extends IdentitiesBlocState {}
 ///
 class IdentitiesBloc extends Bloc<IdentitiesBlocEvent, IdentitiesBlocState> {
   final LocalDbRepository localDbRepository;
-  IdentitiesBloc({required this.localDbRepository})
-    : super(IdentitiesBlocState_init()) {
+  final EncryptionRepository encryptionRepository;
+  final AuthBloc authBloc;
+  IdentitiesBloc({
+    required this.localDbRepository,
+    required this.authBloc,
+    required this.encryptionRepository,
+  }) : super(IdentitiesBlocState_init()) {
     ///
     /// LOAD IDENTITIES
     ///
     on<IdentitiesBlocEvent_loadIdentities>((event, emit) async {
-      try {
-        logger.i('Load active identites');
-        final list = await localDbRepository.getActiveIdentity();
-        logger.i('Loaded identites : ${list.length}');
-        emit(IdentitiesBlocState_loaded(identities: list));
-      } catch (e) {
-        logger.e(e);
+      final authBlocState = authBloc.state;
+
+      if (authBlocState is AuthBlocAuthenticated) {
+        try {
+          logger.i('Load active identites');
+          final list = await localDbRepository.getActiveIdentity();
+          logger.i('Loaded identites : ${list.length}');
+
+          final decryptedList = await encryptionRepository.decryptIdentityList(
+            encryptedIdentities: list,
+            masterKey: authBlocState.MASTER_KEY
+          );
+
+          emit(IdentitiesBlocState_loaded(identities: decryptedList));
+        } catch (e) {
+          logger.e(e);
+        }
       }
     });
   }

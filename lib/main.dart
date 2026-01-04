@@ -116,7 +116,10 @@ class MyApp extends StatelessWidget {
 
         BlocProvider(
           create: (context) =>
-              IdentitiesBloc(localDbRepository: getIt<LocalDbRepository>())
+              IdentitiesBloc(localDbRepository: getIt<LocalDbRepository>(),
+              encryptionRepository: getIt<EncryptionRepository>(),
+              authBloc: context.read<AuthBloc>()
+              )
                 ..add(IdentitiesBlocEvent_loadIdentities()),
         ),
 

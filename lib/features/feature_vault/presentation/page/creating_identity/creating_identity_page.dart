@@ -76,7 +76,7 @@ class _CreatingIdentityPageState extends State<CreatingIdentityPage> {
         address2: address2Controller.text,
         address3: address3Controller.text,
         cityTown: cityController.text,
-        country: companyController.text,
+        country: countryController.text,
         postcode: postcodeController.text,
       );
 

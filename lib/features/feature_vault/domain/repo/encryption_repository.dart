@@ -52,4 +52,9 @@ abstract class EncryptionRepository {
     required Identity encryptedIdentity,
     required String masterKey,
   });
+
+   Future<List<Identity>> decryptIdentityList({
+    required List<Identity> encryptedIdentities,
+    required String masterKey,
+  });
 }

@@ -112,9 +112,88 @@ class Aes256EncryptionRepoImpl implements EncryptionRepository {
   Future<Identity> decryptIdentity({
     required Identity encryptedIdentity,
     required String masterKey,
-  }) {
-    // TODO: implement decryptIdentity
-    throw UnimplementedError();
+  }) async {
+    try {
+      final model = IdentityModel.fromEntity(encryptedIdentity);
+
+      // encrypted data
+      String? username = model.userName;
+      String? company = model.company;
+      String? nationalInsuranceNumber = model.nationalInsuranceNumber;
+      String? passportName = model.passportName;
+      String? licenseNumber = model.licenseNumber;
+      String? email = model.email;
+      String? phone = model.phone;
+      String? address1 = model.address1;
+      String? address2 = model.address2;
+      String? address3 = model.address3;
+
+      // decryption
+      if (username != null) {
+        username = await decrypt(encryptedStr: username, masterKey: masterKey);
+      }
+
+      if (company != null) {
+        company = await decrypt(encryptedStr: company, masterKey: masterKey);
+      }
+
+      if (nationalInsuranceNumber != null) {
+        nationalInsuranceNumber = await decrypt(
+          encryptedStr: nationalInsuranceNumber,
+          masterKey: masterKey,
+        );
+      }
+
+      if (passportName != null) {
+        passportName = await decrypt(
+          encryptedStr: passportName,
+          masterKey: masterKey,
+        );
+      }
+
+      if (licenseNumber != null) {
+        licenseNumber = await decrypt(
+          encryptedStr: licenseNumber,
+          masterKey: masterKey,
+        );
+      }
+      if (email != null) {
+        email = await decrypt(encryptedStr: email, masterKey: masterKey);
+      }
+      if (phone != null) {
+        phone = await decrypt(encryptedStr: phone, masterKey: masterKey);
+      }
+
+      if (address1 != null) {
+        address1 = await decrypt(encryptedStr: address1, masterKey: masterKey);
+      }
+
+      if (address2 != null) {
+        address2 = await decrypt(encryptedStr: address2, masterKey: masterKey);
+      }
+      if (address3 != null) {
+        address3 = await decrypt(encryptedStr: address3, masterKey: masterKey);
+      }
+
+      // decrypted model
+      final decryptedModel = model.copyWith(
+        userName: username,
+        company: company,
+        nationalInsuranceNumber: nationalInsuranceNumber,
+        passportName: passportName,
+        licenseNumber: licenseNumber,
+        email: email,
+        phone: phone,
+        address1: address1,
+        address2: address2,
+        address3: address3,
+      );
+
+      return decryptedModel.toEntity();
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
   }
 
   @override
@@ -214,7 +293,7 @@ class Aes256EncryptionRepoImpl implements EncryptionRepository {
       }
 
       if (company != null) {
-        username = await encrypt(str: company, masterKey: masterKey);
+        company = await encrypt(str: company, masterKey: masterKey);
       }
 
       if (nationalInsuranceNumber != null) {
@@ -235,7 +314,7 @@ class Aes256EncryptionRepoImpl implements EncryptionRepository {
         email = await encrypt(str: email, masterKey: masterKey);
       }
       if (phone != null) {
-        email = await encrypt(str: phone, masterKey: masterKey);
+        phone = await encrypt(str: phone, masterKey: masterKey);
       }
 
       if (address1 != null) {
@@ -348,6 +427,28 @@ class Aes256EncryptionRepoImpl implements EncryptionRepository {
       return decryptedList;
     } catch (e) {
       logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<Identity>> decryptIdentityList({
+    required List<Identity> encryptedIdentities,
+    required String masterKey,
+  }) async {
+    try {
+       List<Identity> decryptedList = [];
+
+      for (var e in encryptedIdentities) {
+        final decrypted = await decryptIdentity(
+          encryptedIdentity: e,
+          masterKey: masterKey,
+        );
+        decryptedList.add(decrypted);
+      }
+      return decryptedList;
+    } catch (e) {
+       logger.e(e);
       rethrow;
     }
   }

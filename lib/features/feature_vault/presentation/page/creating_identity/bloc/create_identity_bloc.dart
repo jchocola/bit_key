@@ -65,7 +65,7 @@ class CreateIdentityBloc
           );
 
           logger.f(event.identity.toString());
-          logger.f('Decrypted identity: ${encryptedIdentity.toString()}');
+          logger.f('encrypted identity: ${encryptedIdentity.toString()}');
 
 
           await localDbRepository.saveIdentity(identity: encryptedIdentity);
