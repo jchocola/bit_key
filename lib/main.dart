@@ -38,7 +38,6 @@ import 'package:glassy_real_navbar/glassy_real_navbar.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
 import 'package:logger/web.dart';
 
-
 final logger = Logger();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -100,9 +99,11 @@ class MyApp extends StatelessWidget {
         ),
 
         BlocProvider(
-          create: (context) =>
-              CardsBloc(localDbRepository: getIt<LocalDbRepository>())
-                ..add(CardsBlocEvent_loadCards()),
+          create: (context) => CardsBloc(
+            localDbRepository: getIt<LocalDbRepository>(),
+            authBloc: context.read<AuthBloc>(),
+            encryptionRepository: getIt<EncryptionRepository>(),
+          )..add(CardsBlocEvent_loadCards()),
         ),
 
         BlocProvider(

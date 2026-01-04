@@ -36,6 +36,10 @@ abstract class EncryptionRepository {
     required Card encryptedCard,
     required String masterKey,
   });
+   Future<List<Card>> decryptCardList({
+    required List<Card> encryptedCards,
+    required String masterKey,
+  });
 
   ///
   /// identity

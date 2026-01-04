@@ -1,5 +1,7 @@
 // ignore_for_file: camel_case_types
 
+import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
+import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -46,19 +48,34 @@ class CardsBlocState_success extends CardsBlocState {}
 ///
 class CardsBloc extends Bloc<CardsBlocEvent, CardsBlocState> {
   final LocalDbRepository localDbRepository;
-  CardsBloc({required this.localDbRepository}) : super(CardsBlocState_init()) {
+  final EncryptionRepository encryptionRepository;
+  final AuthBloc authBloc;
+  CardsBloc({
+    required this.localDbRepository,
+    required this.authBloc,
+    required this.encryptionRepository,
+  }) : super(CardsBlocState_init()) {
     ///
     /// LOAD CARDS
     ///
     on<CardsBlocEvent_loadCards>((event, emit) async {
-      try {
-        logger.d('Load active cards');
-        final cards = await localDbRepository.getActiveCard();
-        logger.d('Cards: ${cards.length}');
-        
-        emit(CardsBlocState_loaded(cards: cards));
-      } catch (e) {
-        logger.e(e);
+      final authBlocState = authBloc.state;
+
+      if (authBlocState is AuthBlocAuthenticated) {
+        try {
+          logger.d('Load active cards');
+          final cards = await localDbRepository.getActiveCard();
+          logger.d('Cards: ${cards.length}');
+
+          final decryptedList = await encryptionRepository.decryptCardList(
+            encryptedCards: cards,
+            masterKey: authBlocState.MASTER_KEY,
+          );
+
+          emit(CardsBlocState_loaded(cards: decryptedList));
+        } catch (e) {
+          logger.e(e);
+        }
       }
     });
   }

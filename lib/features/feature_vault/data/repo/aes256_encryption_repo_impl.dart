@@ -77,9 +77,35 @@ class Aes256EncryptionRepoImpl implements EncryptionRepository {
   Future<Card> decryptCard({
     required Card encryptedCard,
     required String masterKey,
-  }) {
-    // TODO: implement decryptCard
-    throw UnimplementedError();
+  }) async {
+    try {
+      final model = CardModel.fromEntity(encryptedCard);
+
+      // encrypted data
+      String? cardHolderName = model.cardHolderName;
+      String? number = model.number;
+
+      // dectypted data
+      if (cardHolderName != null) {
+        cardHolderName = await decrypt(
+          encryptedStr: cardHolderName,
+          masterKey: masterKey,
+        );
+      }
+
+      if (number != null) {
+        number = await decrypt(encryptedStr: number, masterKey: masterKey);
+      }
+
+      final decrypted = model.copyWith(
+        cardHolderName: cardHolderName,
+        number: number,
+      );
+      return decrypted.toEntity();
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
   }
 
   @override
@@ -99,7 +125,7 @@ class Aes256EncryptionRepoImpl implements EncryptionRepository {
     try {
       final model = LoginModel.fromEntity(encryptedLogin);
 
-      // real data
+      // encrypted data
       String? username = model.login;
       String? password = model.password;
       String? url = model.url;
@@ -115,13 +141,13 @@ class Aes256EncryptionRepoImpl implements EncryptionRepository {
         url = await decrypt(encryptedStr: url, masterKey: masterKey);
       }
 
-      final encryptedModel = model.copyWith(
+      final decryptedModel = model.copyWith(
         login: username,
         password: password,
         url: url,
       );
 
-      return encryptedModel.toEntity();
+      return decryptedModel.toEntity();
     } catch (e) {
       logger.e(e);
       rethrow;
@@ -293,6 +319,28 @@ class Aes256EncryptionRepoImpl implements EncryptionRepository {
       for (var e in encryptedLogins) {
         final decrypted = await decryptLogin(
           encryptedLogin: e,
+          masterKey: masterKey,
+        );
+        decryptedList.add(decrypted);
+      }
+      return decryptedList;
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<Card>> decryptCardList({
+    required List<Card> encryptedCards,
+    required String masterKey,
+  }) async {
+    try {
+      List<Card> decryptedList = [];
+
+      for (var e in encryptedCards) {
+        final decrypted = await decryptCard(
+          encryptedCard: e,
           masterKey: masterKey,
         );
         decryptedList.add(decrypted);
