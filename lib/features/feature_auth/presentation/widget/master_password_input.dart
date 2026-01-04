@@ -1,12 +1,14 @@
 import 'package:bit_key/core/constants/app_constant.dart';
+import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/shared/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
 
 class MasterPasswordInput extends StatelessWidget {
-  const MasterPasswordInput({super.key, this.masterKeyController});
+  const MasterPasswordInput({super.key, this.masterKeyController, this.onFingerPrintTapped});
   final TextEditingController? masterKeyController;
+  final void Function()? onFingerPrintTapped;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -20,7 +22,21 @@ class MasterPasswordInput extends StatelessWidget {
           spacing: AppConstant.appPadding,
           children: [
             Text('Master Password'),
-            CustomTextfield(withEye: true, obscure: true, controller: masterKeyController,),
+            Row(
+              spacing: AppConstant.appPadding,
+              children: [
+                CustomTextfield(
+                  withEye: true,
+                  obscure: true,
+                  controller: masterKeyController,
+                ),
+
+                IconButton(
+                  onPressed: onFingerPrintTapped,
+                  icon: Icon(AppIcon.fingerPrintIcon),
+                ),
+              ],
+            ),
 
             Text(
               'You vault is locked. Please enter your master password to unlock it.',

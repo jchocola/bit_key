@@ -46,10 +46,15 @@ class _UnlockVaultState extends State<UnlockVault> {
       }
     }
 
+    void onFingerPrintTapped(){
+      // TODO : FINGER PRINT LOGIC
+      logger.i('Finger Print Tapped');
+    }
+
     return Column(
       spacing: AppConstant.appPadding,
       children: [
-        MasterPasswordInput(masterKeyController: masterKeyController),
+        MasterPasswordInput(masterKeyController: masterKeyController, onFingerPrintTapped: onFingerPrintTapped,),
         BigButton(title: 'Unlock Vault', onTap: () => _onUnlockVault()),
       ],
     );

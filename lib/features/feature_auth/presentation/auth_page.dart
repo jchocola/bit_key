@@ -4,14 +4,13 @@ import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_auth/presentation/widget/auth_page_appbar.dart';
-import 'package:bit_key/features/feature_auth/presentation/widget/create_master_password.dart';
+
 import 'package:bit_key/features/feature_auth/presentation/widget/first_time_setup.dart';
-import 'package:bit_key/features/feature_auth/presentation/widget/master_password_input.dart';
 import 'package:bit_key/features/feature_auth/presentation/widget/unlock_vault.dart';
 import 'package:bit_key/main.dart';
-import 'package:bit_key/shared/widgets/big_button.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 

@@ -35,4 +35,5 @@ class AppIcon {
   static const IconData infoIcon = LucideIcons.info;
   static const IconData languageIcon = LucideIcons.languages;
   static const IconData securityIcon = LucideIcons.lock;
+  static const IconData fingerPrintIcon = LucideIcons.fingerprintPattern;
 }
