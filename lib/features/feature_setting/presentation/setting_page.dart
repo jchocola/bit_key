@@ -5,6 +5,7 @@ import 'package:bit_key/features/feature_auth/domain/repo/secure_storage_reposit
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/acc_security_page.dart';
 import 'package:bit_key/features/feature_setting/presentation/widgets/setting_appbar.dart';
+import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
 import 'package:bit_key/main.dart';
 import 'package:bit_key/shared/widgets/big_button.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
@@ -70,6 +71,26 @@ class SettingPage extends StatelessWidget {
                 }
               },
             ),
+          ),
+
+          BigButton(
+            title: 'Enctypt: HELLO WORLD ',
+            onTap: () async {
+              await getIt<EncryptionRepository>().encrypt(
+                str: 'HELLO WORLD',
+                masterKey: 'qwerty',
+              );
+            },
+          ),
+
+          BigButton(
+            title: 'Decrypt: HELLO WORLD ',
+            onTap: () async {
+              await getIt<EncryptionRepository>().decrypt(
+                encryptedStr: 'rbYfL+0BfeARk469V74QgTyWJYl/q4nobQQyJ4S61Mw=',
+                masterKey: 'qwerty',
+              );
+            },
           ),
         ],
       ),

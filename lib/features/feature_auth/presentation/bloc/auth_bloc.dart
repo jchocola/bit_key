@@ -45,13 +45,15 @@ class AuthBlocLoading extends AuthBlocState {}
 class AuthBlocUnauthenticated extends AuthBlocState {
   final String SALT;
   final String HASHED_MASTER_KEY;
+  final String SESSION_KEY;
 
   AuthBlocUnauthenticated({
     required this.SALT,
     required this.HASHED_MASTER_KEY,
+    required this.SESSION_KEY,
   });
   @override
-  List<Object?> get props => [SALT, HASHED_MASTER_KEY];
+  List<Object?> get props => [SALT, HASHED_MASTER_KEY, SESSION_KEY];
 }
 
 class AuthBlocFirstTimeUser extends AuthBlocState {}
@@ -90,16 +92,22 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
         final salt = await secureStorageRepository.getSalt();
         final controlSumStr = await secureStorageRepository
             .getHashedMasterKey();
+        final sessionKey = await secureStorageRepository.generateSessionKey();
 
         logger.f('SALT: $salt');
         logger.f('CONTROL SUM STRING: $controlSumStr');
+        logger.f('SESSION KEY : $sessionKey');
 
         if (salt == null || controlSumStr == null) {
           emit(AuthBlocFirstTimeUser());
           return;
         }
         emit(
-          AuthBlocUnauthenticated(SALT: salt, HASHED_MASTER_KEY: controlSumStr),
+          AuthBlocUnauthenticated(
+            SALT: salt,
+            HASHED_MASTER_KEY: controlSumStr,
+            SESSION_KEY: sessionKey,
+          ),
         );
       } catch (e) {
         logger.e(e);
@@ -124,12 +132,16 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
               masterKey: event.MASTER_KEY!,
               salt: newSalt,
             );
+        final newSessionKey = await secureStorageRepository
+            .generateSessionKey();
 
         logger.i('Generated SALT: $newSalt');
         logger.i('Generated HASHED MASTER KEY: $newHashedMasterKey');
+        logger.i('Generated SessionKey $newSessionKey');
 
         await secureStorageRepository.setSalt(newSalt);
         await secureStorageRepository.setHashedMasterKey(newHashedMasterKey);
+        await secureStorageRepository.setSessionKey(newSessionKey);
 
         logger.i('New SALT set: $newSalt');
         logger.i('New HASHED MASTER KEY: $newHashedMasterKey');
@@ -138,6 +150,7 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
           AuthBlocUnauthenticated(
             SALT: newSalt,
             HASHED_MASTER_KEY: newHashedMasterKey,
+            SESSION_KEY: newSessionKey
           ),
         );
       } catch (e) {

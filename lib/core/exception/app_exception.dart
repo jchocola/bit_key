@@ -14,5 +14,8 @@ enum AppException {
   login_not_exist_in_box,
 
   passwords_do_not_match,
-  invalid_master_password
+  invalid_master_password,
+
+  failedConvertKeyToValidForUse,
+  failed_encrypt_str,
 }

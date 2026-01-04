@@ -47,7 +47,18 @@ class AccSecurityPage extends StatelessWidget {
                 icon: Icons.fingerprint,
                 title: 'Чистка вреенных ключей',
                 trailingValue: 'каждый час',
+              ),
+
+                CustomListile(
+                icon: Icons.fingerprint,
+                title: 'Криншот',
+                trailingValue: 'каждый час',
               ), 
+               CustomListile(
+                icon: Icons.fingerprint,
+                title: 'Shake to close',
+                trailingValue: 'каждый час',
+              ),   
 
               Text('Внимание , после очистки временных ключей, потребуется повторный вход во аккаунты. Face ID и Pin Code работать не будут до повторного ввода основных учетных данных.'), 
 

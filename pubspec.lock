@@ -9,6 +9,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "67.0.0"
+  aes256cipher:
+    dependency: "direct main"
+    description:
+      name: aes256cipher
+      sha256: "30719b17620984c88ffe6aed01affca7fc851b7d33243f135994b056471d10b2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
   analyzer:
     dependency: transitive
     description:

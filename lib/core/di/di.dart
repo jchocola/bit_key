@@ -4,8 +4,10 @@ import 'package:bit_key/features/feature_auth/data/repo/secure_storage_repo_impl
 import 'package:bit_key/features/feature_auth/domain/repo/secure_storage_repository.dart';
 import 'package:bit_key/features/feature_generate_pass/data/repositories/generator_repo_impl.dart';
 import 'package:bit_key/features/feature_generate_pass/domain/repositories/generator_repo.dart';
+import 'package:bit_key/features/feature_vault/data/repo/aes256_encryption_repo_impl.dart';
 import 'package:bit_key/features/feature_vault/data/repo/folder_repo_impl.dart';
 import 'package:bit_key/features/feature_vault/data/repo/hive_db_repo_impl.dart';
+import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
 import 'package:bit_key/main.dart';
@@ -44,6 +46,8 @@ Future<void> DI() async {
       aeadCipher: paddedBlockCipher,
     ),
   );
+
+  getIt.registerSingleton<EncryptionRepository>(Aes256EncryptionRepoImpl());
 
   logger.i('DI initialized');
 }
