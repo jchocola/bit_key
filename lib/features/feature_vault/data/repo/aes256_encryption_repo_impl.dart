@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'package:aes256cipher/aes256cipher.dart';
 import 'package:bit_key/core/exception/app_exception.dart';
+import 'package:bit_key/features/feature_vault/domain/entity/card.dart';
+import 'package:bit_key/features/feature_vault/domain/entity/identity.dart';
+import 'package:bit_key/features/feature_vault/domain/entity/login.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
 import 'package:bit_key/main.dart';
 import 'package:crypto/crypto.dart';
@@ -65,5 +68,41 @@ class Aes256EncryptionRepoImpl implements EncryptionRepository {
       logger.e(e);
       throw AppException.failedConvertKeyToValidForUse;
     }
+  }
+
+  @override
+  Future<Card> decryptCard({required Card encryptedCard, required String masterKey}) {
+    // TODO: implement decryptCard
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Identity> decryptIdentity({required Identity encryptedIdentity, required String masterKey}) {
+    // TODO: implement decryptIdentity
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Login> decryptLogin({required Login encryptedLogin, required String masterKey}) {
+    // TODO: implement decryptLogin
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Card> encryptCard({required Card card, required String masterKey}) {
+    // TODO: implement encryptCard
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Identity> encryptIdentity({required Identity identity, required String masterKey}) {
+    // TODO: implement encryptIdentity
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Login> encryptLogin({required Login login, required String masterKey}) {
+    // TODO: implement encryptLogin
+    throw UnimplementedError();
   }
 }

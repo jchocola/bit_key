@@ -14,6 +14,7 @@ import 'package:bit_key/features/feature_generate_pass/presentation/bloc/name_ge
 import 'package:bit_key/features/feature_generate_pass/presentation/bloc/pass_generator_bloc.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/generating_page.dart';
 import 'package:bit_key/features/feature_setting/presentation/setting_page.dart';
+import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/bin_bloc.dart';
@@ -70,6 +71,12 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
+          create: (context) => AuthBloc(
+            secureStorageRepository: getIt<SecureStorageRepository>(),
+          )..add(AppBlocEvent_LoadSaltAndHashedMasterKey()),
+        ),
+
+        BlocProvider(
           create: (context) =>
               PassGeneratorBloc(passGeneratorRepo: getIt<GeneratorRepo>()),
         ),
@@ -87,8 +94,11 @@ class MyApp extends StatelessWidget {
         ),
 
         BlocProvider(
-          create: (context) =>
-              CreateLoginBloc(localDbRepository: getIt<LocalDbRepository>()),
+          create: (context) => CreateLoginBloc(
+            localDbRepository: getIt<LocalDbRepository>(),
+            encryptionRepository: getIt<EncryptionRepository>(),
+            authBloc: context.read<AuthBloc>()
+          ),
         ),
 
         BlocProvider(
@@ -144,11 +154,7 @@ class MyApp extends StatelessWidget {
           create: (context) =>
               SearchBloc(localDbRepository: getIt<LocalDbRepository>()),
         ),
-        BlocProvider(
-          create: (context) => AuthBloc(
-            secureStorageRepository: getIt<SecureStorageRepository>(),
-          )..add(AppBlocEvent_LoadSaltAndHashedMasterKey()),
-        ),
+        
       ],
 
       // child: MainPage(),

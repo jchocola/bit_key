@@ -1,6 +1,8 @@
 // ignore_for_file: camel_case_types
 
+import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/login.dart';
+import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
 import 'package:bit_key/main.dart';
 import 'package:equatable/equatable.dart';
@@ -38,14 +40,22 @@ class CreateLoginBlocState_success extends CreateLoginBlocState {}
 ///
 class CreateLoginBloc extends Bloc<CreateLoginBlocEvent, CreateLoginBlocState> {
   final LocalDbRepository localDbRepository;
-  CreateLoginBloc({required this.localDbRepository})
-    : super(CreateLoginBlocState_init()) {
+  final EncryptionRepository encryptionRepository;
+  final AuthBloc authBloc;
+  CreateLoginBloc({
+    required this.localDbRepository,
+    required this.encryptionRepository,
+    required this.authBloc,
+  }) : super(CreateLoginBlocState_init()) {
     ///
     /// CREATE LOGIN
     ///
     on<CreateLoginBlocEvent_createLogin>((event, emit) async {
       try {
-        await localDbRepository.saveLogin(login: event.login);
+        if (authBloc.state is AuthBlocAuthenticated) {
+
+              await localDbRepository.saveLogin(login: event.login);
+        }
       } catch (e) {
         logger.e(e);
       }
