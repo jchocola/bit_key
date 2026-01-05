@@ -5,6 +5,7 @@ import 'package:bit_key/features/feature_auth/domain/repo/secure_storage_reposit
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/about_page/about_page.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/acc_security_page.dart';
+import 'package:bit_key/features/feature_setting/presentation/pages/vault_page/vault_page.dart';
 import 'package:bit_key/features/feature_setting/presentation/widgets/setting_appbar.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
 import 'package:bit_key/main.dart';
@@ -44,9 +45,20 @@ class SettingPage extends StatelessWidget {
             },
           ),
           CustomListile(title: 'Language', icon: AppIcon.languageIcon),
-          CustomListile(title: 'Vault', icon: AppIcon.vaultIcon),
-
-          CustomListile(title: 'FeedBack', icon: AppIcon.feedbackIcon),
+          CustomListile(title: 'Vault', icon: AppIcon.vaultIcon , onTap: () {
+             showModalBottomSheet(
+                context: context,
+               // isScrollControlled: true,
+                builder: (context) {
+                  return SizedBox(
+                    height:
+                        MediaQuery.of(context).size.height *
+                        AppConstant.modalPageHeight,
+                    child: const VaultPage(),
+                  );
+                },
+              );
+          },),
           CustomListile(title: 'FAQs', icon: AppIcon.faqIcon),
           CustomListile(title: 'About', icon: AppIcon.infoIcon, onTap: () {
             showModalBottomSheet(

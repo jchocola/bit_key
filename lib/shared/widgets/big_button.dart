@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
 
 class BigButton extends StatelessWidget {
-  const BigButton({super.key, this.title = 'Title',this.onTap});
+  const BigButton({super.key, this.title = 'Title', this.onTap, this.color});
   final String title;
+  final Color? color;
   final void Function()? onTap;
   @override
   Widget build(BuildContext context) {
@@ -13,7 +14,7 @@ class BigButton extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return LiquidGlassLayer(
       settings: LiquidGlassSettings(
-        glassColor: AppColor.primary.withOpacity(0.2),
+        glassColor: color ?? AppColor.primary.withOpacity(0.2),
         blur: 5,
       ),
       child: LiquidStretch(
