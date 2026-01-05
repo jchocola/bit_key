@@ -10,6 +10,8 @@ class AppIcon {
   static const IconData vaultIcon = LucideIcons.vault;
   static const IconData generatorIcon = LucideIcons.rotateCcwKey;
   static const IconData settingIcon = LucideIcons.settings;
+  static const IconData feedbackIcon = Icons.feedback_outlined;
+  static const IconData faqIcon = Icons.question_answer_outlined;
 
   static const IconData searchIcon = LucideIcons.search;
 

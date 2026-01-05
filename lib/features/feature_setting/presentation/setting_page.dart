@@ -3,6 +3,7 @@ import 'package:bit_key/core/di/di.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/features/feature_auth/domain/repo/secure_storage_repository.dart';
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
+import 'package:bit_key/features/feature_setting/presentation/pages/about_page/about_page.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/acc_security_page.dart';
 import 'package:bit_key/features/feature_setting/presentation/widgets/setting_appbar.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
@@ -44,7 +45,23 @@ class SettingPage extends StatelessWidget {
           ),
           CustomListile(title: 'Language', icon: AppIcon.languageIcon),
           CustomListile(title: 'Vault', icon: AppIcon.vaultIcon),
-          CustomListile(title: 'About', icon: AppIcon.infoIcon),
+
+          CustomListile(title: 'FeedBack', icon: AppIcon.feedbackIcon),
+          CustomListile(title: 'FAQs', icon: AppIcon.faqIcon),
+          CustomListile(title: 'About', icon: AppIcon.infoIcon, onTap: () {
+            showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                builder: (context) {
+                  return SizedBox(
+                    height:
+                        MediaQuery.of(context).size.height *
+                        AppConstant.modalPageHeight,
+                    child: const AboutPage(),
+                  );
+                },
+              );
+          },),
 
           //  CustomListile(),
           //   CustomListile(),
