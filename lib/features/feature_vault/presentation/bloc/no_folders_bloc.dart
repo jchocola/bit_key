@@ -1,5 +1,7 @@
 // ignore_for_file: camel_case_types
 
+import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
+import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
 import 'package:bit_key/main.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -62,30 +64,64 @@ class NoFoldersBlocState_success extends NoFoldersBlocState {}
 ///
 class NoFoldersBloc extends Bloc<NoFoldersBlocEvent, NoFoldersBlocState> {
   final LocalDbRepository localDbRepository;
+  final EncryptionRepository encryptionRepository;
+  final AuthBloc authBloc;
 
-  NoFoldersBloc({required this.localDbRepository})
-    : super(NoFoldersBlocState_init()) {
+  NoFoldersBloc({
+    required this.localDbRepository,
+    required this.authBloc,
+    required this.encryptionRepository,
+  }) : super(NoFoldersBlocState_init()) {
     ///
     /// LOAD
     ///
     on<NoFoldersBlocEvent_load>((event, emit) async {
       try {
+        // encrypted data
         logger.d('No folders bloc event load:');
         final logins = await localDbRepository.getActiveLoginsWithoutFolder();
         final cards = await localDbRepository.getActiveCardsWithoutFolder();
-        final identities = await localDbRepository.getActiveIdentiesWithoutFolder();
-
-
-
+        final identities = await localDbRepository
+            .getActiveIdentiesWithoutFolder();
         final total = logins.length + cards.length + identities.length;
-        emit(
+
+        // dectyption
+        final authBlocState = authBloc.state;
+        if (authBlocState is AuthBlocAuthenticated) {
+          final dectyptedLogins = await encryptionRepository.decryptLoginList(
+            encryptedLogins: logins,
+            masterKey: authBlocState.MASTER_KEY,
+          );
+          final decryptedCards = await encryptionRepository.decryptCardList(
+            encryptedCards: cards,
+            masterKey: authBlocState.MASTER_KEY,
+          );
+          final decryptedIdentites = await encryptionRepository
+              .decryptIdentityList(
+                encryptedIdentities: identities,
+                masterKey: authBlocState.MASTER_KEY,
+              );
+
+               emit(
+          NoFoldersBlocState_loaded(
+            loginsWihtoutFolder: dectyptedLogins,
+            cardsWithoutFolder: decryptedCards,
+            identitiesWithoutFolder: decryptedIdentites,
+            total: total,
+          ),
+        );
+        } else {
+           emit(
           NoFoldersBlocState_loaded(
             loginsWihtoutFolder: logins,
             cardsWithoutFolder: cards,
             identitiesWithoutFolder: identities,
-            total: total
+            total: total,
           ),
         );
+        }
+
+       
       } catch (e) {
         logger.e(e);
       }

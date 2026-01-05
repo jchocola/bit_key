@@ -115,12 +115,11 @@ class MyApp extends StatelessWidget {
         ),
 
         BlocProvider(
-          create: (context) =>
-              IdentitiesBloc(localDbRepository: getIt<LocalDbRepository>(),
-              encryptionRepository: getIt<EncryptionRepository>(),
-              authBloc: context.read<AuthBloc>()
-              )
-                ..add(IdentitiesBlocEvent_loadIdentities()),
+          create: (context) => IdentitiesBloc(
+            localDbRepository: getIt<LocalDbRepository>(),
+            encryptionRepository: getIt<EncryptionRepository>(),
+            authBloc: context.read<AuthBloc>(),
+          )..add(IdentitiesBlocEvent_loadIdentities()),
         ),
 
         BlocProvider(
@@ -132,14 +131,19 @@ class MyApp extends StatelessWidget {
         ),
 
         BlocProvider(
-          create: (context) =>
-              NoFoldersBloc(localDbRepository: getIt<LocalDbRepository>())
-                ..add(NoFoldersBlocEvent_load()),
+          create: (context) => NoFoldersBloc(
+            localDbRepository: getIt<LocalDbRepository>(),
+            encryptionRepository: getIt<EncryptionRepository>(),
+            authBloc: context.read<AuthBloc>(),
+          )..add(NoFoldersBlocEvent_load()),
         ),
 
         BlocProvider(
-          create: (context) =>
-              FolderDetailBloc(localDbRepository: getIt<LocalDbRepository>()),
+          create: (context) => FolderDetailBloc(
+            localDbRepository: getIt<LocalDbRepository>(),
+            encryptionRepository: getIt<EncryptionRepository>(),
+            authBloc: context.read<AuthBloc>(),
+          ),
         ),
 
         BlocProvider(
@@ -148,9 +152,11 @@ class MyApp extends StatelessWidget {
         ),
 
         BlocProvider(
-          create: (context) =>
-              BinBloc(localDbRepository: getIt<LocalDbRepository>())
-                ..add(BinBlocEvent_load()),
+          create: (context) => BinBloc(
+            localDbRepository: getIt<LocalDbRepository>(),
+            encryptionRepository: getIt<EncryptionRepository>(),
+            authBloc: context.read<AuthBloc>(),
+          )..add(BinBlocEvent_load()),
         ),
         BlocProvider(
           create: (context) =>

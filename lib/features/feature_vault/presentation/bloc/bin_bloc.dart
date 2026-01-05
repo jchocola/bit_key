@@ -2,6 +2,8 @@
 
 import 'dart:async';
 
+import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
+import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
 import 'package:bit_key/main.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,7 +30,7 @@ class BinBlocEvent_deleteAllFromBin extends BinBlocEvent {
 
 class BinBlocEvent_restoreItem extends BinBlocEvent {
   final Object item;
-  final Completer <void>? completer;
+  final Completer<void>? completer;
   BinBlocEvent_restoreItem({required this.item, this.completer});
 
   @override
@@ -37,12 +39,13 @@ class BinBlocEvent_restoreItem extends BinBlocEvent {
 
 class BinBlocEvent_deletePermantlyItem extends BinBlocEvent {
   final Object item;
-  final Completer <void>? completer;
+  final Completer<void>? completer;
   BinBlocEvent_deletePermantlyItem({required this.item, this.completer});
 
   @override
   List<Object?> get props => [item, completer];
-} 
+}
+
 ///
 /// STATE
 ///
@@ -80,12 +83,19 @@ class BinBlocState_success extends BinBlocState {}
 ///
 class BinBloc extends Bloc<BinBlocEvent, BinBlocState> {
   final LocalDbRepository localDbRepository;
-  BinBloc({required this.localDbRepository}) : super(BinBlocState_init()) {
+  final EncryptionRepository encryptionRepository;
+  final AuthBloc authBloc;
+  BinBloc({
+    required this.localDbRepository,
+    required this.authBloc,
+    required this.encryptionRepository,
+  }) : super(BinBlocState_init()) {
     ///
     /// LOAD
     ///
     on<BinBlocEvent_load>((event, emit) async {
       try {
+        // encrypted data
         logger.d('Bin bloc load');
         final logins = await localDbRepository.getLoginsInBin();
         final cards = await localDbRepository.getCardsInBin();
@@ -93,19 +103,47 @@ class BinBloc extends Bloc<BinBlocEvent, BinBlocState> {
         final totalCount = logins.length + cards.length + identities.length;
 
         logger.i('Bin bloc loaded ${totalCount}');
-        emit(
-          BinBlocState_loaded(
-            logins: logins,
-            cards: cards,
-            identities: identities,
-            totalCount: totalCount,
-          ),
-        );
+
+        // decryption
+        final authBlocState = authBloc.state;
+
+        if (authBlocState is AuthBlocAuthenticated) {
+          final decryptedLogins = await encryptionRepository.decryptLoginList(
+            encryptedLogins: logins,
+            masterKey: authBlocState.MASTER_KEY,
+          );
+          final dectyptedCards = await encryptionRepository.decryptCardList(
+            encryptedCards: cards,
+            masterKey: authBlocState.MASTER_KEY,
+          );
+          final dectyptedIdentities = await encryptionRepository
+              .decryptIdentityList(
+                encryptedIdentities: identities,
+                masterKey: authBlocState.MASTER_KEY,
+              );
+
+          emit(
+            BinBlocState_loaded(
+              logins: decryptedLogins,
+              cards: dectyptedCards,
+              identities: dectyptedIdentities,
+              totalCount: totalCount,
+            ),
+          );
+        } else {
+          emit(
+            BinBlocState_loaded(
+              logins: logins,
+              cards: cards,
+              identities: identities,
+              totalCount: totalCount,
+            ),
+          );
+        }
       } catch (e) {
         logger.e(e);
       }
     });
-
 
     ///
     /// DELETE ALL FROM BIN
@@ -123,7 +161,6 @@ class BinBloc extends Bloc<BinBlocEvent, BinBlocState> {
         logger.e(e);
       }
     });
-
 
     ///
     /// RESTORE ITEM
