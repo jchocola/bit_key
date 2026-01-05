@@ -30,6 +30,9 @@ SETTINGS PAGE
         - SHAKE TO LOCK (shake 3.0.0)
         - CHANGE MASTER PASSWORD 🚫
         - secure_application: ^4.1.0
+        - jailbreak_root_detection: "^1.2.0+1"
+        - device_trust: ^1.0.1
+        - screen shoot
 
     - VAULT SETTINGS
         - DELETE ALL DATA

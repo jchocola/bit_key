@@ -5,6 +5,7 @@ import 'package:bit_key/core/router/app_router_config.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/core/theme/app_color.dart';
 import 'package:bit_key/core/theme/app_theme.dart';
+import 'package:bit_key/features/feature_auth/domain/repo/local_auth_repository.dart';
 import 'package:bit_key/features/feature_auth/domain/repo/secure_storage_repository.dart';
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_generate_pass/domain/repositories/generator_repo.dart';
@@ -62,6 +63,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => AuthBloc(
             secureStorageRepository: getIt<SecureStorageRepository>(),
+            localAuthRepository: getIt<LocalAuthRepository>()
           )..add(AppBlocEvent_LoadSaltAndHashedMasterKey()),
         ),
 

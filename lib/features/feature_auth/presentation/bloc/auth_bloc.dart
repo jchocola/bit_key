@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, camel_case_types
 
 import 'package:bit_key/core/exception/app_exception.dart';
+import 'package:bit_key/features/feature_auth/domain/repo/local_auth_repository.dart';
 import 'package:bit_key/features/feature_auth/domain/repo/secure_storage_repository.dart';
 import 'package:bit_key/main.dart';
 import 'package:equatable/equatable.dart';
@@ -31,6 +32,8 @@ class AppBlocEvent_UserUnlockVaultViaMasterKey extends AuthBlocEvent {
   @override
   List<Object?> get props => [MASTER_KEY];
 }
+
+class AuthBlocEvent_UserUnblockVaultViaLocalAuth extends AuthBlocEvent {}
 
 // STATE
 abstract class AuthBlocState extends Equatable {
@@ -83,7 +86,11 @@ class AuthBlocFailure extends AuthBlocState {
 //BLOC
 class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
   final SecureStorageRepository secureStorageRepository;
-  AuthBloc({required this.secureStorageRepository}) : super(AuthBlocInitial()) {
+  final LocalAuthRepository localAuthRepository;
+  AuthBloc({
+    required this.secureStorageRepository,
+    required this.localAuthRepository,
+  }) : super(AuthBlocInitial()) {
     ///
     /// LOAD SALT AND CONTROL SUM STRING
     ///
@@ -150,7 +157,7 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
           AuthBlocUnauthenticated(
             SALT: newSalt,
             HASHED_MASTER_KEY: newHashedMasterKey,
-            SESSION_KEY: newSessionKey
+            SESSION_KEY: newSessionKey,
           ),
         );
       } catch (e) {
@@ -200,6 +207,26 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
         logger.e(e);
         emit(AuthBlocFailure(exception: e as AppException?));
         add(AppBlocEvent_LoadSaltAndHashedMasterKey());
+      }
+    });
+
+    ///
+    /// UNLOCK VAULT VIA LOCAL AUTH
+    ///
+    on<AuthBlocEvent_UserUnblockVaultViaLocalAuth>((event, emit) async {
+      try {
+        final canAuth = await localAuthRepository.canAuthenticate();
+
+        if (canAuth) {
+          final result = await localAuthRepository.authenticate(reason: 'opEN');
+          if (result) {
+            logger.f('Logged successfull');
+          }
+        } else {
+          logger.e('Cant auth');
+        }
+      } catch (e) {
+        logger.e(e);
       }
     });
   }

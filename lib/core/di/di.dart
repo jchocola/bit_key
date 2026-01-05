@@ -1,6 +1,8 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:bit_key/features/feature_auth/data/repo/local_auth_repo_impl.dart';
 import 'package:bit_key/features/feature_auth/data/repo/secure_storage_repo_impl.dart';
+import 'package:bit_key/features/feature_auth/domain/repo/local_auth_repository.dart';
 import 'package:bit_key/features/feature_auth/domain/repo/secure_storage_repository.dart';
 import 'package:bit_key/features/feature_generate_pass/data/repositories/generator_repo_impl.dart';
 import 'package:bit_key/features/feature_generate_pass/domain/repositories/generator_repo.dart';
@@ -48,6 +50,8 @@ Future<void> DI() async {
   );
 
   getIt.registerSingleton<EncryptionRepository>(Aes256EncryptionRepoImpl());
+
+  getIt.registerSingleton<LocalAuthRepository>(LocalAuthRepoImpl());
 
   logger.i('DI initialized');
 }
