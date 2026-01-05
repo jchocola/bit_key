@@ -33,9 +33,9 @@ Future<void> DI() async {
   getIt.registerSingleton<LocalDbRepository>(HiveDbRepoImpl(pathDir: dir.path));
 
   final secureStorage = FlutterSecureStorage(
-    aOptions: AndroidOptions(
-      keyCipherAlgorithm: KeyCipherAlgorithm.AES_GCM_NoPadding,
-    ),
+    // aOptions: AndroidOptions(
+    //   keyCipherAlgorithm: KeyCipherAlgorithm.AES_GCM_NoPadding,
+    // ),
   );
 
   final keyDerivator = KeyDerivator('argon2');

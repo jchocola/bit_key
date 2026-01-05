@@ -97,23 +97,23 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
     on<AppBlocEvent_LoadSaltAndHashedMasterKey>((event, emit) async {
       try {
         final salt = await secureStorageRepository.getSalt();
-        final controlSumStr = await secureStorageRepository
+        final hashedMasterKey = await secureStorageRepository
             .getHashedMasterKey();
-        final sessionKey = await secureStorageRepository.generateSessionKey();
+        final sessionKey = await secureStorageRepository.getSessionKey();
 
         logger.f('SALT: $salt');
-        logger.f('CONTROL SUM STRING: $controlSumStr');
+        logger.f('Hashed master key: $hashedMasterKey');
         logger.f('SESSION KEY : $sessionKey');
 
-        if (salt == null || controlSumStr == null) {
+        if (salt == null || hashedMasterKey == null) {
           emit(AuthBlocFirstTimeUser());
           return;
         }
         emit(
           AuthBlocUnauthenticated(
             SALT: salt,
-            HASHED_MASTER_KEY: controlSumStr,
-            SESSION_KEY: sessionKey,
+            HASHED_MASTER_KEY: hashedMasterKey,
+            SESSION_KEY: sessionKey ?? '',
           ),
         );
       } catch (e) {
@@ -203,6 +203,10 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
             ENCRYPTED_MASTER_KEY: encryptedMasterKey,
           ),
         );
+
+        // update session/ encrypted key
+        await secureStorageRepository.setEncryptedMasterKey(encryptedMasterKey);
+        await secureStorageRepository.setSessionKey(sessionKey);
       } catch (e) {
         logger.e(e);
         emit(AuthBlocFailure(exception: e as AppException?));
@@ -218,9 +222,41 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
         final canAuth = await localAuthRepository.canAuthenticate();
 
         if (canAuth) {
-          final result = await localAuthRepository.authenticate(reason: 'opEN');
+          final result = await localAuthRepository.authenticate(
+            reason: 'opEN',
+            biometricOnly: false,
+          );
           if (result) {
             logger.f('Logged successfull');
+
+            final currentState = state;
+            if (currentState is AuthBlocUnauthenticated) {
+              final encryptedMasterKey = await secureStorageRepository
+                  .getEncryptedMasterKey();
+
+              logger.d('Encrypted key : $encryptedMasterKey');
+              if (encryptedMasterKey != null) {
+                final decryptedMasterKey = await secureStorageRepository
+                    .decryptEncryptedMasterKey(
+                      sessionKey: currentState.SESSION_KEY,
+                      encryptedMasterKey: encryptedMasterKey,
+                    );
+
+                logger.d('Decrypted master key : ${decryptedMasterKey}');
+
+                if (decryptedMasterKey != null) {
+                  logger.d('User authenticated');
+
+                  emit(
+                    AuthBlocAuthenticated(
+                      MASTER_KEY: decryptedMasterKey,
+                      SESSION_KEY: currentState.SESSION_KEY,
+                      ENCRYPTED_MASTER_KEY: currentState.HASHED_MASTER_KEY,
+                    ),
+                  );
+                }
+              }
+            }
           }
         } else {
           logger.e('Cant auth');

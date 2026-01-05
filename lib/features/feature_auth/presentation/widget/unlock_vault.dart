@@ -7,6 +7,7 @@ import 'package:bit_key/main.dart';
 import 'package:bit_key/shared/widgets/big_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class UnlockVault extends StatefulWidget {
   const UnlockVault({super.key});
