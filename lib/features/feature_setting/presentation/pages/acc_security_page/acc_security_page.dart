@@ -18,30 +18,12 @@ class AccSecurityPage extends StatelessWidget {
             children: [
               AppSecPageAppbar(),
               SizedBox(height: AppConstant.appPadding),
-              CustomListile(
-                icon: Icons.fingerprint,
-                title: 'Face ID',
-                trailingValue: 'Enabled',
-              ),
-
-              CustomListile(
-                icon: Icons.fingerprint,
-                title: 'Pin Code',
-                trailingValue: 'Enabled',
-              ),
 
               CustomListile(
                 icon: Icons.fingerprint,
                 title: 'Session Timeout',
                 trailingValue: 'Enabled',
               ),
-
-               CustomListile(
-                icon: Icons.fingerprint,
-                title: 'Change Master Password',
-                trailingValue: 'Enabled',
-              ),
-
 
                 CustomListile(
                 icon: Icons.fingerprint,
