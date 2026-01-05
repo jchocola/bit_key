@@ -42,7 +42,7 @@ class MyVaultPage extends StatelessWidget {
                 );
               } 
                else  {
-                return SearchedWidget();
+                return Expanded(child: SearchedWidget());
               }
             },
           ),

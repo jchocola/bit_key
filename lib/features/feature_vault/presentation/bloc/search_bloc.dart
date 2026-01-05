@@ -1,3 +1,5 @@
+import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
+import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
 import 'package:bit_key/main.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,7 +24,12 @@ class SearchBlocEvent_startSearch extends SearchBlocEvent {
   final bool? isLogin;
   final bool? isCard;
   final bool? isIdentity;
-  SearchBlocEvent_startSearch({required this.query, this.isLogin, this.isCard, this.isIdentity});
+  SearchBlocEvent_startSearch({
+    required this.query,
+    this.isLogin,
+    this.isCard,
+    this.isIdentity,
+  });
 
   @override
   List<Object?> get props => [query, isLogin, isCard, isIdentity];
@@ -58,8 +65,13 @@ class SearchBlocState_searching extends SearchBlocState {
 ///
 class SearchBloc extends Bloc<SearchBlocEvent, SearchBlocState> {
   final LocalDbRepository localDbRepository;
-  SearchBloc({required this.localDbRepository})
-    : super(SearchBlocState_initial()) {
+  final EncryptionRepository encryptionRepository;
+  final AuthBloc authBloc;
+  SearchBloc({
+    required this.localDbRepository,
+    required this.authBloc,
+    required this.encryptionRepository,
+  }) : super(SearchBlocState_initial()) {
     ///
     /// EVENT HANDLERS
     ///
@@ -70,46 +82,37 @@ class SearchBloc extends Bloc<SearchBlocEvent, SearchBlocState> {
         return;
       }
 
+      // encrypted data
       final logins = await localDbRepository.searchLogins(event.query);
       final cards = await localDbRepository.searchCards(event.query);
       final identities = await localDbRepository.searchIdentities(event.query);
 
-      if (event.isLogin == true) {
+      // decryption
+      final authBlocState = authBloc.state;
+      if (authBlocState is AuthBlocAuthenticated) {
+        final decryptedLogins = await encryptionRepository.decryptLoginList(
+          encryptedLogins: logins,
+          masterKey: authBlocState.MASTER_KEY,
+        );
+        final dectyptedCards = await encryptionRepository.decryptCardList(
+          encryptedCards: cards,
+          masterKey: authBlocState.MASTER_KEY,
+        );
+        final dectyptedIdentities = await encryptionRepository
+            .decryptIdentityList(
+              encryptedIdentities: identities,
+              masterKey: authBlocState.MASTER_KEY,
+            );
         emit(
           SearchBlocState_searching(
-            logins: logins,
-            cards: [],
-            identities: [],
-            totalResults: logins.length,
+            logins: decryptedLogins,
+            cards: dectyptedCards,
+            identities: dectyptedIdentities,
+            totalResults: logins.length + cards.length + identities.length,
           ),
         );
-        return;
-      }
-      if (event.isCard == true) {
-        emit(
-          SearchBlocState_searching(
-            logins: [],
-            cards: cards,
-            identities: [],
-            totalResults: cards.length,
-          ),
-        );
-        return;
-      }
-
-      if (event.isIdentity == true) {
-        emit(
-          SearchBlocState_searching(
-            logins: [],
-            cards: [],
-            identities: identities,
-            totalResults: identities.length,
-          ),
-        );
-        return;
-      }
-
-      emit(
+      } else {
+         emit(
         SearchBlocState_searching(
           logins: logins,
           cards: cards,
@@ -117,6 +120,44 @@ class SearchBloc extends Bloc<SearchBlocEvent, SearchBlocState> {
           totalResults: logins.length + cards.length + identities.length,
         ),
       );
+      }
+
+      // if (event.isLogin == true) {
+      //   emit(
+      //     SearchBlocState_searching(
+      //       logins: logins,
+      //       cards: [],
+      //       identities: [],
+      //       totalResults: logins.length,
+      //     ),
+      //   );
+      //   return;
+      // }
+      // if (event.isCard == true) {
+      //   emit(
+      //     SearchBlocState_searching(
+      //       logins: [],
+      //       cards: cards,
+      //       identities: [],
+      //       totalResults: cards.length,
+      //     ),
+      //   );
+      //   return;
+      // }
+
+      // if (event.isIdentity == true) {
+      //   emit(
+      //     SearchBlocState_searching(
+      //       logins: [],
+      //       cards: [],
+      //       identities: identities,
+      //       totalResults: identities.length,
+      //     ),
+      //   );
+      //   return;
+      // }
+
+     
     });
   }
 }

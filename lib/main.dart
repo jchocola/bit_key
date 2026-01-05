@@ -159,8 +159,11 @@ class MyApp extends StatelessWidget {
           )..add(BinBlocEvent_load()),
         ),
         BlocProvider(
-          create: (context) =>
-              SearchBloc(localDbRepository: getIt<LocalDbRepository>()),
+          create: (context) => SearchBloc(
+            localDbRepository: getIt<LocalDbRepository>(),
+            encryptionRepository: getIt<EncryptionRepository>(),
+            authBloc: context.read<AuthBloc>(),
+          ),
         ),
       ],
 
