@@ -58,6 +58,7 @@ dependencies:
   aes256cipher: ^0.0.3
   local_auth: ^3.0.0
   shake: ^3.0.0
+  jailbreak_root_detection: ^1.2.0+1
  
 
 

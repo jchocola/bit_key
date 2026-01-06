@@ -7,6 +7,7 @@ import 'package:bit_key/features/feature_auth/domain/repo/secure_storage_reposit
 import 'package:bit_key/features/feature_generate_pass/data/repositories/generator_repo_impl.dart';
 import 'package:bit_key/features/feature_generate_pass/domain/repositories/generator_repo.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/data/repo/app_security_repo_impl.dart';
+import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/data/repo/jailbreak_root_detection_impl.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/domain/repo/app_security_repository.dart';
 import 'package:bit_key/features/feature_vault/data/repo/aes256_encryption_repo_impl.dart';
 import 'package:bit_key/features/feature_vault/data/repo/folder_repo_impl.dart';
@@ -17,6 +18,7 @@ import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.d
 import 'package:bit_key/main.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:jailbreak_root_detection/jailbreak_root_detection.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pointycastle/pointycastle.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,7 +33,9 @@ Future<void> DI() async {
     FolderRepoImpl(prefs: shared_prefs),
   );
 
-  getIt.registerSingleton<AppSecurityRepository>(AppSecurityRepoImpl(sharedPreferences: shared_prefs));
+  getIt.registerSingleton<AppSecurityRepository>(
+    AppSecurityRepoImpl(sharedPreferences: shared_prefs),
+  );
 
   final dir = await getApplicationDocumentsDirectory();
   getIt.registerSingleton<LocalDbRepository>(HiveDbRepoImpl(pathDir: dir.path));
@@ -56,6 +60,10 @@ Future<void> DI() async {
   getIt.registerSingleton<EncryptionRepository>(Aes256EncryptionRepoImpl());
 
   getIt.registerSingleton<LocalAuthRepository>(LocalAuthRepoImpl());
+
+  getIt.registerSingleton<JailbreakRootDetectionImpl>(
+    JailbreakRootDetectionImpl(),
+  );
 
   logger.i('DI initialized');
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/di/di.dart';
 import 'package:bit_key/core/enum/session_timout.dart';
@@ -7,6 +9,7 @@ import 'package:bit_key/core/theme/app_color.dart';
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_auth/presentation/bloc/session_manager.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/generating_page.dart';
+import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/data/repo/jailbreak_root_detection_impl.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/domain/repo/app_security_repository.dart';
 import 'package:bit_key/features/feature_setting/presentation/setting_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/cards_bloc.dart';
@@ -67,14 +70,23 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
     );
   }
 
+  void _checkJailBreak() async {
+    final isNotTrust = await getIt<JailbreakRootDetectionImpl>().isNotTrust();
+
+    if (isNotTrust) {
+      logger.e('Is Not Trust !!! Exit !!!');
+      exit(1);
+    }
+  }
+
   void shakeDetectorLogicHandler(ShakeEvent event) async {
     final enableShakeToLock = await getIt<AppSecurityRepository>()
         .getEnableShakeToLockValue();
 
     if (enableShakeToLock) {
-       logger.d('Shake direction: ${event.direction}');
-    logger.d('Shake force: ${event.force}');
-    logger.d('Shake timestamp: ${event.timestamp}');
+      logger.d('Shake direction: ${event.direction}');
+      logger.d('Shake force: ${event.force}');
+      logger.d('Shake timestamp: ${event.timestamp}');
       logger.d('User shaked');
       _lockApp();
     }
@@ -91,6 +103,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
     _shakeDetector = ShakeDetector.autoStart(
       onPhoneShake: shakeDetectorLogicHandler,
     );
+    _checkJailBreak();
   }
 
   @override

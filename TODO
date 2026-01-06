@@ -27,9 +27,8 @@ SETTINGS PAGE
         - FACE ID / TOUCH ID (local_auth)
         - PIN CODE 🚫
         - SESSION TIMEOUT ✅ 
-        - SHAKE TO LOCK (shake 3.0.0)
+        - SHAKE TO LOCK (shake 3.0.0) ✅
         - CHANGE MASTER PASSWORD 🚫
-        - secure_application: ^4.1.0
         - jailbreak_root_detection: "^1.2.0+1"
         - device_trust: ^1.0.1
         - screen shoot
