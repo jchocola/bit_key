@@ -12,6 +12,8 @@ import 'package:bit_key/features/feature_generate_pass/domain/repositories/gener
 import 'package:bit_key/features/feature_generate_pass/presentation/bloc/name_generator_bloc.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/bloc/pass_generator_bloc.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/generating_page.dart';
+import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/bloc/acc_security_bloc.dart';
+import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/domain/repo/app_security_repository.dart';
 import 'package:bit_key/features/feature_setting/presentation/setting_page.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
@@ -167,6 +169,8 @@ class MyApp extends StatelessWidget {
             authBloc: context.read<AuthBloc>(),
           ),
         ),
+
+        BlocProvider(create: (context)=> AccSecurityBloc(appSecurityRepository: getIt<AppSecurityRepository>())..add(AccSecurityBlocEvent_load()))
       ],
 
       // child: MainPage(),

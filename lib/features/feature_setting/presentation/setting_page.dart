@@ -5,6 +5,7 @@ import 'package:bit_key/features/feature_auth/domain/repo/secure_storage_reposit
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/about_page/about_page.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/acc_security_page.dart';
+import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/bloc/acc_security_bloc.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/faq_page/faq_page.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/vault_page/vault_page.dart';
 import 'package:bit_key/features/feature_setting/presentation/widgets/setting_appbar.dart';
@@ -14,6 +15,7 @@ import 'package:bit_key/shared/widgets/big_button.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({super.key});
@@ -35,21 +37,29 @@ class SettingPage extends StatelessWidget {
                 context: context,
                 isScrollControlled: true,
                 builder: (context) {
-                  return SizedBox(
-                    height:
-                        MediaQuery.of(context).size.height *
-                        AppConstant.modalPageHeight,
-                    child: const AccSecurityPage(),
+                  return MultiBlocProvider(
+                    providers: [
+                      BlocProvider.value(value: BlocProvider.of<AccSecurityBloc>(context)),
+                    ],
+                    child: SizedBox(
+                      height:
+                          MediaQuery.of(context).size.height *
+                          AppConstant.modalPageHeight,
+                      child: const AccSecurityPage(),
+                    ),
                   );
                 },
               );
             },
           ),
           CustomListile(title: 'Language', icon: AppIcon.languageIcon),
-          CustomListile(title: 'Vault', icon: AppIcon.vaultIcon , onTap: () {
-             showModalBottomSheet(
+          CustomListile(
+            title: 'Vault',
+            icon: AppIcon.vaultIcon,
+            onTap: () {
+              showModalBottomSheet(
                 context: context,
-               // isScrollControlled: true,
+                // isScrollControlled: true,
                 builder: (context) {
                   return SizedBox(
                     height:
@@ -59,9 +69,13 @@ class SettingPage extends StatelessWidget {
                   );
                 },
               );
-          },),
-          CustomListile(title: 'FAQs', icon: AppIcon.faqIcon , onTap: () {
-            showModalBottomSheet(
+            },
+          ),
+          CustomListile(
+            title: 'FAQs',
+            icon: AppIcon.faqIcon,
+            onTap: () {
+              showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
                 builder: (context) {
@@ -73,9 +87,13 @@ class SettingPage extends StatelessWidget {
                   );
                 },
               );
-          },),
-          CustomListile(title: 'About', icon: AppIcon.infoIcon, onTap: () {
-            showModalBottomSheet(
+            },
+          ),
+          CustomListile(
+            title: 'About',
+            icon: AppIcon.infoIcon,
+            onTap: () {
+              showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
                 builder: (context) {
@@ -87,7 +105,8 @@ class SettingPage extends StatelessWidget {
                   );
                 },
               );
-          },),
+            },
+          ),
 
           //  CustomListile(),
           //   CustomListile(),
@@ -134,6 +153,20 @@ class SettingPage extends StatelessWidget {
                 masterKey: 'qwerty',
               );
             },
+          ),
+
+          BlocListener<AuthBloc, AuthBlocState>(
+            listener: (context, state) {
+              if (state is AuthBlocUnauthenticated) {
+                context.go('/auth');
+              }
+            },
+            child: BigButton(
+              title: 'Lock out',
+              onTap: () {
+                context.read<AuthBloc>().add(AuthBlocEvent_lockApp());
+              },
+            ),
           ),
         ],
       ),

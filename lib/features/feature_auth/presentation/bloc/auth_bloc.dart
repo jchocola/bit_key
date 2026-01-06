@@ -35,6 +35,8 @@ class AppBlocEvent_UserUnlockVaultViaMasterKey extends AuthBlocEvent {
 
 class AuthBlocEvent_UserUnblockVaultViaLocalAuth extends AuthBlocEvent {}
 
+class AuthBlocEvent_lockApp extends AuthBlocEvent {}
+
 // STATE
 abstract class AuthBlocState extends Equatable {
   @override
@@ -264,6 +266,13 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
       } catch (e) {
         logger.e(e);
       }
+    });
+
+    ///
+    /// lock app
+    ///
+    on<AuthBlocEvent_lockApp>((event, emit) {
+      add(AppBlocEvent_LoadSaltAndHashedMasterKey());
     });
   }
 }

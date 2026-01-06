@@ -38,4 +38,9 @@ class AppIcon {
   static const IconData languageIcon = LucideIcons.languages;
   static const IconData securityIcon = LucideIcons.lock;
   static const IconData fingerPrintIcon = LucideIcons.fingerprintPattern;
+
+  static const IconData sessionTimeoutIcon = LucideIcons.timer;
+  static const IconData clearKeyIcon = LucideIcons.rotateCcwKey;
+  static const IconData screenShootIcon = LucideIcons.scanEye;
+  static const IconData shakeIcon = LucideIcons.squarePower;
 }

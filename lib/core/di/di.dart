@@ -6,6 +6,8 @@ import 'package:bit_key/features/feature_auth/domain/repo/local_auth_repository.
 import 'package:bit_key/features/feature_auth/domain/repo/secure_storage_repository.dart';
 import 'package:bit_key/features/feature_generate_pass/data/repositories/generator_repo_impl.dart';
 import 'package:bit_key/features/feature_generate_pass/domain/repositories/generator_repo.dart';
+import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/data/repo/app_security_repo_impl.dart';
+import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/domain/repo/app_security_repository.dart';
 import 'package:bit_key/features/feature_vault/data/repo/aes256_encryption_repo_impl.dart';
 import 'package:bit_key/features/feature_vault/data/repo/folder_repo_impl.dart';
 import 'package:bit_key/features/feature_vault/data/repo/hive_db_repo_impl.dart';
@@ -28,6 +30,8 @@ Future<void> DI() async {
   getIt.registerSingleton<FolderRepository>(
     FolderRepoImpl(prefs: shared_prefs),
   );
+
+  getIt.registerSingleton<AppSecurityRepository>(AppSecurityRepoImpl(sharedPreferences: shared_prefs));
 
   final dir = await getApplicationDocumentsDirectory();
   getIt.registerSingleton<LocalDbRepository>(HiveDbRepoImpl(pathDir: dir.path));
