@@ -1,5 +1,6 @@
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/di/di.dart';
+import 'package:bit_key/core/enum/session_timout.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/core/router/app_router_config.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
@@ -8,6 +9,7 @@ import 'package:bit_key/core/theme/app_theme.dart';
 import 'package:bit_key/features/feature_auth/domain/repo/local_auth_repository.dart';
 import 'package:bit_key/features/feature_auth/domain/repo/secure_storage_repository.dart';
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
+import 'package:bit_key/features/feature_auth/presentation/bloc/session_manager.dart';
 import 'package:bit_key/features/feature_generate_pass/domain/repositories/generator_repo.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/bloc/name_generator_bloc.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/bloc/pass_generator_bloc.dart';
@@ -38,6 +40,7 @@ import 'package:bit_key/features/feature_vault/presentation/page/creating_login/
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glassy_real_navbar/glassy_real_navbar.dart';
+import 'package:go_router/go_router.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
 import 'package:logger/web.dart';
 
@@ -65,7 +68,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => AuthBloc(
             secureStorageRepository: getIt<SecureStorageRepository>(),
-            localAuthRepository: getIt<LocalAuthRepository>()
+            localAuthRepository: getIt<LocalAuthRepository>(),
           )..add(AppBlocEvent_LoadSaltAndHashedMasterKey()),
         ),
 
@@ -170,7 +173,11 @@ class MyApp extends StatelessWidget {
           ),
         ),
 
-        BlocProvider(create: (context)=> AccSecurityBloc(appSecurityRepository: getIt<AppSecurityRepository>())..add(AccSecurityBlocEvent_load()))
+        BlocProvider(
+          create: (context) => AccSecurityBloc(
+            appSecurityRepository: getIt<AppSecurityRepository>(),
+          )..add(AccSecurityBlocEvent_load()),
+        ),
       ],
 
       // child: MainPage(),
@@ -195,9 +202,18 @@ class MainPage extends StatefulWidget {
   State<MainPage> createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
+  final SessionManager _sessionManager = SessionManager();
+
   late PageController _pageController; // page controller
   int navbarIndex = 0; // navbar index
+
+  void _lockApp() {
+    logger.e('Lock app');
+
+    context.read<AuthBloc>().add(AuthBlocEvent_lockApp());
+    context.go('/auth');
+  }
 
   void _changePage(int index) {
     setState(() {
@@ -206,10 +222,40 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
+  void initSessionManager() async {
+    final sessionTimeOut = await getIt<AppSecurityRepository>()
+        .getSessionTimeOutValue();
+
+    _sessionManager.initialize(
+      timeout: Duration(minutes: sessionTimeOut.minutes),
+      onTimeout: _lockApp,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: 0, keepPage: true);
+    WidgetsBinding.instance.addObserver(this);
+    initSessionManager();
+    _sessionManager.recordUserActivity();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      // Приложение ушло в фон
+      _sessionManager.dispose();
+    } else if (state == AppLifecycleState.resumed) {
+      _sessionManager.recordUserActivity();
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _sessionManager.dispose();
+    super.dispose();
   }
 
   void onCreateFolderTapped(BuildContext parentContext) async {
