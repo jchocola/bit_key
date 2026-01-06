@@ -1,6 +1,7 @@
 
 import 'package:bit_key/features/feature_auth/presentation/auth_page.dart';
 import 'package:bit_key/main.dart';
+import 'package:bit_key/main_page.dart';
 import 'package:go_router/go_router.dart';
 
 final GoRouter appRouterConfig = GoRouter(
