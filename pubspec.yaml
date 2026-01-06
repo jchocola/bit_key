@@ -59,6 +59,7 @@ dependencies:
   local_auth: ^3.0.0
   shake: ^3.0.0
   jailbreak_root_detection: ^1.2.0+1
+  no_screenshot: ^0.3.1
  
 
 

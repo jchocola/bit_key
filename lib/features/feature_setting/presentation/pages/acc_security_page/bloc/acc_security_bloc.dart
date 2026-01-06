@@ -1,5 +1,6 @@
 // ignore_for_file: camel_case_types, unnecessary_brace_in_string_interps
 
+import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/data/repo/no_screen_shot_repo_impl.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -90,8 +91,11 @@ class AccSecurityBlocState_loaded extends AccSecurityBlocState {
 ///
 class AccSecurityBloc extends Bloc<AccSecurityBlocEvent, AccSecurityBlocState> {
   final AppSecurityRepository appSecurityRepository;
-  AccSecurityBloc({required this.appSecurityRepository})
-    : super(AccSecurityBlocState_initial()) {
+  final NoScreenShotRepoImpl noScreenShotRepoImpl;
+  AccSecurityBloc({
+    required this.appSecurityRepository,
+    required this.noScreenShotRepoImpl,
+  }) : super(AccSecurityBlocState_initial()) {
     ///
     /// LOAD
     ///
@@ -146,12 +150,17 @@ class AccSecurityBloc extends Bloc<AccSecurityBlocEvent, AccSecurityBlocState> {
         final currentValue = await appSecurityRepository
             .getAllowScreenShootValue();
 
+        if (currentValue == true) {
+          await noScreenShotRepoImpl.enableScreenshot();
+        } else {
+          await noScreenShotRepoImpl.disableScreenshot();
+        }
+
         logger.d('Changed Screenshot value: $currentValue');
+
         emit(currentState.copyWith(enableScreenShoot: currentValue));
       }
     });
-
-
 
     ///
     /// Set clean key value
@@ -160,37 +169,36 @@ class AccSecurityBloc extends Bloc<AccSecurityBlocEvent, AccSecurityBlocState> {
       final currentState = state;
 
       if (currentState is AccSecurityBlocState_loaded) {
-
         emit(currentState.copyWith(clearKeyDuration: event.value));
 
-        await appSecurityRepository.changeCleanKeyDurationValue(value: event.value);
+        await appSecurityRepository.changeCleanKeyDurationValue(
+          value: event.value,
+        );
         final currentValue = await appSecurityRepository
             .getCleanKeyDurationValue();
 
         logger.d('Changed Screenshot value: $currentValue');
         emit(currentState.copyWith(clearKeyDuration: currentValue));
-       
       }
     });
 
-
-        ///
+    ///
     /// Set SESSION TIME OUT VALUE
     ///
     on<AccSecurityBlocEvent_setSessionTimeOut>((event, emit) async {
       final currentState = state;
 
       if (currentState is AccSecurityBlocState_loaded) {
-
         emit(currentState.copyWith(sessionTimeout: event.value));
 
-        await appSecurityRepository.changeSessionTimeOutValue(value: event.value);
+        await appSecurityRepository.changeSessionTimeOutValue(
+          value: event.value,
+        );
         final currentValue = await appSecurityRepository
             .getSessionTimeOutValue();
 
         logger.d('Changed Screenshot value: $currentValue');
         emit(currentState.copyWith(sessionTimeout: currentValue));
-       
       }
     });
   }
