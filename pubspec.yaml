@@ -57,6 +57,7 @@ dependencies:
   crypto: ^3.0.7
   aes256cipher: ^0.0.3
   local_auth: ^3.0.0
+  shake: ^3.0.0
  
 
 

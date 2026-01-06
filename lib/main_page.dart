@@ -28,6 +28,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glassy_real_navbar/glassy_real_navbar.dart';
 import 'package:go_router/go_router.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
+import 'package:shake/shake.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -38,7 +39,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
   final SessionManager _sessionManager = SessionManager();
-
+  late ShakeDetector _shakeDetector;
   late PageController _pageController; // page controller
   int navbarIndex = 0; // navbar index
 
@@ -66,6 +67,19 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
     );
   }
 
+  void shakeDetectorLogicHandler(ShakeEvent event) async {
+    final enableShakeToLock = await getIt<AppSecurityRepository>()
+        .getEnableShakeToLockValue();
+
+    if (enableShakeToLock) {
+       logger.d('Shake direction: ${event.direction}');
+    logger.d('Shake force: ${event.force}');
+    logger.d('Shake timestamp: ${event.timestamp}');
+      logger.d('User shaked');
+      _lockApp();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -73,6 +87,10 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     initSessionManager();
     _sessionManager.recordUserActivity();
+
+    _shakeDetector = ShakeDetector.autoStart(
+      onPhoneShake: shakeDetectorLogicHandler,
+    );
   }
 
   @override

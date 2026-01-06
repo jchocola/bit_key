@@ -26,7 +26,7 @@ SETTINGS PAGE
     - ACC SECURITY
         - FACE ID / TOUCH ID (local_auth)
         - PIN CODE 🚫
-        - SESSION TIMEOUT 
+        - SESSION TIMEOUT ✅ 
         - SHAKE TO LOCK (shake 3.0.0)
         - CHANGE MASTER PASSWORD 🚫
         - secure_application: ^4.1.0
