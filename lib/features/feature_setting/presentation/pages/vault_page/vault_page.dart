@@ -1,9 +1,13 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/core/theme/app_color.dart';
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/vault_page/modal/confirm_delete_all_data.dart';
+import 'package:bit_key/features/feature_setting/presentation/pages/vault_page/modal/export_data_modal.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/vault_page/modal/folders_modal_page.dart';
+import 'package:bit_key/features/feature_setting/presentation/pages/vault_page/modal/import_data_modal.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
 import 'package:bit_key/shared/widgets/big_button.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
@@ -41,11 +45,32 @@ class VaultPage extends StatelessWidget {
         builder: (modalContext) {
           return MultiBlocProvider(
             providers: [
-              BlocProvider.value(value: BlocProvider.of<AuthBloc>(context)), 
+              BlocProvider.value(value: BlocProvider.of<AuthBloc>(context)),
             ],
-            child: DeleteAllDataConfirm(
-               
-            ));
+            child: DeleteAllDataConfirm(),
+          );
+        },
+      );
+    }
+
+    void _exportDataTapped() {
+      showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return ExportDataModal();
+        },
+      );
+    }
+
+     void _exportImportTapped() {
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        useRootNavigator: true,
+        builder: (context) {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height * AppConstant.modalPageHeight,
+            child: ImportDataModal());
         },
       );
     }
@@ -64,9 +89,15 @@ class VaultPage extends StatelessWidget {
 
               CustomListile(title: 'Folders', onTap: _onFoldersTapped),
 
-              CustomListile(title: 'Export Data'),
+              CustomListile(title: 'Export Data', onTap: _exportDataTapped,),
 
-              BigButton(title: 'Clear all data', color: AppColor.error, onTap: _deleteEveryThingTapped,),
+              CustomListile(title: 'Import Data', onTap: _exportImportTapped,),
+
+              BigButton(
+                title: 'Clear all data',
+                color: AppColor.error,
+                onTap: _deleteEveryThingTapped,
+              ),
             ],
           ),
         ),
