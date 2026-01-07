@@ -1,4 +1,3 @@
-
 import 'package:bit_key/core/di/di.dart';
 import 'package:bit_key/core/router/app_router_config.dart';
 import 'package:bit_key/core/theme/app_theme.dart';
@@ -8,6 +7,9 @@ import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_generate_pass/domain/repositories/generator_repo.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/bloc/name_generator_bloc.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/bloc/pass_generator_bloc.dart';
+import 'package:bit_key/features/feature_import_export_data/data/repo/import_export_data_repo_impl.dart';
+import 'package:bit_key/features/feature_import_export_data/domain/repo/import_export_data_repository.dart';
+import 'package:bit_key/features/feature_import_export_data/presentation/bloc/export_data_bloc.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/bloc/acc_security_bloc.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/data/repo/no_screen_shot_repo_impl.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/domain/repo/app_security_repository.dart';
@@ -165,8 +167,17 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => AccSecurityBloc(
             appSecurityRepository: getIt<AppSecurityRepository>(),
-            noScreenShotRepoImpl: getIt<NoScreenShotRepoImpl>()
+            noScreenShotRepoImpl: getIt<NoScreenShotRepoImpl>(),
           )..add(AccSecurityBlocEvent_load()),
+        ),
+
+        BlocProvider(
+          create: (context) => ExportDataBloc(
+            importExportDataRepository: getIt<ImportExportDataRepository>(),
+            localDBRepository: getIt<LocalDbRepository>(),
+            authBloc: context.read<AuthBloc>(),
+            folderRepository: getIt<FolderRepository>(),
+          ),
         ),
       ],
 
@@ -177,11 +188,10 @@ class MyApp extends StatelessWidget {
         theme: appTheme,
 
         // debugShowMaterialGrid: true,
-         // showPerformanceOverlay: true,
+        // showPerformanceOverlay: true,
         //showSemanticsDebugger: true,
         debugShowCheckedModeBanner: false,
       ),
     );
   }
 }
-

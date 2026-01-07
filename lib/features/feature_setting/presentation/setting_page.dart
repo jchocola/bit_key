@@ -3,6 +3,7 @@ import 'package:bit_key/core/di/di.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/features/feature_auth/domain/repo/secure_storage_repository.dart';
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
+import 'package:bit_key/features/feature_import_export_data/presentation/bloc/export_data_bloc.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/about_page/about_page.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/acc_security_page.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/bloc/acc_security_bloc.dart';
@@ -69,6 +70,7 @@ class SettingPage extends StatelessWidget {
                     child: MultiBlocProvider(
                       providers: [
                         BlocProvider.value(value:BlocProvider.of<FoldersBloc>(context), ),
+                         BlocProvider.value(value:BlocProvider.of<ExportDataBloc>(context), ),
                       ],
                       child: const VaultPage()),
                   );

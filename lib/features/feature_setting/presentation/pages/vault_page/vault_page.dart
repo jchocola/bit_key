@@ -4,6 +4,7 @@ import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/core/theme/app_color.dart';
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
+import 'package:bit_key/features/feature_import_export_data/presentation/bloc/export_data_bloc.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/vault_page/modal/confirm_delete_all_data.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/vault_page/modal/export_data_modal.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/vault_page/modal/folders_modal_page.dart';
@@ -57,7 +58,11 @@ class VaultPage extends StatelessWidget {
       showModalBottomSheet(
         context: context,
         builder: (context) {
-          return ExportDataModal();
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: BlocProvider.of<ExportDataBloc>(context)), 
+            ],
+            child: ExportDataModal());
         },
       );
     }

@@ -3,6 +3,9 @@ FODLER WITH ITEMS
     - FOLDER INFO PAGE ✅
     - DELETE FOLDER 
 
+EMPTY CASE
+    - 
+
 
 VIEW ITEM DETAILS
     - NO FOLDER ✅
@@ -37,10 +40,10 @@ SETTINGS PAGE
         - DELETE ALL DATA ✅
         - FOLDERS
             - DELETE FOLDERS ✅
-        - IMPORT / EXPORT DATA
+        - EXPORT DATA
             - PURE_DATA
             - ENCRYPTED_DATA
-            - 
+        - IMPORT DATA
 
 
     - LANGUAGE SETTINGS

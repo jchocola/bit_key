@@ -59,7 +59,7 @@ class ImportExportDataRepoImpl implements ImportExportDataRepository {
   }
 
   @override
-  Future<void> exportJsonData({required String dataStr}) async {
+  Future<void> exportJsonData({required String dataStr, required File file}) async {
     // TODO: implement exportJsonData
     throw UnimplementedError();
   }
