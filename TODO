@@ -31,12 +31,12 @@ SETTINGS PAGE
         - CHANGE MASTER PASSWORD 🚫
         - jailbreak_root_detection: "^1.2.0+1" ✅
         - device_trust: ^1.0.1 ✅
-        - screen shoot
+        - screen shoot ✅
 
     - VAULT SETTINGS
         - DELETE ALL DATA
         - FOLDERS
-            - DELETE FOLDERS
+            - DELETE FOLDERS ✅
         - IMPORT / EXPORT DATA
             - PURE_DATA
             - ENCRYPTED_DATA

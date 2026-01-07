@@ -1,6 +1,8 @@
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/core/theme/app_color.dart';
+import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
+import 'package:bit_key/features/feature_setting/presentation/pages/vault_page/modal/confirm_delete_all_data.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/vault_page/modal/folders_modal_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
 import 'package:bit_key/shared/widgets/big_button.dart';
@@ -23,10 +25,27 @@ class VaultPage extends StatelessWidget {
               BlocProvider.value(value: BlocProvider.of<FoldersBloc>(context)),
             ],
             child: SizedBox(
-              height: MediaQuery.of(context).size.height * AppConstant.modalPageHeight,
+              height:
+                  MediaQuery.of(context).size.height *
+                  AppConstant.modalPageHeight,
               child: FoldersModalPage(),
             ),
           );
+        },
+      );
+    }
+
+    void _deleteEveryThingTapped() {
+      showDialog(
+        context: context,
+        builder: (modalContext) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: BlocProvider.of<AuthBloc>(context)), 
+            ],
+            child: DeleteAllDataConfirm(
+               
+            ));
         },
       );
     }
@@ -43,11 +62,11 @@ class VaultPage extends StatelessWidget {
             children: [
               Text('Vault Page'),
 
-              CustomListile(title: 'Folders', onTap: _onFoldersTapped,),
+              CustomListile(title: 'Folders', onTap: _onFoldersTapped),
 
               CustomListile(title: 'Export Data'),
 
-              BigButton(title: 'Clear all data', color: AppColor.error),
+              BigButton(title: 'Clear all data', color: AppColor.error, onTap: _deleteEveryThingTapped,),
             ],
           ),
         ),

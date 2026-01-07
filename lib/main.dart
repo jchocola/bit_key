@@ -56,6 +56,8 @@ class MyApp extends StatelessWidget {
           create: (context) => AuthBloc(
             secureStorageRepository: getIt<SecureStorageRepository>(),
             localAuthRepository: getIt<LocalAuthRepository>(),
+            folderRepository: getIt<FolderRepository>(),
+            localDbRepository: getIt<LocalDbRepository>(),
           )..add(AppBlocEvent_LoadSaltAndHashedMasterKey()),
         ),
 
