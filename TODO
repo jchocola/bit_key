@@ -35,9 +35,12 @@ SETTINGS PAGE
 
     - VAULT SETTINGS
         - DELETE ALL DATA
+        - FOLDERS
+            - DELETE FOLDERS
         - IMPORT / EXPORT DATA
             - PURE_DATA
             - ENCRYPTED_DATA
+            - 
 
 
     - LANGUAGE SETTINGS

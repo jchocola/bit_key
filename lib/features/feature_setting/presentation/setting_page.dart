@@ -10,6 +10,7 @@ import 'package:bit_key/features/feature_setting/presentation/pages/faq_page/faq
 import 'package:bit_key/features/feature_setting/presentation/pages/vault_page/vault_page.dart';
 import 'package:bit_key/features/feature_setting/presentation/widgets/setting_appbar.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
 import 'package:bit_key/main.dart';
 import 'package:bit_key/shared/widgets/big_button.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
@@ -65,7 +66,11 @@ class SettingPage extends StatelessWidget {
                     height:
                         MediaQuery.of(context).size.height *
                         AppConstant.modalPageHeight,
-                    child: const VaultPage(),
+                    child: MultiBlocProvider(
+                      providers: [
+                        BlocProvider.value(value:BlocProvider.of<FoldersBloc>(context), ),
+                      ],
+                      child: const VaultPage()),
                   );
                 },
               );
