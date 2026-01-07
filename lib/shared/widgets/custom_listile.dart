@@ -35,3 +35,37 @@ class CustomListile extends StatelessWidget {
     );
   }
 }
+
+
+
+class CustomListile2 extends StatelessWidget {
+  const CustomListile2({
+    super.key,
+    this.icon = Icons.abc,
+    this.title = 'Title',
+    this.subTitle,
+    this.trailingWidget ,
+    this.onTap
+  });
+  final IconData icon;
+  final String title;
+  final String? subTitle;
+  final Widget? trailingWidget;
+  final void Function()? onTap;
+  @override
+  Widget build(BuildContext context) {
+    return FakeGlass(
+      settings: LiquidGlassSettings(
+        glassColor: AppColor.secondary.withOpacity(0.1),
+      ),
+      shape: LiquidRoundedSuperellipse(borderRadius: AppConstant.appBorder),
+      child: ListTile(
+        onTap: onTap,
+        leading: Icon(icon),
+        title: Text(title),
+        subtitle: subTitle != null ?  Text(subTitle ?? '') : null ,
+        trailing: trailingWidget,
+      ),
+    );
+  }
+}

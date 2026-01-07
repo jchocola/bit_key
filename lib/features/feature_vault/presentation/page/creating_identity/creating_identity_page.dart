@@ -76,7 +76,7 @@ class _CreatingIdentityPageState extends State<CreatingIdentityPage> {
         address2: address2Controller.text,
         address3: address3Controller.text,
         cityTown: cityController.text,
-        country: companyController.text,
+        country: countryController.text,
         postcode: postcodeController.text,
       );
 
@@ -254,54 +254,54 @@ class _CreatingIdentityPageState extends State<CreatingIdentityPage> {
                       ),
                       CustomTextfield(
                         controller: userNameController,
-                        hintText: 'Username',
+                        hintText: 'Username 🔒',
                       ),
 
                       CustomTextfield(
                         controller: companyController,
-                        hintText: 'Company',
+                        hintText: 'Company 🔒',
                       ),
 
                       Text('Identification'),
                       CustomTextfield(
                         controller: nationalInsuranceNumberController,
-                        hintText: 'National Insurance number',
+                        hintText: 'National Insurance number 🔒',
                       ),
 
                       CustomTextfield(
                         controller: passportController,
-                        hintText: 'Passport number',
+                        hintText: 'Passport number 🔒',
                       ),
 
                       CustomTextfield(
                         controller: licenseNumberController,
-                        hintText: 'License number',
+                        hintText: 'License number 🔒',
                       ),
 
                       Text('Contact info'),
 
                       CustomTextfield(
                         controller: emailController,
-                        hintText: 'Email',
+                        hintText: 'Email 🔒',
                       ),
 
                       CustomTextfield(
                         controller: phoneController,
-                        hintText: 'Phone',
+                        hintText: 'Phone 🔒',
                       ),
 
                       Text('Address'),
                       CustomTextfield(
                         controller: address1Controller,
-                        hintText: 'Address 1',
+                        hintText: 'Address 1 🔒',
                       ),
                       CustomTextfield(
                         controller: address2Controller,
-                        hintText: 'Address 2',
+                        hintText: 'Address 2 🔒',
                       ),
                       CustomTextfield(
                         controller: address3Controller,
-                        hintText: 'Address 3',
+                        hintText: 'Address 3 🔒',
                       ),
 
                       CustomTextfield(

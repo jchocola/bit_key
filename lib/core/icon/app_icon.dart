@@ -10,6 +10,8 @@ class AppIcon {
   static const IconData vaultIcon = LucideIcons.vault;
   static const IconData generatorIcon = LucideIcons.rotateCcwKey;
   static const IconData settingIcon = LucideIcons.settings;
+  static const IconData feedbackIcon = Icons.feedback_outlined;
+  static const IconData faqIcon = Icons.question_answer_outlined;
 
   static const IconData searchIcon = LucideIcons.search;
 
@@ -35,4 +37,10 @@ class AppIcon {
   static const IconData infoIcon = LucideIcons.info;
   static const IconData languageIcon = LucideIcons.languages;
   static const IconData securityIcon = LucideIcons.lock;
+  static const IconData fingerPrintIcon = LucideIcons.fingerprintPattern;
+
+  static const IconData sessionTimeoutIcon = LucideIcons.timer;
+  static const IconData clearKeyIcon = LucideIcons.rotateCcwKey;
+  static const IconData screenShootIcon = LucideIcons.scanEye;
+  static const IconData shakeIcon = LucideIcons.squarePower;
 }

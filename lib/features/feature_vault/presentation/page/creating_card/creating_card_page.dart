@@ -202,12 +202,12 @@ class _CreatingCardPageState extends State<CreatingCardPage> {
               Text('Card Details'),
               CustomTextfield(
                 controller: cardHolderNameController,
-                hintText: 'Cardholder name',
+                hintText: 'Cardholder name 🔒',
               ),
               CustomTextfield(
                 inputType: TextInputType.number,
                 controller: cardNumberController,
-                hintText: 'Number',
+                hintText: 'Number 🔒',
               ),
 
               Row(

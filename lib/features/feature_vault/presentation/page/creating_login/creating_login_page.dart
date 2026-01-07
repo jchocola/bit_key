@@ -164,17 +164,17 @@ class _CreatingLoginPageState extends State<CreatingLoginPage> {
               Text('Login Credentials'),
               CustomTextfield(
                 controller: userNameController,
-                hintText: 'Username',
+                hintText: 'Username 🔒',
               ),
               CustomTextfield(
                 controller: passwordController,
                 withEye: true,
                 obscure: true,
-                hintText: 'Password',
+                hintText: 'Password 🔒',
               ),
               CustomTextfield(
                 controller: urlController,
-                hintText: 'Website (URI)',
+                hintText: 'Website (URI) 🔒',
               ),
             ],
           ),

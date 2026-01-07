@@ -1,4 +1,6 @@
+import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/login.dart';
+import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
 import 'package:bit_key/main.dart';
 import 'package:equatable/equatable.dart';
@@ -44,19 +46,31 @@ class LoginsBlocState_success extends LoginsBlocState {}
 ///
 class LoginsBloc extends Bloc<LoginsBlocEvent, LoginsBlocState> {
   final LocalDbRepository localDbRepository;
-  LoginsBloc({required this.localDbRepository})
-    : super(LoginsBlocState_init()) {
+  final EncryptionRepository encryptionRepository;
+  final AuthBloc authBloc;
+  LoginsBloc({
+    required this.localDbRepository,
+    required this.encryptionRepository,
+    required this.authBloc,
+  }) : super(LoginsBlocState_init()) {
     ///
     /// LOAD LOGINS
     ///
     on<LoginsBlocEvent_loadLogins>((event, emit) async {
       try {
-        logger.d('Load Active login list');
+        final authBlocState = authBloc.state;
 
-        final loginList = await localDbRepository.getActiveLogin();
-        logger.d('loaded login list : ${loginList.length}');
+        if (authBlocState is AuthBlocAuthenticated) {
+          logger.d('Load Active login list');
 
-        emit(LoginsBlocState_loaded(logins: loginList));
+          final encryptedLoginList = await localDbRepository.getActiveLogin();
+          logger.d('loaded login list : ${encryptedLoginList.length}');
+
+          final decryptedLoginList = await encryptionRepository
+              .decryptLoginList(encryptedLogins: encryptedLoginList, masterKey: authBlocState.MASTER_KEY);
+
+          emit(LoginsBlocState_loaded(logins: decryptedLoginList));
+        }
       } catch (e) {
         logger.e(e);
       }

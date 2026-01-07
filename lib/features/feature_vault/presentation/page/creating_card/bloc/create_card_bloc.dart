@@ -1,6 +1,10 @@
 // ignore_for_file: camel_case_types
 
+import 'dart:math';
+
+import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/card.dart';
+import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_login/bloc/create_login_bloc.dart';
 import 'package:bit_key/main.dart';
@@ -42,18 +46,36 @@ class CreateCardBlocState_success extends CreateCardBlocState {}
 ///
 class CreateCardBloc extends Bloc<CreateCardBlocEvent, CreateCardBlocState> {
   final LocalDbRepository localDbRepository;
-  CreateCardBloc({required this.localDbRepository})
-    : super(CreateCardBlocState_init()) {
+  final EncryptionRepository encryptionRepository;
+  final AuthBloc authBloc;
+  CreateCardBloc({
+    required this.localDbRepository,
+    required this.authBloc,
+    required this.encryptionRepository,
+  }) : super(CreateCardBlocState_init()) {
     ///
     /// CREATE NEW CARD
     ///
     on<CreateCardBlocEvent_createCard>((event, emit) async {
-      try {
-        logger.d('Create new card');
-        await localDbRepository.saveCard(card: event.card);
-        logger.i('Created new card!');
-      } catch (e) {
-        logger.e(e);
+      final authBlocState = authBloc.state;
+
+      if (authBlocState is AuthBlocAuthenticated) {
+        try {
+          logger.d('Create new card');
+
+          final encryptedCard = await encryptionRepository.encryptCard(
+            card: event.card,
+            masterKey: authBlocState.MASTER_KEY,
+          );
+
+          logger.f(event.card.toString());
+          logger.f('Encrypted card : ${encryptedCard.toString()}');
+
+          await localDbRepository.saveCard(card: encryptedCard);
+          logger.i('Created new card!');
+        } catch (e) {
+          logger.e(e);
+        }
       }
     });
   }

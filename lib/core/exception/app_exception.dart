@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 enum AppException {
   failed_to_create_folder,
   folder_already_exist,
@@ -10,4 +12,10 @@ enum AppException {
   card_not_exist_in_box,
   identity_not_exist_in_box,
   login_not_exist_in_box,
+
+  passwords_do_not_match,
+  invalid_master_password,
+
+  failedConvertKeyToValidForUse,
+  failed_encrypt_str,
 }

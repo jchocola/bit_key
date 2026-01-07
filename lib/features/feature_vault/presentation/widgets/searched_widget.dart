@@ -24,15 +24,17 @@ class SearchedWidget extends StatelessWidget {
     return BlocBuilder<SearchBloc, SearchBlocState>(
       builder: (context, state) {
         if (state is SearchBlocState_searching) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: AppConstant.appPadding,
-            children: [
-              Text('Found ${state.totalResults} results:'),
-              _builLoginsList(context, state.logins),
-              _buildCardsList(context, state.cards),
-              _buildIdentitiesList(context, state.identities),
-            ],
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: AppConstant.appPadding,
+              children: [
+                Text('Found ${state.totalResults} results:'),
+                _builLoginsList(context, state.logins),
+                _buildCardsList(context, state.cards),
+                _buildIdentitiesList(context, state.identities),
+              ],
+            ),
           );
         } else {
           return const Text('Start a search to see results.');

@@ -1,6 +1,7 @@
 FODLER WITH ITEMS
     - WITH COUNTS ✅
     - FOLDER INFO PAGE ✅
+    - DELETE FOLDER 
 
 
 VIEW ITEM DETAILS
@@ -23,16 +24,22 @@ SEARCH FUNCTION
 
 SETTINGS PAGE
     - ACC SECURITY
-        - FACE ID / TOUCH ID
-        - PIN CODE
-        - SESSION TIMEOUT 
-        - SHAKE TO LOCK
-        - CHANGE MASTER PASSWORD
+        - FACE ID / TOUCH ID (local_auth)
+        - PIN CODE 🚫
+        - SESSION TIMEOUT ✅ 
+        - SHAKE TO LOCK (shake 3.0.0) ✅
+        - CHANGE MASTER PASSWORD 🚫
+        - jailbreak_root_detection: "^1.2.0+1" ✅
+        - device_trust: ^1.0.1 ✅
+        - screen shoot
 
     - VAULT SETTINGS
         - DELETE ALL DATA
         - IMPORT / EXPORT DATA
-  
+            - PURE_DATA
+            - ENCRYPTED_DATA
+
+
     - LANGUAGE SETTINGS
         - SELECT LANGUAGE
         - TRANSLATE APP
@@ -48,6 +55,24 @@ SETTINGS PAGE
         - FIREBASE ANALYTIC
         - CRASHLYTICS
         - MIXPANEL
+
+    - AUTH PAGE
+        - FIRST TIME SETUP ✅
+        - UNLOCK VAULT ✅
+        - FORGOT MASTER PASSWORD FLOW ✅
+        - LOG OUT FLOW ✅
+    
+CRUD ITEMS
+    - EDIT ITEMS
+
+
+SECURITY 
+    - CREATE MASTER KEY WHEN FIRST TIME ✅
+    - ENCRYPT / DECRYPT LOGIN ✅
+    - ENCRYPT / DECRYPT CARD ✅
+    - ENCRYPT / DECRYPT IDENTITY✅
+
+
 
 
 
