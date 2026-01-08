@@ -30,8 +30,10 @@ import 'package:bit_key/features/feature_vault/presentation/page/creating_identi
 import 'package:bit_key/features/feature_vault/presentation/page/creating_login/bloc/create_login_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:logger/web.dart';
+import 'package:wiredash/wiredash.dart';
 
 final logger = Logger();
 Future<void> main() async {
@@ -42,6 +44,9 @@ Future<void> main() async {
 
   // init local db
   await getIt<LocalDbRepository>().init();
+
+  // load .env
+  await dotenv.load(fileName: ".env");
 
   // run app
   runApp(const MyApp());
@@ -191,15 +196,19 @@ class MyApp extends StatelessWidget {
       ],
 
       // child: MainPage(),
-      child: MaterialApp.router(
-        routerConfig: appRouterConfig,
-        title: 'Flutter Demo',
-        theme: appTheme,
-
-        // debugShowMaterialGrid: true,
-        // showPerformanceOverlay: true,
-        //showSemanticsDebugger: true,
-        debugShowCheckedModeBanner: false,
+      child: Wiredash(
+        projectId: dotenv.env['WIREDASH_PROJECT_ID'] ?? '',
+         secret: dotenv.env['WIREDASH_SECRET'] ?? '',
+        child: MaterialApp.router(
+          routerConfig: appRouterConfig,
+          title: 'Flutter Demo',
+          theme: appTheme,
+        
+          // debugShowMaterialGrid: true,
+          // showPerformanceOverlay: true,
+          //showSemanticsDebugger: true,
+          debugShowCheckedModeBanner: false,
+        ),
       ),
     );
   }

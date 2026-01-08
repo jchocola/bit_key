@@ -2,6 +2,7 @@ import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
+import 'package:wiredash/wiredash.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
@@ -22,7 +23,7 @@ class AboutPage extends StatelessWidget {
                 aboutSection(),
                 securitySection(),
                 techSection(),
-                supportFeebackSection(),
+                supportFeebackSection(context),
                 pravicyPolicySection(),
               ],
             ),
@@ -120,7 +121,7 @@ class AboutPage extends StatelessWidget {
     );
   }
 
-  Widget supportFeebackSection() {
+  Widget supportFeebackSection(BuildContext context) {
     return FakeGlass(
       shape: LiquidRoundedRectangle(borderRadius: AppConstant.appBorder),
       child: Column(
@@ -135,12 +136,16 @@ class AboutPage extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.bug_report),
             title: Text('Сообщить об ошибке'),
-            // onTap: () => _openBugReport(),
+            onTap: () => {
+              Wiredash.of(context).show(inheritMaterialTheme: true),
+            },
           ),
           ListTile(
             leading: Icon(Icons.lightbulb),
             title: Text('Предложить функцию'),
-            //onTap: () => _openFeatureRequest(),
+            onTap: () => {
+              Wiredash.of(context).show(inheritMaterialTheme: true),
+            },
           ),
           ListTile(
             leading: Icon(Icons.rate_review),
@@ -156,7 +161,6 @@ class AboutPage extends StatelessWidget {
     return FakeGlass(
       shape: LiquidRoundedRectangle(borderRadius: AppConstant.appBorder),
       child: Column(
-       
         children: [
           Text('Правовая информация'),
           ListTile(
@@ -169,7 +173,7 @@ class AboutPage extends StatelessWidget {
             title: Text('Условия использования'),
             //onTap: () => _openTerms(),
           ),
-        
+
           ListTile(
             leading: Icon(Icons.copyright),
             title: Text('Авторские права'),
