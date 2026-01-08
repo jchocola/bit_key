@@ -177,6 +177,7 @@ class MyApp extends StatelessWidget {
             localDBRepository: getIt<LocalDbRepository>(),
             authBloc: context.read<AuthBloc>(),
             folderRepository: getIt<FolderRepository>(),
+            encryptionRepository: getIt<EncryptionRepository>(),
           ),
         ),
       ],

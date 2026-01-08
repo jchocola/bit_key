@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:bit_key/features/feature_auth/domain/repo/local_auth_repository.dart';
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
+import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
 import 'package:bit_key/main.dart';
@@ -22,6 +23,8 @@ abstract class ExportDataBlocEvent extends Equatable {
 class ExportDataBlocEvent_exportPureData extends ExportDataBlocEvent {}
 
 class ExportDataBlocEvent_exportEncryptedData extends ExportDataBlocEvent {}
+
+class ExportDataBlocEvent_exportDecryptedData extends ExportDataBlocEvent {}
 
 ///
 /// STATE
@@ -45,11 +48,13 @@ class ExportDataBloc extends Bloc<ExportDataBlocEvent, ExportDataBlocState> {
   final LocalDbRepository localDBRepository;
   final AuthBloc authBloc;
   final FolderRepository folderRepository;
+  final EncryptionRepository encryptionRepository;
   ExportDataBloc({
     required this.importExportDataRepository,
     required this.localDBRepository,
     required this.authBloc,
     required this.folderRepository,
+    required this.encryptionRepository,
   }) : super(ExportDataBlocState_initial()) {
     ///
     /// EXPORT PURE DATA
@@ -70,7 +75,7 @@ class ExportDataBloc extends Bloc<ExportDataBlocEvent, ExportDataBlocState> {
         final authBlocState = authBloc.state;
 
         if (authBlocState is AuthBlocAuthenticated) {
-          // get decrypted data
+          // get encrypted data
           final logins = await localDBRepository.getAllLogin();
           final cards = await localDBRepository.getAllCard();
           final identities = await localDBRepository.getAllIdentity();
@@ -87,6 +92,63 @@ class ExportDataBloc extends Bloc<ExportDataBlocEvent, ExportDataBlocState> {
                 logins: logins,
                 cards: cards,
                 identities: identities,
+                masterKey: masterKey,
+                folders: folders,
+              );
+          logger.f('Converted data $convertedData');
+
+          await importExportDataRepository.exportJsonData(
+            dataStr: convertedData,
+            file: file,
+          );
+        }
+      } catch (e) {
+        logger.e(e);
+      }
+    });
+
+    ///
+    /// EXPORT DECRYPTED DATA
+    ///
+    on<ExportDataBlocEvent_exportDecryptedData>((event, emit) async {
+      try {
+        final authBlocState = authBloc.state;
+
+        if (authBlocState is AuthBlocAuthenticated) {
+          // get encrypted data
+          final logins = await localDBRepository.getAllLogin();
+          final cards = await localDBRepository.getAllCard();
+          final identities = await localDBRepository.getAllIdentity();
+          final folders = await folderRepository.getAllFolder();
+
+          final masterKey = authBlocState.MASTER_KEY;
+
+          // decryption data
+          final decryptedLogins = await encryptionRepository.decryptLoginList(
+            encryptedLogins: logins,
+            masterKey: masterKey,
+          );
+
+          final decryptedCards = await encryptionRepository.decryptCardList(
+            encryptedCards: cards,
+            masterKey: masterKey,
+          );
+
+          final decryptedIdentites = await encryptionRepository
+              .decryptIdentityList(
+                encryptedIdentities: identities,
+                masterKey: masterKey,
+              );
+
+          // generate file
+          final File file = await importExportDataRepository.generateFile();
+
+          // convert data to string
+          final convertedData = await importExportDataRepository
+              .convertDataToJsonString(
+                logins: decryptedLogins,
+                cards: decryptedCards,
+                identities: decryptedIdentites,
                 masterKey: masterKey,
                 folders: folders,
               );

@@ -20,7 +20,11 @@ class ExportDataModal extends StatelessWidget {
               Text('Export Data'),
               BigButton(
                 title: 'Export Pure Data (for human, high risk) .json',
-                onTap: () {},
+                onTap: () {
+                  context.read<ExportDataBloc>().add(
+                    ExportDataBlocEvent_exportDecryptedData(),
+                  );
+                },
               ),
               BigButton(
                 title: 'Export Encrypted Data (for security/import) .json',
@@ -31,7 +35,7 @@ class ExportDataModal extends StatelessWidget {
                 },
               ),
 
-              Text('Надежно храните файлы!!!')
+              Text('Надежно храните файлы!!!'),
             ],
           ),
         ),
