@@ -16,6 +16,7 @@ abstract class ImportExportDataRepository {
   Future<List<Login>> retrieveLoginsFromFile({required File file});
   Future<List<Card>> retrieveCardsFromFile({required File file});
   Future<List<Identity>> retrieveIdentitiesFromFile({required File file});
+  Future<List<String>> retrieveFoldersFromFile({required File file});
 
   Future<File> generateFile();
 

@@ -106,6 +106,15 @@ class ImportExportDataRepoImpl implements ImportExportDataRepository {
       final Map<String, dynamic> decodedFile;
       try {
         decodedFile = jsonDecode(extractedFile) as Map<String, dynamic>;
+        logger.f(decodedFile[_cards]);
+
+        List<CardModel> cardModelList = [];
+
+        for (var dataMap in decodedFile[_cards]) {
+          final model = CardModel.fromMap(dataMap);
+          cardModelList.add(model);
+        }
+        return cardModelList.map((e) => e.toEntity()).toList();
       } catch (e) {
         logger.e('Invalid JSON format: $e');
         throw FormatException('File is not valid JSON');
@@ -119,15 +128,63 @@ class ImportExportDataRepoImpl implements ImportExportDataRepository {
   }
 
   @override
-  Future<List<Identity>> retrieveIdentitiesFromFile({required File file}) {
-    // TODO: implement retrieveIdentitiesFromFile
-    throw UnimplementedError();
+  Future<List<Identity>> retrieveIdentitiesFromFile({
+    required File file,
+  }) async {
+    try {
+      final extractedFile = await file.readAsString();
+      logger.f(extractedFile);
+
+      // 2. Парсим JSON
+      final Map<String, dynamic> decodedFile;
+      try {
+        decodedFile = jsonDecode(extractedFile) as Map<String, dynamic>;
+        logger.f(decodedFile[_identites]);
+
+        List<IdentityModel> identityModelList = [];
+
+        for (var dataMap in decodedFile[_identites]) {
+          final model = IdentityModel.fromMap(dataMap);
+          identityModelList.add(model);
+        }
+        return identityModelList.map((e) => e.toEntity()).toList();
+      } catch (e) {
+        logger.e('Invalid JSON format: $e');
+        throw FormatException('File is not valid JSON');
+      }
+    } catch (e) {
+      logger.e(e);
+      return [];
+    }
   }
 
   @override
-  Future<List<Login>> retrieveLoginsFromFile({required File file}) {
-    // TODO: implement retrieveLoginsFromFile
-    throw UnimplementedError();
+  Future<List<Login>> retrieveLoginsFromFile({required File file}) async {
+    try {
+      final extractedFile = await file.readAsString();
+      logger.f(extractedFile);
+
+      // 2. Парсим JSON
+      final Map<String, dynamic> decodedFile;
+      try {
+        decodedFile = jsonDecode(extractedFile) as Map<String, dynamic>;
+        logger.f(decodedFile[_logins]);
+
+        List<LoginModel> loginModelList = [];
+
+        for (var dataMap in decodedFile[_logins]) {
+          final model = LoginModel.fromMap(dataMap);
+          loginModelList.add(model);
+        }
+        return loginModelList.map((e) => e.toEntity()).toList();
+      } catch (e) {
+        logger.e('Invalid JSON format: $e');
+        throw FormatException('File is not valid JSON');
+      }
+    } catch (e) {
+      logger.e(e);
+      return [];
+    }
   }
 
   // Конвертация логинов
@@ -169,7 +226,7 @@ class ImportExportDataRepoImpl implements ImportExportDataRepository {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: false,
       allowedExtensions: ['json'],
-      type: FileType.custom
+      type: FileType.custom,
     );
     try {
       if (result != null) {
@@ -180,6 +237,37 @@ class ImportExportDataRepoImpl implements ImportExportDataRepository {
       }
     } catch (e) {
       logger.e(e);
+    }
+  }
+
+  @override
+  Future<List<String>> retrieveFoldersFromFile({required File file}) async {
+    try {
+      final extractedFile = await file.readAsString();
+      logger.f(extractedFile);
+
+      // 2. Парсим JSON
+      final Map<String, dynamic> decodedFile;
+      try {
+        decodedFile = jsonDecode(extractedFile) as Map<String, dynamic>;
+        logger.f(decodedFile[_folders]);
+        List<String> folders = [];
+        for (var data in decodedFile[_folders]) {
+          final folder = data["name"] as String;
+
+          folders.add(folder);
+        }
+
+        return folders;
+      } catch (e) {
+        logger.e('Invalid JSON format: $e');
+        throw FormatException('File is not valid JSON');
+      }
+
+     
+    } catch (e) {
+      logger.e(e);
+      return [];
     }
   }
 }
