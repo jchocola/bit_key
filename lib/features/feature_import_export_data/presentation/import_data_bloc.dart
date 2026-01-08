@@ -1,6 +1,8 @@
 // ignore_for_file: camel_case_types
 
 import 'dart:io';
+import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
+import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bit_key/features/feature_import_export_data/domain/repo/import_export_data_repository.dart';
@@ -42,6 +44,8 @@ class ImportDataBlocEvent_removeFolder extends ImportDataBlocEvent {
   final int index;
   ImportDataBlocEvent_removeFolder({required this.index});
 }
+
+class ImportDataBlocEvent_importToExistingData extends ImportDataBlocEvent {}
 
 ///
 /// STATE
@@ -91,8 +95,13 @@ class ImportDataBlocState_pickedFile extends ImportDataBlocState {
 ///
 class ImportDataBloc extends Bloc<ImportDataBlocEvent, ImportDataBlocState> {
   final ImportExportDataRepository importExportDataRepository;
-  ImportDataBloc({required this.importExportDataRepository})
-    : super(ImportDataBlocState_initial()) {
+  final LocalDbRepository localDbRepository;
+  final FolderRepository folderRepository;
+  ImportDataBloc({
+    required this.importExportDataRepository,
+    required this.localDbRepository,
+    required this.folderRepository,
+  }) : super(ImportDataBlocState_initial()) {
     ///
     /// PICK FILE
     ///
@@ -229,6 +238,30 @@ class ImportDataBloc extends Bloc<ImportDataBlocEvent, ImportDataBlocState> {
             logger.d(folders.length);
             emit(currentState.copyWith(folders: folders));
           }
+        } catch (e) {
+          logger.e(e);
+        }
+      }
+    });
+
+    ///
+    /// IMPORT TO EXISTING DATA
+    ///
+    on<ImportDataBlocEvent_importToExistingData>((event, emit) async {
+      final currentState = state;
+      if (currentState is ImportDataBlocState_pickedFile) {
+        try {
+          // prepearing data to import
+          final logins = currentState.logins ?? [];
+          final cards = currentState.cards ?? [];
+          final identities = currentState.identities ?? [];
+          final folders = currentState.folders ?? [];
+
+          // add new data to existing
+          await localDbRepository.saveLoginsList(logins: logins);
+          await localDbRepository.saveCardsList(cards: cards);
+          await localDbRepository.saveIdentitiesList(identities: identities);
+          await folderRepository.addListFolder(folderList: folders);
         } catch (e) {
           logger.e(e);
         }

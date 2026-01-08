@@ -7,7 +7,6 @@ import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_generate_pass/domain/repositories/generator_repo.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/bloc/name_generator_bloc.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/bloc/pass_generator_bloc.dart';
-import 'package:bit_key/features/feature_import_export_data/data/repo/import_export_data_repo_impl.dart';
 import 'package:bit_key/features/feature_import_export_data/domain/repo/import_export_data_repository.dart';
 import 'package:bit_key/features/feature_import_export_data/presentation/bloc/export_data_bloc.dart';
 import 'package:bit_key/features/feature_import_export_data/presentation/import_data_bloc.dart';
@@ -182,7 +181,13 @@ class MyApp extends StatelessWidget {
           ),
         ),
 
-        BlocProvider(create: (context)=> ImportDataBloc(importExportDataRepository: getIt<ImportExportDataRepository>()))
+        BlocProvider(
+          create: (context) => ImportDataBloc(
+            importExportDataRepository: getIt<ImportExportDataRepository>(),
+            localDbRepository: getIt<LocalDbRepository>(),
+            folderRepository: getIt<FolderRepository>()
+          ),
+        ),
       ],
 
       // child: MainPage(),

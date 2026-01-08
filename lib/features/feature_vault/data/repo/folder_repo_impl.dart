@@ -56,4 +56,15 @@ class FolderRepoImpl implements FolderRepository {
   Future<List<String>> getAllFolder() async {
     return prefs.getStringList(FOLDER_KEY) ?? [];
   }
+
+  @override
+  Future<void> addListFolder({required List<String> folderList}) async {
+    try {
+      for (var folder in folderList) {
+        await createNewFolder(folderName: folder);
+      }
+    } catch (e) {
+      logger.e(e);
+    }
+  }
 }

@@ -8,6 +8,7 @@ import 'package:bit_key/shared/widgets/big_button.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class ImportDataModal extends StatelessWidget {
   const ImportDataModal({super.key});
@@ -59,8 +60,24 @@ class ImportDataModal extends StatelessWidget {
               Row(
                 spacing: AppConstant.appPadding,
                 children: [
-                  Expanded(child: BigButton(title: 'Cancel')),
-                  Expanded(child: BigButton(title: 'Import to exsiting data')),
+                  Expanded(
+                    child: BigButton(
+                      title: 'Cancel',
+                      onTap: () {
+                        context.pop();
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: BigButton(
+                      title: 'Import to exsiting data',
+                      onTap: () {
+                        context.read<ImportDataBloc>().add(
+                          ImportDataBlocEvent_importToExistingData(),
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -206,7 +223,7 @@ class _buildFolders extends StatelessWidget {
                     onPressed: () {
                       context.read<ImportDataBloc>().add(
                         ImportDataBlocEvent_removeFolder(index: index),
-                      ); 
+                      );
                     },
                     icon: Icon(AppIcon.deleteIcon),
                   ),
