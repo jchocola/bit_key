@@ -90,6 +90,7 @@ class ExportDataBloc extends Bloc<ExportDataBlocEvent, ExportDataBlocState> {
                 masterKey: masterKey,
                 folders: folders,
               );
+          logger.f('Converted data $convertedData');
 
           await importExportDataRepository.exportJsonData(
             dataStr: convertedData,

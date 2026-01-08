@@ -26,156 +26,158 @@ class SettingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppConstant.appPadding),
-      child: Column(
-        spacing: AppConstant.appPadding,
-        children: [
-          SettingPageAppbar(),
-
-          CustomListile(
-            title: 'Account security',
-            icon: AppIcon.securityIcon,
-            onTap: () {
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                builder: (context) {
-                  return MultiBlocProvider(
-                    providers: [
-                      BlocProvider.value(value: BlocProvider.of<AccSecurityBloc>(context)),
-                    ],
-                    child: SizedBox(
+      child: SingleChildScrollView(
+        child: Column(
+          spacing: AppConstant.appPadding,
+          children: [
+            SettingPageAppbar(),
+        
+            CustomListile(
+              title: 'Account security',
+              icon: AppIcon.securityIcon,
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (context) {
+                    return MultiBlocProvider(
+                      providers: [
+                        BlocProvider.value(value: BlocProvider.of<AccSecurityBloc>(context)),
+                      ],
+                      child: SizedBox(
+                        height:
+                            MediaQuery.of(context).size.height *
+                            AppConstant.modalPageHeight,
+                        child: const AccSecurityPage(),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+            CustomListile(title: 'Language', icon: AppIcon.languageIcon),
+            CustomListile(
+              title: 'Vault',
+              icon: AppIcon.vaultIcon,
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  // isScrollControlled: true,
+                  builder: (context) {
+                    return SizedBox(
                       height:
                           MediaQuery.of(context).size.height *
                           AppConstant.modalPageHeight,
-                      child: const AccSecurityPage(),
-                    ),
-                  );
-                },
-              );
-            },
-          ),
-          CustomListile(title: 'Language', icon: AppIcon.languageIcon),
-          CustomListile(
-            title: 'Vault',
-            icon: AppIcon.vaultIcon,
-            onTap: () {
-              showModalBottomSheet(
-                context: context,
-                // isScrollControlled: true,
-                builder: (context) {
-                  return SizedBox(
-                    height:
-                        MediaQuery.of(context).size.height *
-                        AppConstant.modalPageHeight,
-                    child: MultiBlocProvider(
-                      providers: [
-                        BlocProvider.value(value:BlocProvider.of<FoldersBloc>(context), ),
-                         BlocProvider.value(value:BlocProvider.of<ExportDataBloc>(context), ),
-                      ],
-                      child: const VaultPage()),
-                  );
-                },
-              );
-            },
-          ),
-          CustomListile(
-            title: 'FAQs',
-            icon: AppIcon.faqIcon,
-            onTap: () {
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                builder: (context) {
-                  return SizedBox(
-                    height:
-                        MediaQuery.of(context).size.height *
-                        AppConstant.modalPageHeight,
-                    child: const FaqPage(),
-                  );
-                },
-              );
-            },
-          ),
-          CustomListile(
-            title: 'About',
-            icon: AppIcon.infoIcon,
-            onTap: () {
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                builder: (context) {
-                  return SizedBox(
-                    height:
-                        MediaQuery.of(context).size.height *
-                        AppConstant.modalPageHeight,
-                    child: const AboutPage(),
-                  );
-                },
-              );
-            },
-          ),
-
-          //  CustomListile(),
-          //   CustomListile(),
-          BigButton(
-            title: 'Clear SALT  and SumControlStr data',
-            onTap: () async {
-              await getIt<SecureStorageRepository>().deleteControlSumString();
-              await getIt<SecureStorageRepository>().deleteSalt();
-            },
-          ),
-
-          BlocBuilder<AuthBloc, AuthBlocState>(
-            builder: (context, state) => BigButton(
-              title: 'Get Master Key Via SessionKey and Encrypted Master Key',
+                      child: MultiBlocProvider(
+                        providers: [
+                          BlocProvider.value(value:BlocProvider.of<FoldersBloc>(context), ),
+                           BlocProvider.value(value:BlocProvider.of<ExportDataBloc>(context), ),
+                        ],
+                        child: const VaultPage()),
+                    );
+                  },
+                );
+              },
+            ),
+            CustomListile(
+              title: 'FAQs',
+              icon: AppIcon.faqIcon,
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (context) {
+                    return SizedBox(
+                      height:
+                          MediaQuery.of(context).size.height *
+                          AppConstant.modalPageHeight,
+                      child: const FaqPage(),
+                    );
+                  },
+                );
+              },
+            ),
+            CustomListile(
+              title: 'About',
+              icon: AppIcon.infoIcon,
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (context) {
+                    return SizedBox(
+                      height:
+                          MediaQuery.of(context).size.height *
+                          AppConstant.modalPageHeight,
+                      child: const AboutPage(),
+                    );
+                  },
+                );
+              },
+            ),
+        
+            //  CustomListile(),
+            //   CustomListile(),
+            BigButton(
+              title: 'Clear SALT  and SumControlStr data',
               onTap: () async {
-                if (state is AuthBlocAuthenticated) {
-                  final masterKey = await getIt<SecureStorageRepository>()
-                      .decryptEncryptedMasterKey(
-                        sessionKey: state.SESSION_KEY,
-                        encryptedMasterKey: state.ENCRYPTED_MASTER_KEY,
-                      );
-
-                  logger.f('Master key : ${masterKey}');
+                await getIt<SecureStorageRepository>().deleteControlSumString();
+                await getIt<SecureStorageRepository>().deleteSalt();
+              },
+            ),
+        
+            BlocBuilder<AuthBloc, AuthBlocState>(
+              builder: (context, state) => BigButton(
+                title: 'Get Master Key Via SessionKey and Encrypted Master Key',
+                onTap: () async {
+                  if (state is AuthBlocAuthenticated) {
+                    final masterKey = await getIt<SecureStorageRepository>()
+                        .decryptEncryptedMasterKey(
+                          sessionKey: state.SESSION_KEY,
+                          encryptedMasterKey: state.ENCRYPTED_MASTER_KEY,
+                        );
+        
+                    logger.f('Master key : ${masterKey}');
+                  }
+                },
+              ),
+            ),
+        
+            BigButton(
+              title: 'Enctypt: HELLO WORLD ',
+              onTap: () async {
+                await getIt<EncryptionRepository>().encrypt(
+                  str: 'HELLO WORLD',
+                  masterKey: 'qwerty',
+                );
+              },
+            ),
+        
+            BigButton(
+              title: 'Decrypt: HELLO WORLD ',
+              onTap: () async {
+                await getIt<EncryptionRepository>().decrypt(
+                  encryptedStr: 'rbYfL+0BfeARk469V74QgTyWJYl/q4nobQQyJ4S61Mw=',
+                  masterKey: 'qwerty',
+                );
+              },
+            ),
+        
+            BlocListener<AuthBloc, AuthBlocState>(
+              listener: (context, state) {
+                if (state is AuthBlocUnauthenticated) {
+                  context.go('/auth');
                 }
               },
+              child: BigButton(
+                title: 'Lock out',
+                onTap: () {
+                  context.read<AuthBloc>().add(AuthBlocEvent_lockApp());
+                },
+              ),
             ),
-          ),
-
-          BigButton(
-            title: 'Enctypt: HELLO WORLD ',
-            onTap: () async {
-              await getIt<EncryptionRepository>().encrypt(
-                str: 'HELLO WORLD',
-                masterKey: 'qwerty',
-              );
-            },
-          ),
-
-          BigButton(
-            title: 'Decrypt: HELLO WORLD ',
-            onTap: () async {
-              await getIt<EncryptionRepository>().decrypt(
-                encryptedStr: 'rbYfL+0BfeARk469V74QgTyWJYl/q4nobQQyJ4S61Mw=',
-                masterKey: 'qwerty',
-              );
-            },
-          ),
-
-          BlocListener<AuthBloc, AuthBlocState>(
-            listener: (context, state) {
-              if (state is AuthBlocUnauthenticated) {
-                context.go('/auth');
-              }
-            },
-            child: BigButton(
-              title: 'Lock out',
-              onTap: () {
-                context.read<AuthBloc>().add(AuthBlocEvent_lockApp());
-              },
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

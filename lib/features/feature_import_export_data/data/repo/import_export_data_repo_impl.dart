@@ -11,6 +11,7 @@ import 'package:bit_key/features/feature_vault/domain/entity/card.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/identity.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/login.dart';
 import 'package:bit_key/main.dart';
+import 'package:path_provider/path_provider.dart';
 
 class ImportExportDataRepoImpl implements ImportExportDataRepository {
   ///
@@ -59,15 +60,39 @@ class ImportExportDataRepoImpl implements ImportExportDataRepository {
   }
 
   @override
-  Future<void> exportJsonData({required String dataStr, required File file}) async {
-    // TODO: implement exportJsonData
-    throw UnimplementedError();
+  Future<void> exportJsonData({
+    required String dataStr,
+    required File file,
+  }) async {
+    try {
+      // Write the file, sync operation is fine for small amounts of data
+      await file.writeAsString(dataStr);
+      logger.d('Data exported ${file.path}');
+    } catch (e) {
+      logger.e(e);
+    }
   }
 
   @override
-  Future<File> generateFile() {
-    // TODO: implement generateFile
-    throw UnimplementedError();
+  Future<File> generateFile() async {
+    try {
+      final directory = await getExternalStorageDirectory();
+
+       final downloadsDir = Directory('${directory!.path}');
+
+       if (!await downloadsDir.exists()) {
+      await downloadsDir.create(recursive: true);
+    }
+
+      // This is the path to the local directory for the app.
+      final path = downloadsDir.path;
+      final createdAt = DateTime.now().toIso8601String();
+      logger.d('Generated File :$path');
+      return File('$path/bitkey_backup_$createdAt.json');
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
   }
 
   @override
@@ -76,14 +101,14 @@ class ImportExportDataRepoImpl implements ImportExportDataRepository {
       final extractedFile = await file.readAsString();
       logger.f(extractedFile);
 
-     // 2. Парсим JSON
-    final Map<String, dynamic> decodedFile;
-    try {
-      decodedFile = jsonDecode(extractedFile) as Map<String, dynamic>;
-    } catch (e) {
-      logger.e('Invalid JSON format: $e');
-      throw FormatException('File is not valid JSON');
-    }
+      // 2. Парсим JSON
+      final Map<String, dynamic> decodedFile;
+      try {
+        decodedFile = jsonDecode(extractedFile) as Map<String, dynamic>;
+      } catch (e) {
+        logger.e('Invalid JSON format: $e');
+        throw FormatException('File is not valid JSON');
+      }
 
       return [];
     } catch (e) {

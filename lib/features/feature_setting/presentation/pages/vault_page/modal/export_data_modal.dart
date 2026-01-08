@@ -30,6 +30,8 @@ class ExportDataModal extends StatelessWidget {
                   );
                 },
               ),
+
+              Text('Надежно храните файлы!!!')
             ],
           ),
         ),
