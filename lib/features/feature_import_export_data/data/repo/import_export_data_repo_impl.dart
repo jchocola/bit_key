@@ -11,6 +11,7 @@ import 'package:bit_key/features/feature_vault/domain/entity/card.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/identity.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/login.dart';
 import 'package:bit_key/main.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
 class ImportExportDataRepoImpl implements ImportExportDataRepository {
@@ -78,11 +79,11 @@ class ImportExportDataRepoImpl implements ImportExportDataRepository {
     try {
       final directory = await getExternalStorageDirectory();
 
-       final downloadsDir = Directory('${directory!.path}');
+      final downloadsDir = Directory('${directory!.path}');
 
-       if (!await downloadsDir.exists()) {
-      await downloadsDir.create(recursive: true);
-    }
+      if (!await downloadsDir.exists()) {
+        await downloadsDir.create(recursive: true);
+      }
 
       // This is the path to the local directory for the app.
       final path = downloadsDir.path;
@@ -161,5 +162,24 @@ class ImportExportDataRepoImpl implements ImportExportDataRepository {
     return folders.asMap().entries.map((entry) {
       return {'name': entry.value};
     }).toList();
+  }
+
+  @override
+  Future<File?> pickeFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      allowedExtensions: ['json'],
+      type: FileType.custom
+    );
+    try {
+      if (result != null) {
+        File file = File(result.files.first.path!);
+        return file;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      logger.e(e);
+    }
   }
 }

@@ -19,5 +19,7 @@ abstract class ImportExportDataRepository {
 
   Future<File> generateFile();
 
-  Future<void> exportJsonData({required String dataStr , required File file});
+  Future<void> exportJsonData({required String dataStr, required File file});
+
+  Future<File?> pickeFile();
 }

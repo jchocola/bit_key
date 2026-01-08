@@ -4,6 +4,7 @@ import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/features/feature_auth/domain/repo/secure_storage_repository.dart';
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_import_export_data/presentation/bloc/export_data_bloc.dart';
+import 'package:bit_key/features/feature_import_export_data/presentation/import_data_bloc.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/about_page/about_page.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/acc_security_page.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/bloc/acc_security_bloc.dart';
@@ -31,7 +32,7 @@ class SettingPage extends StatelessWidget {
           spacing: AppConstant.appPadding,
           children: [
             SettingPageAppbar(),
-        
+
             CustomListile(
               title: 'Account security',
               icon: AppIcon.securityIcon,
@@ -42,7 +43,9 @@ class SettingPage extends StatelessWidget {
                   builder: (context) {
                     return MultiBlocProvider(
                       providers: [
-                        BlocProvider.value(value: BlocProvider.of<AccSecurityBloc>(context)),
+                        BlocProvider.value(
+                          value: BlocProvider.of<AccSecurityBloc>(context),
+                        ),
                       ],
                       child: SizedBox(
                         height:
@@ -70,10 +73,18 @@ class SettingPage extends StatelessWidget {
                           AppConstant.modalPageHeight,
                       child: MultiBlocProvider(
                         providers: [
-                          BlocProvider.value(value:BlocProvider.of<FoldersBloc>(context), ),
-                           BlocProvider.value(value:BlocProvider.of<ExportDataBloc>(context), ),
+                          BlocProvider.value(
+                            value: BlocProvider.of<FoldersBloc>(context),
+                          ),
+                          BlocProvider.value(
+                            value: BlocProvider.of<ExportDataBloc>(context),
+                          ),
+                          BlocProvider.value(
+                            value: BlocProvider.of<ImportDataBloc>(context),
+                          ),
                         ],
-                        child: const VaultPage()),
+                        child: const VaultPage(),
+                      ),
                     );
                   },
                 );
@@ -115,7 +126,7 @@ class SettingPage extends StatelessWidget {
                 );
               },
             ),
-        
+
             //  CustomListile(),
             //   CustomListile(),
             BigButton(
@@ -125,7 +136,7 @@ class SettingPage extends StatelessWidget {
                 await getIt<SecureStorageRepository>().deleteSalt();
               },
             ),
-        
+
             BlocBuilder<AuthBloc, AuthBlocState>(
               builder: (context, state) => BigButton(
                 title: 'Get Master Key Via SessionKey and Encrypted Master Key',
@@ -136,13 +147,13 @@ class SettingPage extends StatelessWidget {
                           sessionKey: state.SESSION_KEY,
                           encryptedMasterKey: state.ENCRYPTED_MASTER_KEY,
                         );
-        
+
                     logger.f('Master key : ${masterKey}');
                   }
                 },
               ),
             ),
-        
+
             BigButton(
               title: 'Enctypt: HELLO WORLD ',
               onTap: () async {
@@ -152,7 +163,7 @@ class SettingPage extends StatelessWidget {
                 );
               },
             ),
-        
+
             BigButton(
               title: 'Decrypt: HELLO WORLD ',
               onTap: () async {
@@ -162,7 +173,7 @@ class SettingPage extends StatelessWidget {
                 );
               },
             ),
-        
+
             BlocListener<AuthBloc, AuthBlocState>(
               listener: (context, state) {
                 if (state is AuthBlocUnauthenticated) {

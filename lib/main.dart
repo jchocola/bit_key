@@ -10,6 +10,7 @@ import 'package:bit_key/features/feature_generate_pass/presentation/bloc/pass_ge
 import 'package:bit_key/features/feature_import_export_data/data/repo/import_export_data_repo_impl.dart';
 import 'package:bit_key/features/feature_import_export_data/domain/repo/import_export_data_repository.dart';
 import 'package:bit_key/features/feature_import_export_data/presentation/bloc/export_data_bloc.dart';
+import 'package:bit_key/features/feature_import_export_data/presentation/import_data_bloc.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/bloc/acc_security_bloc.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/data/repo/no_screen_shot_repo_impl.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/domain/repo/app_security_repository.dart';
@@ -180,6 +181,8 @@ class MyApp extends StatelessWidget {
             encryptionRepository: getIt<EncryptionRepository>(),
           ),
         ),
+
+        BlocProvider(create: (context)=> ImportDataBloc(importExportDataRepository: getIt<ImportExportDataRepository>()))
       ],
 
       // child: MainPage(),

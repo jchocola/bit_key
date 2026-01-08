@@ -5,6 +5,7 @@ import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/core/theme/app_color.dart';
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_import_export_data/presentation/bloc/export_data_bloc.dart';
+import 'package:bit_key/features/feature_import_export_data/presentation/import_data_bloc.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/vault_page/modal/confirm_delete_all_data.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/vault_page/modal/export_data_modal.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/vault_page/modal/folders_modal_page.dart';
@@ -60,24 +61,39 @@ class VaultPage extends StatelessWidget {
         builder: (context) {
           return MultiBlocProvider(
             providers: [
-              BlocProvider.value(value: BlocProvider.of<ExportDataBloc>(context)), 
+              BlocProvider.value(
+                value: BlocProvider.of<ExportDataBloc>(context),
+              ),
             ],
-            child: ExportDataModal());
+            child: ExportDataModal(),
+          );
         },
       );
     }
 
-     void _exportImportTapped() {
+    void _exportImportTapped() {
       showModalBottomSheet(
         context: context,
         isScrollControlled: true,
         useRootNavigator: true,
         builder: (context) {
           return SizedBox(
-            height: MediaQuery.of(context).size.height * AppConstant.modalPageHeight,
-            child: ImportDataModal());
+            height:
+                MediaQuery.of(context).size.height *
+                AppConstant.modalPageHeight,
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider.value(
+                  value: BlocProvider.of<ImportDataBloc>(context),
+                ),
+              ],
+              child: ImportDataModal(),
+            ),
+          );
         },
-      );
+      ).then((_) {
+        context.read<ImportDataBloc>().add(ImportDataBlocEvent_clear());
+      });
     }
 
     return Scaffold(
@@ -94,9 +110,9 @@ class VaultPage extends StatelessWidget {
 
               CustomListile(title: 'Folders', onTap: _onFoldersTapped),
 
-              CustomListile(title: 'Export Data', onTap: _exportDataTapped,),
+              CustomListile(title: 'Export Data', onTap: _exportDataTapped),
 
-              CustomListile(title: 'Import Data', onTap: _exportImportTapped,),
+              CustomListile(title: 'Import Data', onTap: _exportImportTapped),
 
               BigButton(
                 title: 'Clear all data',
