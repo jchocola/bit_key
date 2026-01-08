@@ -1,5 +1,7 @@
 import 'package:bit_key/core/constants/app_constant.dart';
+import 'package:bit_key/core/di/di.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
+import 'package:bit_key/features/feature_setting/presentation/pages/about_page/domain/repo/url_launcher_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
 import 'package:wiredash/wiredash.dart';
@@ -131,7 +133,11 @@ class AboutPage extends StatelessWidget {
             leading: Icon(Icons.email),
             title: Text('Email поддержки'),
             subtitle: Text('support@bitkey.app'),
-            // onTap: () => _launchEmail(),
+            onTap: () async {
+              await getIt<UrlLauncherRepo>().contactToDeveloper(
+                developerEmail: 'sangsangden@gmail.com',
+              );
+            },
           ),
           ListTile(
             leading: Icon(Icons.bug_report),

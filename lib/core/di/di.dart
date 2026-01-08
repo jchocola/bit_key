@@ -8,6 +8,8 @@ import 'package:bit_key/features/feature_generate_pass/data/repositories/generat
 import 'package:bit_key/features/feature_generate_pass/domain/repositories/generator_repo.dart';
 import 'package:bit_key/features/feature_import_export_data/data/repo/import_export_data_repo_impl.dart';
 import 'package:bit_key/features/feature_import_export_data/domain/repo/import_export_data_repository.dart';
+import 'package:bit_key/features/feature_setting/presentation/pages/about_page/data/repo/url_launcher_repo_impl.dart';
+import 'package:bit_key/features/feature_setting/presentation/pages/about_page/domain/repo/url_launcher_repo.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/data/repo/app_security_repo_impl.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/data/repo/jailbreak_root_detection_impl.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/data/repo/no_screen_shot_repo_impl.dart';
@@ -73,6 +75,8 @@ Future<void> DI() async {
   getIt.registerSingleton<ImportExportDataRepository>(
     ImportExportDataRepoImpl(),
   );
+
+  getIt.registerSingleton<UrlLauncherRepo>(UrlLauncherRepoImpl());
 
   logger.i('DI initialized');
 }
