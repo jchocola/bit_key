@@ -60,6 +60,7 @@ dependencies:
   shake: ^3.0.0
   jailbreak_root_detection: ^1.2.0+1
   no_screenshot: ^0.3.1
+  file_picker: ^10.3.8
  
 
 

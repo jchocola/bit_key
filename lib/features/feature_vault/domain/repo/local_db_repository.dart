@@ -9,12 +9,13 @@ abstract class LocalDbRepository {
   /// CARD
   ///
   Future<void> saveCard({required Card card});
+  Future<void> saveCardsList({required List<Card> cards});
   Future<void> deleteCard({required Card card});
   Future<void> updateCard({required Card card});
   Future<List<Card>> getAllCard();
   Future<List<Card>> getActiveCard();
   Future<List<Card>> getCardsWithoutFolder();
-  Future<List<Card>> getActiveCardsWithoutFolder(); 
+  Future<List<Card>> getActiveCardsWithoutFolder();
   Future<List<Card>> getCardsWithFolderName({required String folderName});
   Future<void> moveCardToBin({required Card card});
   Future<void> restoreCardFromBin({required Card card});
@@ -22,11 +23,13 @@ abstract class LocalDbRepository {
   Future<int> getCardIndexInBox({required Card card});
   Future<void> deleteAllCardsFromBin();
   Future<List<Card>> searchCards(String query);
+  Future<void> deleteAllCards();
 
   ///
   /// LOGIN
   ///
   Future<void> saveLogin({required Login login});
+  Future<void> saveLoginsList({required List<Login> logins});
   Future<void> deleteLogin({required Login login});
   Future<void> updateLogin({required Login login});
   Future<List<Login>> getAllLogin();
@@ -40,15 +43,17 @@ abstract class LocalDbRepository {
   Future<int> getLoginIndexInBox({required Login login});
   Future<void> deleteAllLoginsFromBin();
   Future<List<Login>> searchLogins(String query);
+  Future<void> deleteAllLogins();
 
   ///
   /// IDENTITY
   ///
   Future<void> saveIdentity({required Identity identity});
+  Future<void> saveIdentitiesList({required List<Identity> identities});
   Future<void> deleteIdentity({required Identity identtity});
   Future<void> updateIdentity({required Identity identity});
   Future<List<Identity>> getAllIdentity();
-   Future<List<Identity>> getActiveIdentity();
+  Future<List<Identity>> getActiveIdentity();
   Future<List<Identity>> getIdentiesWithoutFolder();
   Future<List<Identity>> getActiveIdentiesWithoutFolder();
   Future<List<Identity>> getIdentitiesWithFolderName({
@@ -60,4 +65,5 @@ abstract class LocalDbRepository {
   Future<int> getIdentityIndexInBox({required Identity identity});
   Future<void> deleteAllIdentitiesFromBin();
   Future<List<Identity>> searchIdentities(String query);
+  Future<void> deleteAllIdentities();
 }

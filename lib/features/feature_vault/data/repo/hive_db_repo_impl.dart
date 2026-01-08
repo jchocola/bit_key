@@ -575,74 +575,138 @@ class HiveDbRepoImpl implements LocalDbRepository {
       final allCards = await getAllCard();
 
       final filteredCards = allCards
-          .where((card) =>
-              card.itemName.toLowerCase().contains(query.toLowerCase()) ||
-              (card.number != null &&
-                  card.number!
-                      .toLowerCase()
-                      .contains(query.toLowerCase())) ||
-              (card.cardHolderName != null &&
-                  card.cardHolderName!
-                      .toLowerCase()
-                      .contains(query.toLowerCase())) 
-              )
+          .where(
+            (card) =>
+                card.itemName.toLowerCase().contains(query.toLowerCase()) ||
+                (card.number != null &&
+                    card.number!.toLowerCase().contains(query.toLowerCase())) ||
+                (card.cardHolderName != null &&
+                    card.cardHolderName!.toLowerCase().contains(
+                      query.toLowerCase(),
+                    )),
+          )
           .toList();
       return filteredCards;
     } catch (e) {
       logger.e(e);
-       return [];
+      return [];
     }
   }
 
   @override
-  Future<List<Identity>> searchIdentities(String query) async{
+  Future<List<Identity>> searchIdentities(String query) async {
     try {
       final allIdentities = await getAllIdentity();
 
       final filteredIdentities = allIdentities
-          .where((identity) =>
-              identity.itemName.toLowerCase().contains(query.toLowerCase()) ||
-              (identity.firstName != null &&
-                  identity.firstName!
-                      .toLowerCase()
-                      .contains(query.toLowerCase())) ||
-              (identity.lastName != null &&
-                  identity.lastName!
-                      .toLowerCase()
-                      .contains(query.toLowerCase())) ||
-              (identity.email != null &&
-                  identity.email!
-                      .toLowerCase()
-                      .contains(query.toLowerCase())))
+          .where(
+            (identity) =>
+                identity.itemName.toLowerCase().contains(query.toLowerCase()) ||
+                (identity.firstName != null &&
+                    identity.firstName!.toLowerCase().contains(
+                      query.toLowerCase(),
+                    )) ||
+                (identity.lastName != null &&
+                    identity.lastName!.toLowerCase().contains(
+                      query.toLowerCase(),
+                    )) ||
+                (identity.email != null &&
+                    identity.email!.toLowerCase().contains(
+                      query.toLowerCase(),
+                    )),
+          )
           .toList();
       return filteredIdentities;
     } catch (e) {
       logger.e(e);
-       return [];
+      return [];
     }
   }
 
   @override
-  Future<List<Login>> searchLogins(String query) async{
-   try {
+  Future<List<Login>> searchLogins(String query) async {
+    try {
       final allLogins = await getAllLogin();
 
       final filteredLogins = allLogins
-          .where((login) =>
-              login.itemName.toLowerCase().contains(query.toLowerCase()) ||
-              (login.login != null &&
-                  login.login!
-                      .toLowerCase()
-                      .contains(query.toLowerCase())) ||
-              (login.password != null &&
-                  login.password!
-                      .toLowerCase()
-                      .contains(query.toLowerCase())))
+          .where(
+            (login) =>
+                login.itemName.toLowerCase().contains(query.toLowerCase()) ||
+                (login.login != null &&
+                    login.login!.toLowerCase().contains(query.toLowerCase())) ||
+                (login.password != null &&
+                    login.password!.toLowerCase().contains(
+                      query.toLowerCase(),
+                    )),
+          )
           .toList();
       return filteredLogins;
     } catch (e) {
       logger.e(e);
-       return [];
+      return [];
+    }
+  }
+
+  @override
+  Future<void> deleteAllCards() async {
+    try {
+      await _cardsBox.deleteFromDisk();
+      logger.d('Deleted all cards');
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  @override
+  Future<void> deleteAllIdentities() async {
+    try {
+      await _identitiesBox.deleteFromDisk();
+      logger.d('Deleted all identities');
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  @override
+  Future<void> deleteAllLogins() async {
+    try {
+      await _loginsBox.deleteFromDisk();
+      logger.d('Deleted all logins');
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  @override
+  Future<void> saveCardsList({required List<Card> cards}) async {
+    try {
+      for (var card in cards) {
+        await saveCard(card: card);
+      }
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  @override
+  Future<void> saveIdentitiesList({required List<Identity> identities}) async {
+    try {
+      for (var identity in identities) {
+        await saveIdentity(identity: identity);
+      }
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  @override
+  Future<void> saveLoginsList({required List<Login> logins}) async {
+    try {
+      for (var login in logins) {
+        await saveLogin(login: login);
+      }
+    } catch (e) {
+      logger.e(e);
     }
   }
 }

@@ -3,6 +3,9 @@ FODLER WITH ITEMS
     - FOLDER INFO PAGE ✅
     - DELETE FOLDER 
 
+EMPTY CASE
+    - 
+
 
 VIEW ITEM DETAILS
     - NO FOLDER ✅
@@ -31,13 +34,16 @@ SETTINGS PAGE
         - CHANGE MASTER PASSWORD 🚫
         - jailbreak_root_detection: "^1.2.0+1" ✅
         - device_trust: ^1.0.1 ✅
-        - screen shoot
+        - screen shoot ✅
 
     - VAULT SETTINGS
-        - DELETE ALL DATA
-        - IMPORT / EXPORT DATA
+        - DELETE ALL DATA ✅
+        - FOLDERS
+            - DELETE FOLDERS ✅
+        - EXPORT DATA
             - PURE_DATA
             - ENCRYPTED_DATA
+        - IMPORT DATA
 
 
     - LANGUAGE SETTINGS

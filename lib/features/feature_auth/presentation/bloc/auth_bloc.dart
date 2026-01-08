@@ -1,11 +1,14 @@
 // ignore_for_file: non_constant_identifier_names, camel_case_types
 
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:bit_key/core/exception/app_exception.dart';
 import 'package:bit_key/features/feature_auth/domain/repo/local_auth_repository.dart';
 import 'package:bit_key/features/feature_auth/domain/repo/secure_storage_repository.dart';
+import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
+import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
 import 'package:bit_key/main.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 // EVENT
 abstract class AuthBlocEvent extends Equatable {
@@ -36,6 +39,13 @@ class AppBlocEvent_UserUnlockVaultViaMasterKey extends AuthBlocEvent {
 class AuthBlocEvent_UserUnblockVaultViaLocalAuth extends AuthBlocEvent {}
 
 class AuthBlocEvent_lockApp extends AuthBlocEvent {}
+
+class AuthBlocEvent_DELETE_ALL_DATA extends AuthBlocEvent {
+  final String masterKey;
+  AuthBlocEvent_DELETE_ALL_DATA({required this.masterKey});
+  @override
+  List<Object?> get props => [masterKey];
+}
 
 // STATE
 abstract class AuthBlocState extends Equatable {
@@ -89,9 +99,14 @@ class AuthBlocFailure extends AuthBlocState {
 class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
   final SecureStorageRepository secureStorageRepository;
   final LocalAuthRepository localAuthRepository;
+  final FolderRepository folderRepository;
+  final LocalDbRepository localDbRepository;
   AuthBloc({
     required this.secureStorageRepository,
     required this.localAuthRepository,
+    required this.folderRepository,
+    required this.localDbRepository,
+    re,
   }) : super(AuthBlocInitial()) {
     ///
     /// LOAD SALT AND CONTROL SUM STRING
@@ -273,6 +288,41 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
     ///
     on<AuthBlocEvent_lockApp>((event, emit) {
       add(AppBlocEvent_LoadSaltAndHashedMasterKey());
+    });
+
+    ///
+    /// DELETE ALL DATA
+    ///
+    on<AuthBlocEvent_DELETE_ALL_DATA>((event, emit) async {
+      final currentState = state;
+      if (currentState is AuthBlocAuthenticated) {
+        try {
+          // check master key
+          if (event.masterKey != currentState.MASTER_KEY) {
+            logger.e('Invalid master key');
+            return;
+          }
+
+          logger.d('START DELETE ALL DATA');
+
+          await localDbRepository.deleteAllCards();
+          await localDbRepository.deleteAllLogins();
+          await localDbRepository.deleteAllIdentities();
+
+          await secureStorageRepository.deleteEncryptedMasterKey();
+          await secureStorageRepository.deleteSessionKey();
+          await secureStorageRepository.deleteControlSumString();
+          await secureStorageRepository.deleteSalt();
+
+          logger.d(
+            'DELETED ALL DATA , KEYS, SESSION KEY , CONTROLL SUM , SALT',
+          );
+
+          add(AppBlocEvent_LoadSaltAndHashedMasterKey());
+        } catch (e) {
+          logger.e(e);
+        }
+      }
     });
   }
 }

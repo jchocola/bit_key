@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
 
@@ -168,4 +170,58 @@ class IdentityModel {
       postcode: postcode?? this.postcode,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'itemName': itemName,
+      'folderName': folderName,
+      'isHide': isHide,
+      'firstName': firstName,
+      'middleName': middleName,
+      'lastName': lastName,
+      'userName': userName,
+      'company': company,
+      'nationalInsuranceNumber': nationalInsuranceNumber,
+      'passportName': passportName,
+      'licenseNumber': licenseNumber,
+      'email': email,
+      'phone': phone,
+      'address1': address1,
+      'address2': address2,
+      'address3': address3,
+      'cityTown': cityTown,
+      'country': country,
+      'postcode': postcode,
+    };
+  }
+
+  factory IdentityModel.fromMap(Map<String, dynamic> map) {
+    return IdentityModel(
+      id: map['id'] ?? '',
+      itemName: map['itemName'] ?? '',
+      folderName: map['folderName'],
+      isHide: map['isHide'],
+      firstName: map['firstName'],
+      middleName: map['middleName'],
+      lastName: map['lastName'],
+      userName: map['userName'],
+      company: map['company'],
+      nationalInsuranceNumber: map['nationalInsuranceNumber'],
+      passportName: map['passportName'],
+      licenseNumber: map['licenseNumber'],
+      email: map['email'],
+      phone: map['phone'],
+      address1: map['address1'],
+      address2: map['address2'],
+      address3: map['address3'],
+      cityTown: map['cityTown'],
+      country: map['country'],
+      postcode: map['postcode'],
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory IdentityModel.fromJson(String source) => IdentityModel.fromMap(json.decode(source));
 }

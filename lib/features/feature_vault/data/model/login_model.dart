@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
 
@@ -70,4 +72,32 @@ class LoginModel {
       isHide: isHide ?? this.isHide,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'itemName': itemName,
+      'folderName': folderName,
+      'login': login,
+      'password': password,
+      'url': url,
+      'isHide': isHide,
+    };
+  }
+
+  factory LoginModel.fromMap(Map<String, dynamic> map) {
+    return LoginModel(
+      id: map['id'] ?? '',
+      itemName: map['itemName'] ?? '',
+      folderName: map['folderName'],
+      login: map['login'],
+      password: map['password'],
+      url: map['url'],
+      isHide: map['isHide'],
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory LoginModel.fromJson(String source) => LoginModel.fromMap(json.decode(source));
 }

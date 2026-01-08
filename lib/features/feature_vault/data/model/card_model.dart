@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
 
@@ -91,4 +93,38 @@ class CardModel {
       secCode: secCode ?? this.secCode,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'itemName': itemName,
+      'isHide': isHide,
+      'folderName': folderName,
+      'cardHolderName': cardHolderName,
+      'number': number,
+      'brand': brand,
+      'expMonth': expMonth,
+      'expYear': expYear,
+      'secCode': secCode,
+    };
+  }
+
+  factory CardModel.fromMap(Map<String, dynamic> map) {
+    return CardModel(
+      id: map['id'] ?? '',
+      itemName: map['itemName'] ?? '',
+      isHide: map['isHide'],
+      folderName: map['folderName'],
+      cardHolderName: map['cardHolderName'],
+      number: map['number'],
+      brand: map['brand'],
+      expMonth: map['expMonth']?.toInt(),
+      expYear: map['expYear']?.toInt(),
+      secCode: map['secCode']?.toInt(),
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory CardModel.fromJson(String source) => CardModel.fromMap(json.decode(source));
 }

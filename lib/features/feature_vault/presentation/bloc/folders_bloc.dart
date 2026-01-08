@@ -2,13 +2,13 @@
 
 import 'dart:developer';
 
-import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
+import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
 import 'package:bit_key/main.dart';
 
 ///
@@ -32,6 +32,14 @@ class FoldersBlocEvent_createFolder extends FoldersBlocEvent {
 class FolderBlocEvent_selectFolder extends FoldersBlocEvent {
   final String folderName;
   FolderBlocEvent_selectFolder({required this.folderName});
+
+  @override
+  List<Object?> get props => [folderName];
+}
+
+class FolderBlocEvent_deleteFolder extends FoldersBlocEvent {
+  final String folderName;
+  FolderBlocEvent_deleteFolder({required this.folderName});
 
   @override
   List<Object?> get props => [folderName];
@@ -150,6 +158,19 @@ class FoldersBloc extends Bloc<FoldersBlocEvent, FoldersBlocState> {
       final currentState = state;
       if (currentState is FoldersBlocLoaded) {
         emit(currentState.copyWith(selectedFolder: event.folderName));
+      }
+    });
+
+    ///
+    /// DELTE FOLDER
+    ///
+    on<FolderBlocEvent_deleteFolder>((event, emit) async {
+      try {
+        await folderRepository.deleteFolder(folderName: event.folderName);
+
+        add(FoldersBlocEvent_loadFolders());
+      } catch (e) {
+        logger.e(e);
       }
     });
   }
