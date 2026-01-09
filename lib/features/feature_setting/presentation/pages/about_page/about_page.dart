@@ -1,6 +1,7 @@
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/di/di.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
+import 'package:bit_key/features/feature_setting/presentation/pages/about_page/data/repo/url_launcher_repo_impl.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/about_page/domain/repo/url_launcher_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
@@ -55,6 +56,12 @@ class AboutPage extends StatelessWidget {
             leading: Icon(Icons.code),
             title: Text('Версия API'),
             subtitle: Text('1.0.0'),
+          ),
+
+          ListTile(
+            leading: Icon(Icons.code),
+            title: Text('Developer'),
+            subtitle: Text(AppConstant.developer),
           ),
         ],
       ),
@@ -132,10 +139,10 @@ class AboutPage extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.email),
             title: Text('Email поддержки'),
-            subtitle: Text('support@bitkey.app'),
+            subtitle: Text(AppConstant.developerEmail),
             onTap: () async {
               await getIt<UrlLauncherRepo>().contactToDeveloper(
-                developerEmail: 'sangsangden@gmail.com',
+                developerEmail: AppConstant.developerEmail,
               );
             },
           ),
@@ -156,7 +163,11 @@ class AboutPage extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.rate_review),
             title: Text('Оценить приложение'),
-            //onTap: () => _rateApp(),
+            onTap: () async{
+             await getIt<UrlLauncherRepo>().lauchURL(
+                url: AppConstant.rustoreUrl,
+              ); 
+            },
           ),
         ],
       ),
@@ -172,18 +183,26 @@ class AboutPage extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.description),
             title: Text('Политика конфиденциальности'),
-            //onTap: () => _openPrivacyPolicy(),
+            onTap: () async {
+              await getIt<UrlLauncherRepo>().lauchURL(
+                url: AppConstant.privacyPolicyUrl,
+              );
+            },
           ),
           ListTile(
             leading: Icon(Icons.gavel),
             title: Text('Условия использования'),
-            //onTap: () => _openTerms(),
+            onTap: () async {
+              await getIt<UrlLauncherRepo>().lauchURL(
+                url: AppConstant.termOfServiceUrl,
+              );
+            },
           ),
 
           ListTile(
             leading: Icon(Icons.copyright),
             title: Text('Авторские права'),
-            subtitle: Text('© 2024 BitKey. Все права защищены.'),
+            subtitle: Text(AppConstant.copyRightUrl),
           ),
         ],
       ),
