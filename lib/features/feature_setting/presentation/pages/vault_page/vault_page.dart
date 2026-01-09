@@ -96,6 +96,8 @@ class VaultPage extends StatelessWidget {
       });
     }
 
+    final theme = Theme.of(context);
+
     return Scaffold(
       body: AppBg(
         child: Padding(
@@ -106,7 +108,7 @@ class VaultPage extends StatelessWidget {
           child: Column(
             spacing: AppConstant.appPadding,
             children: [
-              Text('Vault Page'),
+              Text('Vault', style: theme.textTheme.titleMedium,),
 
               CustomListile(title: 'Folders', onTap: _onFoldersTapped),
 

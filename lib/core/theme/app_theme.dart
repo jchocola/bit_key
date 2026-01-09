@@ -1,3 +1,4 @@
+import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/theme/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -63,7 +64,7 @@ titleMedium: appTextStyle.copyWith(color: AppColor.secondary),
 
 
   expansionTileTheme: ExpansionTileThemeData(
-    
+   childrenPadding: EdgeInsets.all(AppConstant.appPadding) 
   )
 
 );

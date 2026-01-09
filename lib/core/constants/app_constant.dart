@@ -19,4 +19,5 @@ class AppConstant {
       'https://www.termsfeed.com/live/eb5e1865-7cf9-419e-85ba-fc831c83c7dd';
   static const String copyRightUrl = '© 2026 BitKey. All right reserved';
   static const String rustoreUrl = '';
+  static const String codeRepositoryUrl = 'https://github.com/jchocola/bit_key';
 }

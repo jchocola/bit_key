@@ -129,50 +129,50 @@ class SettingPage extends StatelessWidget {
 
             //  CustomListile(),
             //   CustomListile(),
-            BigButton(
-              title: 'Clear SALT  and SumControlStr data',
-              onTap: () async {
-                await getIt<SecureStorageRepository>().deleteControlSumString();
-                await getIt<SecureStorageRepository>().deleteSalt();
-              },
-            ),
+            // BigButton(
+            //   title: 'Clear SALT  and SumControlStr data',
+            //   onTap: () async {
+            //     await getIt<SecureStorageRepository>().deleteControlSumString();
+            //     await getIt<SecureStorageRepository>().deleteSalt();
+            //   },
+            // ),
 
-            BlocBuilder<AuthBloc, AuthBlocState>(
-              builder: (context, state) => BigButton(
-                title: 'Get Master Key Via SessionKey and Encrypted Master Key',
-                onTap: () async {
-                  if (state is AuthBlocAuthenticated) {
-                    final masterKey = await getIt<SecureStorageRepository>()
-                        .decryptEncryptedMasterKey(
-                          sessionKey: state.SESSION_KEY,
-                          encryptedMasterKey: state.ENCRYPTED_MASTER_KEY,
-                        );
+            // BlocBuilder<AuthBloc, AuthBlocState>(
+            //   builder: (context, state) => BigButton(
+            //     title: 'Get Master Key Via SessionKey and Encrypted Master Key',
+            //     onTap: () async {
+            //       if (state is AuthBlocAuthenticated) {
+            //         final masterKey = await getIt<SecureStorageRepository>()
+            //             .decryptEncryptedMasterKey(
+            //               sessionKey: state.SESSION_KEY,
+            //               encryptedMasterKey: state.ENCRYPTED_MASTER_KEY,
+            //             );
 
-                    logger.f('Master key : ${masterKey}');
-                  }
-                },
-              ),
-            ),
+            //         logger.f('Master key : ${masterKey}');
+            //       }
+            //     },
+            //   ),
+            // ),
 
-            BigButton(
-              title: 'Enctypt: HELLO WORLD ',
-              onTap: () async {
-                await getIt<EncryptionRepository>().encrypt(
-                  str: 'HELLO WORLD',
-                  masterKey: 'qwerty',
-                );
-              },
-            ),
+            // BigButton(
+            //   title: 'Enctypt: HELLO WORLD ',
+            //   onTap: () async {
+            //     await getIt<EncryptionRepository>().encrypt(
+            //       str: 'HELLO WORLD',
+            //       masterKey: 'qwerty',
+            //     );
+            //   },
+            // ),
 
-            BigButton(
-              title: 'Decrypt: HELLO WORLD ',
-              onTap: () async {
-                await getIt<EncryptionRepository>().decrypt(
-                  encryptedStr: 'rbYfL+0BfeARk469V74QgTyWJYl/q4nobQQyJ4S61Mw=',
-                  masterKey: 'qwerty',
-                );
-              },
-            ),
+            // BigButton(
+            //   title: 'Decrypt: HELLO WORLD ',
+            //   onTap: () async {
+            //     await getIt<EncryptionRepository>().decrypt(
+            //       encryptedStr: 'rbYfL+0BfeARk469V74QgTyWJYl/q4nobQQyJ4S61Mw=',
+            //       masterKey: 'qwerty',
+            //     );
+            //   },
+            // ),
 
             BlocListener<AuthBloc, AuthBlocState>(
               listener: (context, state) {
@@ -181,7 +181,7 @@ class SettingPage extends StatelessWidget {
                 }
               },
               child: BigButton(
-                title: 'Lock out',
+                title: 'Lock app',
                 onTap: () {
                   context.read<AuthBloc>().add(AuthBlocEvent_lockApp());
                 },
