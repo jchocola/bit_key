@@ -1,3 +1,4 @@
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/bin_bloc.dart';
@@ -10,6 +11,7 @@ import 'package:bit_key/features/feature_vault/presentation/bloc/no_folders_bloc
 import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/folder_info_page.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -28,7 +30,7 @@ class FoldersWidget extends StatelessWidget {
               spacing: AppConstant.appPadding,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Folders (${state.folders.length})'),
+                Text(context.tr(AppText.folders, namedArgs: {'count': state.folders.length.toString()}) ),
                 ...List.generate(state.folders.length, (index) {
                   return CustomListile(
                     title: state.folders[index],

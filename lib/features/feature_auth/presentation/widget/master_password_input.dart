@@ -41,11 +41,11 @@ class MasterPasswordInput extends StatelessWidget {
             ),
 
             Text(
-              'You vault is locked. Please enter your master password to unlock it.',
+              context.tr(AppText.yourVaultIsLocked),
               style: theme.textTheme.bodySmall,
             ),
             Text(
-              'Your master password is used to encrypt and decrypt your data. Make sure to keep it safe and do not share it with anyone.',
+              context.tr(AppText.yourMasterKeyUsedFor),
               style: theme.textTheme.bodySmall,
             ),
           ],

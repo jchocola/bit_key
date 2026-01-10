@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/di/di.dart';
 import 'package:bit_key/core/enum/session_timout.dart';
@@ -26,6 +27,7 @@ import 'package:bit_key/features/feature_vault/presentation/page/creating_identi
 import 'package:bit_key/features/feature_vault/presentation/page/creating_login/bloc/create_login_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_login/creating_login_page.dart';
 import 'package:bit_key/main.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glassy_real_navbar/glassy_real_navbar.dart';
@@ -285,15 +287,15 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
                           items: [
                             GlassNavBarItem(
                               icon: AppIcon.vaultIcon,
-                              title: 'Home',
+                              title: 'Vault',
                             ),
                             GlassNavBarItem(
                               icon: AppIcon.generatorIcon,
-                              title: 'Search',
+                              title: 'Generator',
                             ),
                             GlassNavBarItem(
                               icon: AppIcon.settingIcon,
-                              title: 'Profile',
+                              title: 'Setting',
                             ),
                           ],
                         ),
@@ -318,19 +320,19 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
                                   itemBuilder: (context) {
                                     return [
                                       PopupMenuItem(
-                                        child: Text('Login'),
+                                        child: Text(context.tr(AppText.login)),
                                         onTap: () {
                                           onCreateLoginTapped(context);
                                         },
                                       ),
                                       PopupMenuItem(
-                                        child: Text('Card'),
+                                        child: Text(context.tr(AppText.card)),
                                         onTap: () {
                                           onCreateCardTapped(context);
                                         },
                                       ),
                                       PopupMenuItem(
-                                        child: Text('Identity'),
+                                        child: Text(context.tr(AppText.identity)),
                                         onTap: () {
                                           onCreateIdentityTapped(context);
                                         },
@@ -339,7 +341,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
                                         onTap: () {
                                           onCreateFolderTapped(context);
                                         },
-                                        child: Text('Folder'),
+                                        child: Text(context.tr(AppText.folder)),
                                       ),
                                     ];
                                   },

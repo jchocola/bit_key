@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
@@ -23,6 +24,7 @@ import 'package:bit_key/main.dart';
 import 'package:bit_key/shared/widgets/big_button.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
 import 'package:bit_key/shared/widgets/search_textfiled.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:family_bottom_sheet/family_bottom_sheet.dart';
 import 'package:flutter/material.dart' hide Card;
 import 'package:flutter/scheduler.dart';
@@ -55,7 +57,7 @@ class ViewInfoPage extends StatelessWidget {
                     },
                     icon: Icon(AppIcon.arrowBackIcon),
                   ),
-                  Text('Info Page', style: theme.textTheme.titleMedium),
+                  Text(context.tr(AppText.details), style: theme.textTheme.titleMedium),
                   IconButton(onPressed: () {}, icon: Icon(AppIcon.moreIcon)),
                 ],
               ),
@@ -112,7 +114,7 @@ class ViewInfoPage extends StatelessWidget {
           trailingValue: login.folderName ?? '',
         ),
 
-        Text('LOGIN CREDENTIALS'),
+        Text(context.tr(AppText.login_credentials)),
         _loginCredentialsInfo(login: login),
 
         // Text('Created : 9 Nov 2022 , 21:59', style: theme.textTheme.bodySmall),
@@ -126,7 +128,7 @@ class ViewInfoPage extends StatelessWidget {
             Expanded(
               flex: 1,
               child: BigButton(
-                title: 'Delete',
+                title: context.tr(AppText.delete),
                 onTap: () {
                   showDialog(
                     context: context,
@@ -188,7 +190,7 @@ class ViewInfoPage extends StatelessWidget {
             Expanded(
               flex: 3,
               child: BigButton(
-                title: 'Edit',
+                title: context.tr(AppText.edit),
                 onTap: () {
                   showModalBottomSheet(
                     context: context,
@@ -234,7 +236,7 @@ class ViewInfoPage extends StatelessWidget {
           trailingValue: card.folderName ?? '',
         ),
 
-        Text('CARD CREDENTIALS'),
+        Text(context.tr(AppText.card_credentials)),
         _cardCredentialsInfo(card: card),
 
         Row(
@@ -243,7 +245,7 @@ class ViewInfoPage extends StatelessWidget {
             Expanded(
               flex: 1,
               child: BigButton(
-                title: 'Delete',
+                title: context.tr(AppText.delete),
                 onTap: () {
                   showDialog(
                     context: context,
@@ -305,7 +307,7 @@ class ViewInfoPage extends StatelessWidget {
             Expanded(
               flex: 3,
               child: BigButton(
-                title: 'Edit',
+                title: context.tr(AppText.edit),
                 onTap: () {
                   showModalBottomSheet(
                     context: context,
@@ -351,7 +353,7 @@ class ViewInfoPage extends StatelessWidget {
           trailingValue: identity.folderName ?? '',
         ),
 
-        Text('IDENTITY CREDENTIALS'),
+        Text(context.tr(AppText.identity_credentials)),
 
         _identityCredentialsInfo(identity: identity),
 
@@ -361,7 +363,7 @@ class ViewInfoPage extends StatelessWidget {
             Expanded(
               flex: 1,
               child: BigButton(
-                title: 'Delete',
+                title: context.tr(AppText.delete),
                 onTap: () {
                   showDialog(
                     context: context,
@@ -422,7 +424,7 @@ class ViewInfoPage extends StatelessWidget {
             Expanded(
               flex: 3,
               child: BigButton(
-                title: 'Edit',
+                title: context.tr(AppText.edit),
                 onTap: () {
                   showModalBottomSheet(
                     context: context,
@@ -465,7 +467,7 @@ class _loginCredentialsInfo extends StatelessWidget {
           // login
           _specialListile(
             withHide: false,
-            title: 'Username',
+            title: context.tr(AppText.user_name),
             value: login?.login,
           ),
 
@@ -473,13 +475,13 @@ class _loginCredentialsInfo extends StatelessWidget {
           // password
           _specialListile(
             withHide: true,
-            title: 'Password',
+            title: context.tr(AppText.password),
             value: login?.password,
           ),
 
           const Divider(),
           // password
-          _specialListile(withHide: false, title: 'URL', value: login?.url),
+          _specialListile(withHide: false, title: context.tr(AppText.website), value: login?.url),
         ],
       ),
     );
@@ -498,13 +500,13 @@ class _cardCredentialsInfo extends StatelessWidget {
           // number
           _specialListile(
             withHide: false,
-            title: 'Number',
+            title: context.tr(AppText.card_number),
             value: card?.number,
           ),
 
           const Divider(),
           // brand
-          _specialListile(withHide: false, title: 'Brand', value: card?.brand),
+          _specialListile(withHide: false, title: context.tr(AppText.brand), value: card?.brand),
 
           const Divider(),
           // expMonth / expYear
@@ -512,14 +514,14 @@ class _cardCredentialsInfo extends StatelessWidget {
             children: [
               Flexible(
                 child: _specialListile(
-                  title: 'Exp. Month',
+                  title: context.tr(AppText.exp_month),
                   value: card?.expMonth.toString(),
                 ),
               ),
 
               Flexible(
                 child: _specialListile(
-                  title: 'Exp. Year',
+                  title: context.tr(AppText.exp_year),
                   value: card?.expYear.toString(),
                 ),
               ),
@@ -528,7 +530,7 @@ class _cardCredentialsInfo extends StatelessWidget {
 
           const Divider(),
           _specialListile(
-            title: 'Sec. Code',
+            title: context.tr(AppText.security_code),
             value: card?.secCode.toString(),
             withHide: true,
           ),
@@ -548,85 +550,85 @@ class _identityCredentialsInfo extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Personal Details'),
+          Text(context.tr(AppText.personal_detail)),
           // Firstname
           _specialListile(
             withHide: false,
-            title: 'First name',
+            title: context.tr(AppText.first_name),
             value: identity?.firstName,
           ),
 
           const Divider(),
           // middle name
-          _specialListile(title: 'Middle name', value: identity?.middleName),
+          _specialListile(title: context.tr(AppText.middle_name), value: identity?.middleName),
 
           const Divider(),
           // last name
-          _specialListile(title: 'Last name', value: identity?.lastName),
+          _specialListile(title: context.tr(AppText.last_name), value: identity?.lastName),
 
           const Divider(),
           // user name
-          _specialListile(title: 'User name', value: identity?.userName),
+          _specialListile(title: context.tr(AppText.user_name_identity), value: identity?.userName),
 
           const Divider(),
           // Company name
-          _specialListile(title: 'Company', value: identity?.company),
+          _specialListile(title: context.tr(AppText.company), value: identity?.company),
 
           SizedBox(height: AppConstant.appPadding),
-          Text('Identification'),
+          Text(context.tr(AppText.identification)),
 
           // last name
           _specialListile(
-            title: 'National Insurance Number',
+            title: context.tr(AppText.national_insurance_number),
             value: identity?.nationalInsuranceNumber,
             withHide: true,
           ),
           const Divider(),
           // last name
           _specialListile(
-            title: 'Passport',
+            title: context.tr(AppText.passport_number),
             value: identity?.passportName,
             withHide: true,
           ),
           const Divider(),
           // last name
           _specialListile(
-            title: 'License number',
+            title: context.tr(AppText.license_number),
             value: identity?.licenseNumber,
           ),
 
           SizedBox(height: AppConstant.appPadding),
-          Text('Contact Info'),
+          Text(context.tr(AppText.contact_info)),
 
           // last name
-          _specialListile(title: 'Email', value: identity?.email),
+          _specialListile(title: context.tr(AppText.email), value: identity?.email),
           const Divider(),
           // last name
-          _specialListile(title: 'Phone', value: identity?.phone),
+          _specialListile(title: context.tr(AppText.phone), value: identity?.phone),
 
           SizedBox(height: AppConstant.appPadding),
-          Text('Address'),
+          Text(context.tr(AppText.address)),
           // last name
-          _specialListile(title: 'Address1', value: identity?.address1),
+          _specialListile(title: context.tr(AppText.address1), value: identity?.address1),
 
           const Divider(),
           // last name
-          _specialListile(title: 'Address2', value: identity?.address2),
+          _specialListile(title: context.tr(AppText.address2),value: identity?.address2),
 
           const Divider(),
           // last name
-          _specialListile(title: 'Address3', value: identity?.address3),
+          _specialListile(title: context.tr(AppText.address3), value: identity?.address3),
 
           const Divider(),
           // last name
-          _specialListile(title: 'City/Town', value: identity?.cityTown),
+          _specialListile(title:context.tr(AppText.city_town), value: identity?.cityTown),
 
           const Divider(),
           // last name
-          _specialListile(title: 'Country', value: identity?.country),
+          _specialListile(title:context.tr(AppText.country), value: identity?.country),
           const Divider(),
           // last name
-          _specialListile(title: 'Postcode', value: identity?.postcode),
+          _specialListile(title: context.tr(AppText.post_code), value: identity?.postcode),
         ],
       ),
     );

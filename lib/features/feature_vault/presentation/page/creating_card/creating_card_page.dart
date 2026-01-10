@@ -1,3 +1,4 @@
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/enum/card_brand.dart';
 import 'package:bit_key/core/enum/exp_month.dart';
@@ -11,6 +12,7 @@ import 'package:bit_key/features/feature_vault/presentation/page/creating_card/b
 import 'package:bit_key/main.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
 import 'package:bit_key/shared/widgets/custom_textfield.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart' hide Card;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
@@ -142,9 +144,9 @@ class _CreatingCardPageState extends State<CreatingCardPage> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text('Cancel', style: theme.textTheme.bodyMedium),
+                    child: Text(context.tr(AppText.cancel), style: theme.textTheme.bodyMedium),
                   ),
-                  Text('New card', style: theme.textTheme.titleMedium),
+                  Text(context.tr(AppText.new_card), style: theme.textTheme.titleMedium),
 
                   BlocListener<FoldersBloc, FoldersBlocState>(
                     listener: (context, state) {
@@ -158,7 +160,7 @@ class _CreatingCardPageState extends State<CreatingCardPage> {
                     },
                     child: TextButton(
                       onPressed: _onSaveTapped,
-                      child: Text('Save', style: theme.textTheme.bodyMedium),
+                      child: Text(context.tr(AppText.save), style: theme.textTheme.bodyMedium),
                     ),
                   ),
                 ],
@@ -166,18 +168,18 @@ class _CreatingCardPageState extends State<CreatingCardPage> {
 
               Divider(),
 
-              Text('Item Details'),
+              Text(context.tr(AppText.item_details),),
               Row(
                 spacing: AppConstant.appPadding,
                 children: [
                   CustomTextfield(
                     controller: itemNameController,
-                    hintText: 'Item name (required)',
+                    hintText: context.tr(AppText.item_name),
                   ),
 
                   BlocBuilder<FoldersBloc, FoldersBlocState>(
                     builder: (context, state) => PopupMenuButton(
-                      child: Text(folder ?? 'Folder'),
+                      child: Text(folder ?? context.tr(AppText.folder)),
                       itemBuilder: (context) {
                         if (state is FoldersBlocLoaded) {
                           return List.generate(state.folders.length, (index) {
@@ -199,15 +201,15 @@ class _CreatingCardPageState extends State<CreatingCardPage> {
                 ],
               ),
 
-              Text('Card Details'),
+              Text(context.tr(AppText.card_details)),
               CustomTextfield(
                 controller: cardHolderNameController,
-                hintText: 'Cardholder name 🔒',
+                hintText: context.tr(AppText.card_holder),
               ),
               CustomTextfield(
                 inputType: TextInputType.number,
                 controller: cardNumberController,
-                hintText: 'Number 🔒',
+                hintText:  context.tr(AppText.card_number),
               ),
 
               Row(
@@ -215,7 +217,7 @@ class _CreatingCardPageState extends State<CreatingCardPage> {
                 spacing: AppConstant.appPadding,
                 children: [
                   PopupMenuButton(
-                    child: Text(brand ?? 'Brand'),
+                    child: Text(brand ??  context.tr(AppText.brand),),
                     itemBuilder: (context) {
                       return List.generate(CardBrand.values.length, (index) {
                         final value = CardBrand.values[index];
@@ -233,7 +235,7 @@ class _CreatingCardPageState extends State<CreatingCardPage> {
                     child: Text(
                       expMonth != null
                           ? ExpMonthToString(index: expMonth!)
-                          : 'Exp. month',
+                          :  context.tr(AppText.exp_month),
                     ),
                     itemBuilder: (context) {
                       return List.generate(ExpMonth.values.length, (index) {
@@ -251,13 +253,13 @@ class _CreatingCardPageState extends State<CreatingCardPage> {
               CustomTextfield(
                 inputType: TextInputType.number,
                 controller: expYearController,
-                hintText: 'Expiration year',
+                hintText:  context.tr(AppText.exp_year),
               ),
 
               CustomTextfield(
                 inputType: TextInputType.number,
                 controller: secCodeController,
-                hintText: 'Security code',
+                hintText:  context.tr(AppText.security_code),
                 withEye: true,
                 obscure: true,
               ),

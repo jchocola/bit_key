@@ -1,5 +1,83 @@
 {
-  "language": "Language",
-  "master_key": "Master Key",
-  "unlock_vault": "Unlock Vault"
+  "auth": {
+    "confirm_master_key": "Confirm Master Password",
+    "create_master_key": "Create Master Key",
+    "master_key": "Master Key",
+    "please_create_master_key_for_your_vault": "Please create a master key for your vault.",
+    "unlock_vault": "Unlock Vault",
+    "verify_master_key": "Verify master key",
+    "you_cant_change_this_key": "You cant change this masterkey . Please ",
+    "your_master_key_used_for": "Your master key is used to encrypt and decrypt your data. Make sure to keep it safe and do not share it with anyone.",
+    "your_master_key_used_for_to": "Your master password is used to encrypt and decrypt your data. Make sure to keep it safe and do not share it with anyone.",
+    "your_vault_is_locked": "Your vault is locked. Please enter your master key to unlock it."
+  },
+  "card": {
+    "brand": "Brand",
+    "card_credentials": "Card credentials",
+    "card_details": "Card Details",
+    "card_holder": "Card Holder 🔒",
+    "card_number": "Card Number 🔒",
+    "exp_month": "Exp. month",
+    "exp_year": "Exp. year",
+    "new_card": "New card",
+    "security_code": "Security code"
+  },
+  "commons": {
+    "cancel": "Cancel",
+    "clear_all": "Clear all",
+    "delete": "Delete",
+    "details": "Details",
+    "edit": "edit",
+    "item_details": "Item Details",
+    "item_name": "Item name (required)",
+    "language": "Language",
+    "master_key": "",
+    "none": "None",
+    "restore": "Restore",
+    "save": "Save",
+    "unlock_vault": ""
+  },
+  "identity": {
+    "address": "Address",
+    "address1": "Address1 🔒",
+    "address2": "Address2 🔒",
+    "address3": "Address3 🔒",
+    "city_town": "City/Town",
+    "company": "Company 🔒",
+    "contact_info": "Contact info",
+    "country": "Country",
+    "email": "Email 🔒",
+    "first_name": "First name",
+    "identification": "Identification",
+    "identity_credentials": "Identity credentials",
+    "last_name": "Last name",
+    "license_number": "License number 🔒",
+    "middle_name": "Middle name",
+    "national_insurance_number": "National Insurance Number 🔒",
+    "new_indetity": "New identity",
+    "passport_number": "Passport number 🔒",
+    "personal_detail": "Personal details",
+    "phone": "Phone 🔒",
+    "post_code": "Post code",
+    "user_name": "Username 🔒"
+  },
+  "login": {
+    "login_credentials": "Login credentials",
+    "new_login": "New Login",
+    "password": "Password 🔒",
+    "user_name": "User name 🔒",
+    "website": "Website(URL) 🔒"
+  },
+  "vault": {
+    "bin": "Bin",
+    "card": "Card",
+    "folder": "Folder",
+    "folders": "Folders ({count})",
+    "found_n_results": "Found {} result",
+    "identity": "Identity",
+    "login": "Login",
+    "my_vault": "My Vault",
+    "no_folders": "No folders ({count})",
+    "types": "Types"
+  }
 }

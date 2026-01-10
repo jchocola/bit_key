@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
@@ -20,6 +21,7 @@ import 'package:bit_key/features/feature_vault/presentation/delete_all_from_bin_
 import 'package:bit_key/main.dart';
 
 import 'package:bit_key/shared/widgets/custom_listile.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart' hide Card;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -102,7 +104,7 @@ class BinPage extends StatelessWidget {
                         logger.e(e);
                       }
                     },
-                    child: Text('RESTORE', style: theme.textTheme.bodyMedium),
+                    child: Text(context.tr(AppText.restore), style: theme.textTheme.bodyMedium),
                   ),
 
                   TextButton(
@@ -130,7 +132,7 @@ class BinPage extends StatelessWidget {
                       }
                     },
                     child: Text(
-                      'DELETE',
+                      context.tr(AppText.delete),
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.error,
                       ),
@@ -216,7 +218,7 @@ class BinPage extends StatelessWidget {
                         logger.e(e);
                       }
                     },
-                    child: Text('RESTORE', style: theme.textTheme.bodyMedium),
+                    child: Text(context.tr(AppText.restore), style: theme.textTheme.bodyMedium),
                   ),
 
                   TextButton(
@@ -244,7 +246,7 @@ class BinPage extends StatelessWidget {
                       }
                     },
                     child: Text(
-                      'DELETE',
+                      context.tr(AppText.delete),
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.error,
                       ),
@@ -330,7 +332,7 @@ class BinPage extends StatelessWidget {
                         logger.e(e);
                       }
                     },
-                    child: Text('RESTORE', style: theme.textTheme.bodyMedium),
+                    child: Text(context.tr(AppText.delete), style: theme.textTheme.bodyMedium),
                   ),
 
                   TextButton(
@@ -358,7 +360,7 @@ class BinPage extends StatelessWidget {
                       }
                     },
                     child: Text(
-                      'DELETE',
+                     context.tr(AppText.delete),
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.error,
                       ),
@@ -385,7 +387,7 @@ class BinPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Bin', style: theme.textTheme.titleMedium),
+                  Text(context.tr(AppText.bin), style: theme.textTheme.titleMedium),
                   TextButton(
                     onPressed: () {
                       showDialog(
@@ -420,7 +422,7 @@ class BinPage extends StatelessWidget {
                         },
                       );
                     },
-                    child: Text('Clear all', style: theme.textTheme.bodySmall),
+                    child: Text(context.tr(AppText.clear_all), style: theme.textTheme.bodySmall),
                   ),
                 ],
               ),

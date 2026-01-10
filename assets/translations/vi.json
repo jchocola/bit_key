@@ -1,5 +1,83 @@
 {
-  "language": "Ngôn ngữ",
-  "master_key": "Chìa khoá tổng",
-  "unlock_vault": "Mở két"
+  "auth": {
+    "confirm_master_key": "",
+    "create_master_key": "",
+    "master_key": "",
+    "please_create_master_key_for_your_vault": "",
+    "unlock_vault": "",
+    "verify_master_key": "",
+    "you_cant_change_this_key": "",
+    "your_master_key_used_for": "",
+    "your_master_key_used_for_to": "",
+    "your_vault_is_locked": ""
+  },
+  "card": {
+    "brand": "",
+    "card_credentials": "",
+    "card_details": "",
+    "card_holder": "",
+    "card_number": "",
+    "exp_month": "",
+    "exp_year": "",
+    "new_card": "",
+    "security_code": ""
+  },
+  "commons": {
+    "cancel": "",
+    "clear_all": "",
+    "delete": "",
+    "details": "",
+    "edit": "",
+    "item_details": "",
+    "item_name": "",
+    "language": "",
+    "master_key": "",
+    "none": "",
+    "restore": "",
+    "save": "",
+    "unlock_vault": ""
+  },
+  "identity": {
+    "address": "",
+    "address1": "",
+    "address2": "",
+    "address3": "",
+    "city_town": "",
+    "company": "",
+    "contact_info": "",
+    "country": "",
+    "email": "",
+    "first_name": "",
+    "identification": "",
+    "identity_credentials": "",
+    "last_name": "",
+    "license_number": "",
+    "middle_name": "",
+    "national_insurance_number": "",
+    "new_indetity": "",
+    "passport_number": "",
+    "personal_detail": "",
+    "phone": "",
+    "post_code": "",
+    "user_name": ""
+  },
+  "login": {
+    "login_credentials": "",
+    "new_login": "",
+    "password": "",
+    "user_name": "",
+    "website": ""
+  },
+  "vault": {
+    "bin": "",
+    "card": "",
+    "folder": "",
+    "folders": "",
+    "found_n_results": "",
+    "identity": "",
+    "login": "",
+    "my_vault": "",
+    "no_folders": "",
+    "types": ""
+  }
 }
