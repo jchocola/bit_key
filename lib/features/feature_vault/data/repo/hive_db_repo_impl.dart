@@ -168,9 +168,15 @@ class HiveDbRepoImpl implements LocalDbRepository {
   }
 
   @override
-  Future<void> updateIdentity({required Identity identity}) {
-    // TODO: implement updateIdentity
-    throw UnimplementedError();
+  Future<void> updateIdentity({required Identity identity}) async{
+   try {
+      final index = await getIdentityIndexInBox(identity: identity);
+      logger.d('Update identity with index ${index}');
+      final identityModel = IdentityModel.fromEntity(identity);
+      await _identitiesBox.putAt(index, identityModel);
+    } catch (e) {
+      logger.e(e);
+    }
   }
 
   @override

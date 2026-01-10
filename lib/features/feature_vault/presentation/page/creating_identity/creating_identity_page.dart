@@ -160,7 +160,7 @@ class _CreatingIdentityPageState extends State<CreatingIdentityPage> {
             padding: const EdgeInsets.all(AppConstant.appPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              // spacing: AppConstant.appPadding,
+             //spacing: AppConstant.appPadding,
               children: [
                 SafeArea(
                   child: Row(

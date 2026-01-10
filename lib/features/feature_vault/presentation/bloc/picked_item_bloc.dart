@@ -71,6 +71,13 @@ class PickedItemBloc_Event_editCard extends PickedItemBlocEvent {
   List<Object?> get props => [updatedCard];
 }
 
+class PickedItemBloc_Event_editIdentity extends PickedItemBlocEvent {
+  final Identity updatedIdentity;
+  PickedItemBloc_Event_editIdentity({required this.updatedIdentity});
+  @override
+  List<Object?> get props => [updatedIdentity];
+}
+
 ///
 /// STATE
 ///
@@ -234,7 +241,7 @@ class PickedItemBloc extends Bloc<PickedItemBlocEvent, PickedItemBlocState> {
       }
     });
 
-      ///
+    ///
     /// EDIT CARDS
     ///
     on<PickedItemBloc_Event_editCard>((event, emit) async {
@@ -257,5 +264,29 @@ class PickedItemBloc extends Bloc<PickedItemBlocEvent, PickedItemBlocState> {
       }
     });
 
+
+
+        ///
+    /// EDIT IDENTITY
+    ///
+    on<PickedItemBloc_Event_editIdentity>((event, emit) async {
+      logger.i('Edit Identity');
+      try {
+        final authBlocState = authBloc.state;
+        if (authBlocState is AuthBlocAuthenticated) {
+          final encryptedIdentity = await encryptionRepository.encryptIdentity(
+            identity: event.updatedIdentity,
+            masterKey: authBlocState.MASTER_KEY,
+          );
+
+          logger.f('Identity : ${event.updatedIdentity.toString()}');
+          logger.f('Encrypted card : ${encryptedIdentity.toString()}');
+
+          await localDbRepository.updateIdentity(identity: encryptedIdentity);
+        }
+      } catch (e) {
+        logger.e(e);
+      }
+    });
   }
 }
