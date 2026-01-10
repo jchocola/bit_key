@@ -156,9 +156,15 @@ class HiveDbRepoImpl implements LocalDbRepository {
   }
 
   @override
-  Future<void> updateCard({required Card card}) {
-    // TODO: implement updateCard
-    throw UnimplementedError();
+  Future<void> updateCard({required Card card})async {
+    try {
+      final index = await getCardIndexInBox(card: card);
+      logger.d('Update card with index ${index}');
+      final cardModel = CardModel.fromEntity(card);
+      await _cardsBox.putAt(index, cardModel);
+    } catch (e) {
+      logger.e(e);
+    }
   }
 
   @override

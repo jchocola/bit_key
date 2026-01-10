@@ -2,14 +2,14 @@
 
 import 'dart:async';
 
-import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
-import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/card.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/identity.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/login.dart';
+import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
 import 'package:bit_key/main.dart';
 
@@ -64,6 +64,13 @@ class PickedItemBlocEvent_editLogin extends PickedItemBlocEvent {
   List<Object?> get props => [updatedLogin];
 }
 
+class PickedItemBloc_Event_editCard extends PickedItemBlocEvent {
+  final Card updatedCard;
+  PickedItemBloc_Event_editCard({required this.updatedCard});
+  @override
+  List<Object?> get props => [updatedCard];
+}
+
 ///
 /// STATE
 ///
@@ -97,8 +104,11 @@ class PickedItemBloc extends Bloc<PickedItemBlocEvent, PickedItemBlocState> {
   final LocalDbRepository localDbRepository;
   final AuthBloc authBloc;
   final EncryptionRepository encryptionRepository;
-  PickedItemBloc({required this.localDbRepository, required this.authBloc, required this.encryptionRepository})
-    : super(PickedItemBlocState_init()) {
+  PickedItemBloc({
+    required this.localDbRepository,
+    required this.authBloc,
+    required this.encryptionRepository,
+  }) : super(PickedItemBlocState_init()) {
     ///
     /// PICK LOGIN
     ///
@@ -207,9 +217,8 @@ class PickedItemBloc extends Bloc<PickedItemBlocEvent, PickedItemBlocState> {
     on<PickedItemBlocEvent_editLogin>((event, emit) async {
       logger.i('Edit Login');
       try {
-           final authBlocState = authBloc.state;
+        final authBlocState = authBloc.state;
         if (authBlocState is AuthBlocAuthenticated) {
-
           final encryptedLogin = await encryptionRepository.encryptLogin(
             login: event.updatedLogin,
             masterKey: authBlocState.MASTER_KEY,
@@ -220,10 +229,33 @@ class PickedItemBloc extends Bloc<PickedItemBlocEvent, PickedItemBlocState> {
 
           await localDbRepository.updateLogin(login: encryptedLogin);
         }
-
       } catch (e) {
         logger.e(e);
       }
     });
+
+      ///
+    /// EDIT CARDS
+    ///
+    on<PickedItemBloc_Event_editCard>((event, emit) async {
+      logger.i('Edit Card');
+      try {
+        final authBlocState = authBloc.state;
+        if (authBlocState is AuthBlocAuthenticated) {
+          final encryptedCard = await encryptionRepository.encryptCard(
+            card: event.updatedCard,
+            masterKey: authBlocState.MASTER_KEY,
+          );
+
+          logger.f('Card : ${event.updatedCard.toString()}');
+          logger.f('Encrypted card : ${encryptedCard.toString()}');
+
+          await localDbRepository.updateCard(card: encryptedCard);
+        }
+      } catch (e) {
+        logger.e(e);
+      }
+    });
+
   }
 }
