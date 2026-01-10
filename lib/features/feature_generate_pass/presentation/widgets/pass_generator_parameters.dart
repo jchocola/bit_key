@@ -94,37 +94,37 @@ class PassGeneratorParameters extends StatelessWidget {
                   ),
                 ),
 
-                const Divider(),
+             //   const Divider(),
 
-                ListTile(
-                  leading: Text('Maximum numbers'),
-                  trailing: _qtyWidget(
-                    value: state.maxDigit.toString(),
-                    onRemove: () => passGeneratorBloc_read.add(
-                      PassGeneratorBlocEvent_removeNumberDigit(),
-                    ),
+                // ListTile(
+                //   leading: Text('Maximum numbers'),
+                //   trailing: _qtyWidget(
+                //     value: state.maxDigit.toString(),
+                //     onRemove: () => passGeneratorBloc_read.add(
+                //       PassGeneratorBlocEvent_removeNumberDigit(),
+                //     ),
 
-                    onAdd: () => passGeneratorBloc_read.add(
-                      PassGeneratorBlocEvent_addNumberDigit(),
-                    ),
-                  ),
-                ),
+                //     onAdd: () => passGeneratorBloc_read.add(
+                //       PassGeneratorBlocEvent_addNumberDigit(),
+                //     ),
+                //   ),
+                // ),
 
-                const Divider(),
+                // const Divider(),
 
-                ListTile(
-                  leading: Text('Maximum special'),
-                  trailing: _qtyWidget(
-                    value: state.maxSpecialSymbol.toString(),
+                // ListTile(
+                //   leading: Text('Maximum special'),
+                //   trailing: _qtyWidget(
+                //     value: state.maxSpecialSymbol.toString(),
 
-                    onRemove: () => passGeneratorBloc_read.add(
-                      PassGeneratorBlocEvent_removeNumberSpecial(),
-                    ),
-                    onAdd: () => passGeneratorBloc_read.add(
-                      PassGeneratorBlocEvent_addNumberSpecial(),
-                    ),
-                  ),
-                ),
+                //     onRemove: () => passGeneratorBloc_read.add(
+                //       PassGeneratorBlocEvent_removeNumberSpecial(),
+                //     ),
+                //     onAdd: () => passGeneratorBloc_read.add(
+                //       PassGeneratorBlocEvent_addNumberSpecial(),
+                //     ),
+                //   ),
+                // ),
               ],
             );
           } else {

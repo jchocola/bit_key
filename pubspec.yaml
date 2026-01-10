@@ -61,6 +61,11 @@ dependencies:
   jailbreak_root_detection: ^1.2.0+1
   no_screenshot: ^0.3.1
   file_picker: ^10.3.8
+  wiredash: ^2.6.0
+  flutter_dotenv: ^6.0.0
+  url_launcher: ^6.3.2
+  easy_localization: ^3.0.8
+  easy_localization_loader: ^2.0.2
  
 
 
@@ -89,8 +94,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - assets/bg.mp4
+  assets:
+    - .env
+    - assets/translations/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

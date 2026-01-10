@@ -1,7 +1,10 @@
 import 'package:bit_key/core/constants/app_constant.dart';
+import 'package:bit_key/core/di/di.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
+import 'package:bit_key/features/feature_setting/presentation/pages/about_page/domain/repo/url_launcher_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
+import 'package:wiredash/wiredash.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
@@ -19,11 +22,11 @@ class AboutPage extends StatelessWidget {
             child: Column(
               spacing: AppConstant.appPadding,
               children: [
-                aboutSection(),
-                securitySection(),
-                techSection(),
-                supportFeebackSection(),
-                pravicyPolicySection(),
+                aboutSection(context),
+                securitySection(context),
+                techSection(context),
+                supportFeebackSection(context),
+                pravicyPolicySection(context),
               ],
             ),
           ),
@@ -32,38 +35,46 @@ class AboutPage extends StatelessWidget {
     );
   }
 
-  Widget aboutSection() {
+  Widget aboutSection(BuildContext context) {
+    final theme = Theme.of(context);
     return FakeGlass(
       shape: LiquidRoundedRectangle(borderRadius: AppConstant.appBorder),
       child: Column(
         children: [
-          Text('О приложении'),
+          Text('О приложении', style: theme.textTheme.titleMedium,),
           ListTile(
             leading: Icon(Icons.info),
             title: Text('Версия'),
-            subtitle: Text(' (build )'),
+            subtitle: Text(AppConstant.appVersion),
           ),
           ListTile(
             leading: Icon(Icons.calendar_today),
             title: Text('Дата сборки'),
-            subtitle: Text('2024-01-15'),
+            subtitle: Text(AppConstant.buildDate),
           ),
+
+          // ListTile(
+          //   leading: Icon(Icons.code),
+          //   title: Text('Версия API'),
+          //   subtitle: Text('1.0.0'),
+          // ),
           ListTile(
             leading: Icon(Icons.code),
-            title: Text('Версия API'),
-            subtitle: Text('1.0.0'),
+            title: Text('Developer'),
+            subtitle: Text(AppConstant.developer),
           ),
         ],
       ),
     );
   }
 
-  Widget securitySection() {
+  Widget securitySection(BuildContext context) {
+      final theme = Theme.of(context);
     return FakeGlass(
       shape: LiquidRoundedRectangle(borderRadius: AppConstant.appBorder),
       child: Column(
         children: [
-          Text('Безопасность'),
+          Text('Безопасность', style: theme.textTheme.titleMedium,),
           ListTile(
             leading: Icon(Icons.security),
             title: Text('Шифрование'),
@@ -89,12 +100,13 @@ class AboutPage extends StatelessWidget {
     );
   }
 
-  Widget techSection() {
+  Widget techSection(BuildContext context) {
+      final theme = Theme.of(context);
     return FakeGlass(
       shape: LiquidRoundedRectangle(borderRadius: AppConstant.appBorder),
       child: Column(
         children: [
-          Text('Технические детали'),
+          Text('Технические детали', style: theme.textTheme.titleMedium,),
           ListTile(
             leading: Icon(Icons.storage),
             title: Text('База данных'),
@@ -115,65 +127,97 @@ class AboutPage extends StatelessWidget {
             title: Text('Платформа'),
             subtitle: Text('Flutter '),
           ),
+
+          ListTile(
+            onTap: ()async {
+              await getIt<UrlLauncherRepo>().lauchURL(
+                url: AppConstant.codeRepositoryUrl,
+              ); 
+            },
+            leading: Icon(Icons.phone_android),
+            title: Text('Open source'),
+            subtitle: Text('code in github'),
+          ),
         ],
       ),
     );
   }
 
-  Widget supportFeebackSection() {
+  Widget supportFeebackSection(BuildContext context) {
+      final theme = Theme.of(context);
     return FakeGlass(
       shape: LiquidRoundedRectangle(borderRadius: AppConstant.appBorder),
       child: Column(
         children: [
-          Text('Поддержка'),
+          Text('Поддержка' , style: theme.textTheme.titleMedium,),
           ListTile(
             leading: Icon(Icons.email),
             title: Text('Email поддержки'),
-            subtitle: Text('support@bitkey.app'),
-            // onTap: () => _launchEmail(),
+            subtitle: Text(AppConstant.developerEmail),
+            onTap: () async {
+              await getIt<UrlLauncherRepo>().contactToDeveloper(
+                developerEmail: AppConstant.developerEmail,
+              );
+            },
           ),
           ListTile(
             leading: Icon(Icons.bug_report),
             title: Text('Сообщить об ошибке'),
-            // onTap: () => _openBugReport(),
+            onTap: () => {
+              Wiredash.of(context).show(inheritMaterialTheme: true),
+            },
           ),
           ListTile(
             leading: Icon(Icons.lightbulb),
             title: Text('Предложить функцию'),
-            //onTap: () => _openFeatureRequest(),
+            onTap: () => {
+              Wiredash.of(context).show(inheritMaterialTheme: true),
+            },
           ),
           ListTile(
             leading: Icon(Icons.rate_review),
             title: Text('Оценить приложение'),
-            //onTap: () => _rateApp(),
+            onTap: () async {
+              await getIt<UrlLauncherRepo>().lauchURL(
+                url: AppConstant.rustoreUrl,
+              );
+            },
           ),
         ],
       ),
     );
   }
 
-  Widget pravicyPolicySection() {
+  Widget pravicyPolicySection(BuildContext context) {
+      final theme = Theme.of(context);
     return FakeGlass(
       shape: LiquidRoundedRectangle(borderRadius: AppConstant.appBorder),
       child: Column(
-       
         children: [
-          Text('Правовая информация'),
+          Text('Правовая информация' , style: theme.textTheme.titleMedium,),
           ListTile(
             leading: Icon(Icons.description),
             title: Text('Политика конфиденциальности'),
-            //onTap: () => _openPrivacyPolicy(),
+            onTap: () async {
+              await getIt<UrlLauncherRepo>().lauchURL(
+                url: AppConstant.privacyPolicyUrl,
+              );
+            },
           ),
           ListTile(
             leading: Icon(Icons.gavel),
             title: Text('Условия использования'),
-            //onTap: () => _openTerms(),
+            onTap: () async {
+              await getIt<UrlLauncherRepo>().lauchURL(
+                url: AppConstant.termOfServiceUrl,
+              );
+            },
           ),
-        
+
           ListTile(
             leading: Icon(Icons.copyright),
             title: Text('Авторские права'),
-            subtitle: Text('© 2024 BitKey. Все права защищены.'),
+            subtitle: Text(AppConstant.copyRightUrl),
           ),
         ],
       ),
