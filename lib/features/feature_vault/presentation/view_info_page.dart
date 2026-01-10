@@ -16,6 +16,7 @@ import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dar
 import 'package:bit_key/features/feature_vault/presentation/bloc/no_folders_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/move_to_bin_confirm.dart';
+import 'package:bit_key/features/feature_vault/presentation/page/edit_login/edit_login_page.dart';
 import 'package:bit_key/main.dart';
 import 'package:bit_key/shared/widgets/big_button.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
@@ -182,7 +183,27 @@ class ViewInfoPage extends StatelessWidget {
                 },
               ),
             ),
-            Expanded(flex: 3, child: BigButton(title: 'Edit')),
+            Expanded(
+              flex: 3,
+              child: BigButton(
+                title: 'Edit',
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (modalContext) {
+                      return MultiBlocProvider(
+                        providers: [
+                          BlocProvider.value(value: BlocProvider.of<PickedItemBloc>(context),)
+                        ],
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height * AppConstant.modalPageHeight,
+                          child: EditLoginPage()));
+                    },
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ],

@@ -2,14 +2,16 @@
 
 import 'dart:async';
 
-import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
-import 'package:bit_key/main.dart';
+import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
+import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:bit_key/features/feature_vault/domain/entity/card.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/identity.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/login.dart';
+import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
+import 'package:bit_key/main.dart';
 
 ///
 /// EVENT
@@ -55,6 +57,13 @@ class PickedItemBlocEvent_moveIdentityToBin extends PickedItemBlocEvent {
   PickedItemBlocEvent_moveIdentityToBin({this.completer});
 }
 
+class PickedItemBlocEvent_editLogin extends PickedItemBlocEvent {
+  final Login updatedLogin;
+  PickedItemBlocEvent_editLogin({required this.updatedLogin});
+  @override
+  List<Object?> get props => [updatedLogin];
+}
+
 ///
 /// STATE
 ///
@@ -86,7 +95,9 @@ class PickedItemBlocState_success extends PickedItemBlocState {}
 ///
 class PickedItemBloc extends Bloc<PickedItemBlocEvent, PickedItemBlocState> {
   final LocalDbRepository localDbRepository;
-  PickedItemBloc({required this.localDbRepository})
+  final AuthBloc authBloc;
+  final EncryptionRepository encryptionRepository;
+  PickedItemBloc({required this.localDbRepository, required this.authBloc, required this.encryptionRepository})
     : super(PickedItemBlocState_init()) {
     ///
     /// PICK LOGIN
@@ -185,6 +196,31 @@ class PickedItemBloc extends Bloc<PickedItemBlocEvent, PickedItemBlocState> {
         } else {
           logger.e('Some error');
         }
+      } catch (e) {
+        logger.e(e);
+      }
+    });
+
+    ///
+    /// EDIT LOGIN
+    ///
+    on<PickedItemBlocEvent_editLogin>((event, emit) async {
+      logger.i('Edit Login');
+      try {
+           final authBlocState = authBloc.state;
+        if (authBlocState is AuthBlocAuthenticated) {
+
+          final encryptedLogin = await encryptionRepository.encryptLogin(
+            login: event.updatedLogin,
+            masterKey: authBlocState.MASTER_KEY,
+          );
+
+          logger.f('Login : ${event.updatedLogin.toString()}');
+          logger.f('Encrypted Login : ${encryptedLogin.toString()}');
+
+          await localDbRepository.updateLogin(login: encryptedLogin);
+        }
+
       } catch (e) {
         logger.e(e);
       }

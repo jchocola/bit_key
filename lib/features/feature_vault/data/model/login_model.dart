@@ -100,4 +100,9 @@ class LoginModel {
   String toJson() => json.encode(toMap());
 
   factory LoginModel.fromJson(String source) => LoginModel.fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'LoginModel(id: $id, itemName: $itemName, folderName: $folderName, login: $login, password: $password, url: $url, isHide: $isHide)';
+  }
 }

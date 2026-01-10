@@ -11,6 +11,7 @@ import 'package:bit_key/features/feature_vault/domain/entity/identity.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/login.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
 import 'package:bit_key/main.dart';
+import 'package:logger/web.dart';
 
 class HiveDbRepoImpl implements LocalDbRepository {
   final String pathDir;
@@ -167,9 +168,15 @@ class HiveDbRepoImpl implements LocalDbRepository {
   }
 
   @override
-  Future<void> updateLogin({required Login login}) {
-    // TODO: implement updateLogin
-    throw UnimplementedError();
+  Future<void> updateLogin({required Login login}) async {
+    try {
+      final index = await getLoginIndexInBox(login: login);
+      logger.d('Update login with index ${index}');
+      final loginModel = LoginModel.fromEntity(login);
+      await _loginsBox.putAt(index, loginModel);
+    } catch (e) {
+      logger.e(e);
+    }
   }
 
   @override
