@@ -1,10 +1,12 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
 
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_auth/presentation/widget/master_password_input.dart';
 import 'package:bit_key/main.dart';
 import 'package:bit_key/shared/widgets/big_button.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -61,7 +63,7 @@ class _UnlockVaultState extends State<UnlockVault> {
           masterKeyController: masterKeyController,
           onFingerPrintTapped: onFingerPrintTapped,
         ),
-        BigButton(title: 'Unlock Vault', onTap: () => _onUnlockVault()),
+        BigButton(title: context.tr(AppText.unlockVault), onTap: () => _onUnlockVault()),
       ],
     );
   }

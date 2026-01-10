@@ -13,6 +13,9 @@ import 'package:bit_key/features/feature_import_export_data/presentation/import_
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/bloc/acc_security_bloc.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/data/repo/no_screen_shot_repo_impl.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/domain/repo/app_security_repository.dart';
+import 'package:bit_key/features/feature_setting/presentation/pages/language_page/bloc/language_bloc.dart';
+import 'package:bit_key/features/feature_setting/presentation/pages/language_page/data/repo/language_setting_repo_impl.dart';
+import 'package:bit_key/features/feature_setting/presentation/pages/language_page/domain/repo/language_setting_repo.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
@@ -28,6 +31,8 @@ import 'package:bit_key/features/feature_vault/presentation/bloc/search_bloc.dar
 import 'package:bit_key/features/feature_vault/presentation/page/creating_card/bloc/create_card_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_identity/bloc/create_identity_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_login/bloc/create_login_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization_loader/easy_localization_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -39,6 +44,9 @@ final logger = Logger();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // localization
+  await EasyLocalization.ensureInitialized();
+
   // DI
   await DI();
 
@@ -48,8 +56,20 @@ Future<void> main() async {
   // load .env
   await dotenv.load(fileName: ".env");
 
+  // get current langcode
+  final currentLangCode = await getIt<LanguageSettingRepo>().getCurrentLangCode();
+
   // run app
-  runApp(const MyApp());
+  runApp(
+    EasyLocalization(
+      supportedLocales: [Locale('en'), Locale('ru'), Locale('vi')],
+      path: 'assets/translations',
+      assetLoader: JsonAssetLoader(),
+      fallbackLocale: Locale('en'),
+      startLocale: Locale(currentLangCode),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -190,20 +210,25 @@ class MyApp extends StatelessWidget {
           create: (context) => ImportDataBloc(
             importExportDataRepository: getIt<ImportExportDataRepository>(),
             localDbRepository: getIt<LocalDbRepository>(),
-            folderRepository: getIt<FolderRepository>()
+            folderRepository: getIt<FolderRepository>(),
           ),
         ),
+
+        BlocProvider(create: (context)=> LanguageBloc(languageSettingRepo: getIt<LanguageSettingRepo>())..add(LanguageBlocEvent_loadCurrentLangCode()))
       ],
 
       // child: MainPage(),
       child: Wiredash(
         projectId: dotenv.env['WIREDASH_PROJECT_ID'] ?? '',
-         secret: dotenv.env['WIREDASH_SECRET'] ?? '',
+        secret: dotenv.env['WIREDASH_SECRET'] ?? '',
         child: MaterialApp.router(
           routerConfig: appRouterConfig,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
+          localizationsDelegates: context.localizationDelegates,
           title: 'Flutter Demo',
           theme: appTheme,
-        
+
           // debugShowMaterialGrid: true,
           // showPerformanceOverlay: true,
           //showSemanticsDebugger: true,

@@ -1,3 +1,4 @@
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/di/di.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
@@ -9,6 +10,8 @@ import 'package:bit_key/features/feature_setting/presentation/pages/about_page/a
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/acc_security_page.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/bloc/acc_security_bloc.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/faq_page/faq_page.dart';
+import 'package:bit_key/features/feature_setting/presentation/pages/language_page/bloc/language_bloc.dart';
+import 'package:bit_key/features/feature_setting/presentation/pages/language_page/language_page.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/vault_page/vault_page.dart';
 import 'package:bit_key/features/feature_setting/presentation/widgets/setting_appbar.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
@@ -16,6 +19,7 @@ import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.da
 import 'package:bit_key/main.dart';
 import 'package:bit_key/shared/widgets/big_button.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -58,7 +62,22 @@ class SettingPage extends StatelessWidget {
                 );
               },
             ),
-            CustomListile(title: 'Language', icon: AppIcon.languageIcon),
+            CustomListile(
+              title: context.tr(AppText.language),
+              icon: AppIcon.languageIcon,
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (modalContext) {
+                    return MultiBlocProvider(
+                      providers: [
+                        BlocProvider.value(value: BlocProvider.of<LanguageBloc>(context))
+                      ],
+                      child: LanguagePage());
+                  },
+                );
+              },
+            ),
             CustomListile(
               title: 'Vault',
               icon: AppIcon.vaultIcon,
@@ -173,7 +192,6 @@ class SettingPage extends StatelessWidget {
             //     );
             //   },
             // ),
-
             BlocListener<AuthBloc, AuthBlocState>(
               listener: (context, state) {
                 if (state is AuthBlocUnauthenticated) {

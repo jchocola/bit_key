@@ -1,6 +1,8 @@
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/shared/widgets/custom_textfield.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
@@ -21,7 +23,7 @@ class MasterPasswordInput extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: AppConstant.appPadding,
           children: [
-            Text('Master Password'),
+            Text(context.tr(AppText.masterKey)),
             Row(
               spacing: AppConstant.appPadding,
               children: [

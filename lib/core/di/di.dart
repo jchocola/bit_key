@@ -14,6 +14,8 @@ import 'package:bit_key/features/feature_setting/presentation/pages/acc_security
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/data/repo/jailbreak_root_detection_impl.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/data/repo/no_screen_shot_repo_impl.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/domain/repo/app_security_repository.dart';
+import 'package:bit_key/features/feature_setting/presentation/pages/language_page/data/repo/language_setting_repo_impl.dart';
+import 'package:bit_key/features/feature_setting/presentation/pages/language_page/domain/repo/language_setting_repo.dart';
 import 'package:bit_key/features/feature_vault/data/repo/aes256_encryption_repo_impl.dart';
 import 'package:bit_key/features/feature_vault/data/repo/folder_repo_impl.dart';
 import 'package:bit_key/features/feature_vault/data/repo/hive_db_repo_impl.dart';
@@ -37,6 +39,7 @@ Future<void> DI() async {
   getIt.registerSingleton<FolderRepository>(
     FolderRepoImpl(prefs: shared_prefs),
   );
+  getIt.registerSingleton<LanguageSettingRepo>(LanguageSettingRepoImpl(sharedPreferences: shared_prefs));
 
   getIt.registerSingleton<AppSecurityRepository>(
     AppSecurityRepoImpl(sharedPreferences: shared_prefs),
