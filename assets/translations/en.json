@@ -32,6 +32,7 @@
     "item_details": "Item Details",
     "item_name": "Item name (required)",
     "language": "Language",
+    "lock_app": "Lock app",
     "master_key": "",
     "none": "None",
     "restore": "Restore",
@@ -79,6 +80,22 @@
     "password": "Password 🔒",
     "user_name": "User name 🔒",
     "website": "Website(URL) 🔒"
+  },
+  "setting": {
+    "FAQs": "FAQs",
+    "about_app": "About app",
+    "account_security": "Account security",
+    "allowed_screenshot": "Taking a screenshot is allowed.",
+    "clearing_temporary_key": "Clearing temporary keys",
+    "language": "Language",
+    "note": "Please note: After clearing temporary keys, you will need to sign in to your accounts again. Face ID and PIN will not work until you re-enter your primary credentials.",
+    "prevent_screenshot": "Prevents taking screenshots",
+    "screenshot": "Screenshot",
+    "session_time_out": "Session Timeout",
+    "settings": "Settings",
+    "shake_to_lock": "Shake to lock",
+    "shake_to_lock_desc": "Quickly lock your safe in critical situations",
+    "vault": "Vault"
   },
   "vault": {
     "bin": "Bin",

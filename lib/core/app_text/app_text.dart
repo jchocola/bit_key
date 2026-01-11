@@ -4,7 +4,7 @@ class AppText {
   ///
   /// COMMONS
   ///
-  static const language = 'commons.language';
+
   static const cancel = 'commons.cancel';
   static const save = 'commons.save';
   static const item_name = 'commons.item_name';
@@ -16,6 +16,7 @@ class AppText {
   static const restore = "commons.restore";
   static const clear_all = "commons.clear_all";
   static const copy = "commons.copy";
+  static const lock_app = "commons.lock_app";
 
   ///
   /// AUTH
@@ -108,6 +109,25 @@ class AppText {
   static const last_name_generator = "generator.last_name";
   static const full_name = "generator.full_name";
   static const zone = "generator.zone";
+
+  ///
+  /// SETTING
+  ///
+  static const language = 'setting.language';
+  static const settings = "setting.settings";
+  static const account_security = "setting.account_security";
+  static const vault = "setting.vault";
+  static const FAQs = "setting.FAQs";
+  static const about_app = "setting.about_app";
+  static const session_time_out = "setting.session_time_out";
+  static const clearing_temporary_key = "setting.clearing_temporary_key";
+  static const screenshot = "setting.screenshot";
+  static const allowed_screenshot = "setting.allowed_screenshot";
+  static const prevent_screenshot = "setting.prevent_screenshot";
+  static const shake_to_lock = "setting.shake_to_lock";
+  static const shake_to_lock_desc = "setting.shake_to_lock_desc";
+  static const note_acc_setting = "setting.note";
+  //  static const = "setting.";
 
   // static const = "";
   //  static const = "";

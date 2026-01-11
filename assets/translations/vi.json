@@ -32,6 +32,7 @@
     "item_details": "",
     "item_name": "",
     "language": "",
+    "lock_app": "",
     "master_key": "",
     "none": "",
     "restore": "",
@@ -79,6 +80,22 @@
     "password": "",
     "user_name": "",
     "website": ""
+  },
+  "setting": {
+    "FAQs": "",
+    "about_app": "",
+    "account_security": "",
+    "allowed_screenshot": "",
+    "clearing_temporary_key": "",
+    "language": "",
+    "note": "",
+    "prevent_screenshot": "",
+    "screenshot": "",
+    "session_time_out": "",
+    "settings": "",
+    "shake_to_lock": "",
+    "shake_to_lock_desc": "",
+    "vault": ""
   },
   "vault": {
     "bin": "",

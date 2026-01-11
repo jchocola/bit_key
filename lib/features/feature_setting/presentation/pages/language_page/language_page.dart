@@ -1,5 +1,6 @@
 import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
+import 'package:bit_key/core/enum/lang_code_coverter.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/core/theme/app_color.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/language_page/bloc/language_bloc.dart';
@@ -47,7 +48,7 @@ class LanguagePage extends StatelessWidget {
               );
 
             },
-            title: locale.languageCode,
+            title: langCodeConverter(langCode: locale.languageCode),
             color: state is LanguageBlocState_loaded
                 ? state.currentLangCode == locale.languageCode
                       ? AppColor.error

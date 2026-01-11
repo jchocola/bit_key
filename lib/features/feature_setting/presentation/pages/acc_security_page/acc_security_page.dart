@@ -1,3 +1,4 @@
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/enum/clean_key_duration.dart';
 import 'package:bit_key/core/enum/session_timout.dart';
@@ -8,6 +9,7 @@ import 'package:bit_key/features/feature_setting/presentation/pages/acc_security
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/widgets/acc_sec_appbar.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
 import 'package:bit_key/shared/widgets/custom_switcher.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -34,7 +36,7 @@ class AccSecurityPage extends StatelessWidget {
 
                     CustomListile2(
                       icon: AppIcon.sessionTimeoutIcon,
-                      title: 'Session Timeout',
+                      title: context.tr(AppText.session_time_out),
                       subTitle: state.sessionTimeout.label,
                        trailingWidget: PopupMenuButton(
                         itemBuilder: (context) => List.generate(
@@ -59,7 +61,7 @@ class AccSecurityPage extends StatelessWidget {
 
                     CustomListile2(
                       icon: AppIcon.clearKeyIcon,
-                      title: 'Чистка вреенных ключей',
+                      title: context.tr(AppText.clearing_temporary_key),
                       subTitle: state.clearKeyDuration.label,
                       trailingWidget: PopupMenuButton(
                         itemBuilder: (context) => List.generate(
@@ -84,8 +86,8 @@ class AccSecurityPage extends StatelessWidget {
 
                     CustomListile2(
                       icon: AppIcon.screenShootIcon,
-                      title: 'Криншот',
-                      subTitle: state.enableScreenShoot ?'Разрешаете сделать скриншот' : 'Запрешаете делать скриншот',
+                      title: context.tr(AppText.screenshot),
+                      subTitle: state.enableScreenShoot ?context.tr(AppText.allowed_screenshot) : context.tr(AppText.prevent_screenshot),
                       trailingWidget: CustomSwitcher(
                         value: state.enableScreenShoot,
                         onChanged: (_) {
@@ -97,8 +99,8 @@ class AccSecurityPage extends StatelessWidget {
                     ),
                     CustomListile2(
                       icon: AppIcon.shakeIcon,
-                      title: 'Shake to lock',
-                      subTitle: 'Easy to lock you app',
+                      title: context.tr(AppText.shake_to_lock),
+                      subTitle: context.tr(AppText.shake_to_lock_desc),
                       trailingWidget: CustomSwitcher(
                         value: state.shakeToLock,
                         onChanged: (_) {
@@ -110,7 +112,7 @@ class AccSecurityPage extends StatelessWidget {
                     ),
 
                     Text(
-                      'Внимание , после очистки временных ключей, потребуется повторный вход во аккаунты. Face ID и Pin Code работать не будут до повторного ввода основных учетных данных.',
+                      context.tr(AppText.note_acc_setting),
                     ),
                   ],
                 );

@@ -38,7 +38,7 @@ class SettingPage extends StatelessWidget {
             SettingPageAppbar(),
 
             CustomListile(
-              title: 'Account security',
+              title: context.tr(AppText.account_security),
               icon: AppIcon.securityIcon,
               onTap: () {
                 showModalBottomSheet(
@@ -79,7 +79,7 @@ class SettingPage extends StatelessWidget {
               },
             ),
             CustomListile(
-              title: 'Vault',
+              title:context.tr(AppText.vault),
               icon: AppIcon.vaultIcon,
               onTap: () {
                 showModalBottomSheet(
@@ -110,7 +110,7 @@ class SettingPage extends StatelessWidget {
               },
             ),
             CustomListile(
-              title: 'FAQs',
+              title: context.tr(AppText.FAQs),
               icon: AppIcon.faqIcon,
               onTap: () {
                 showModalBottomSheet(
@@ -128,7 +128,7 @@ class SettingPage extends StatelessWidget {
               },
             ),
             CustomListile(
-              title: 'About',
+              title: context.tr(AppText.about_app),
               icon: AppIcon.infoIcon,
               onTap: () {
                 showModalBottomSheet(
@@ -199,7 +199,7 @@ class SettingPage extends StatelessWidget {
                 }
               },
               child: BigButton(
-                title: 'Lock app',
+                title: context.tr(AppText.lock_app),
                 onTap: () {
                   context.read<AuthBloc>().add(AuthBlocEvent_lockApp());
                 },
