@@ -143,7 +143,7 @@ class AppText {
   static const synchronization = "setting.about.synchronization";
   static const synchronization_desc = "setting.about.synchronization_desc";
   static const zero_knowledge = "setting.about.zero_knowledge";
-   static const zero_knowledge_desc = "setting.about.zero_knowledge_desc";
+  static const zero_knowledge_desc = "setting.about.zero_knowledge_desc";
   static const technical_details = "setting.about.technical_details";
   static const database = "setting.about.database";
   static const database_desc = "setting.about.database_desc";
@@ -164,6 +164,55 @@ class AppText {
   static const privacy_policy = "setting.about.privacy_policy";
   static const term_service = "setting.about.term_service";
   static const copy_right = "setting.about.copy_right";
+
+  ///
+  /// SETTING.FAQ
+  ///
+  static const security_end_encryption = "setting.faq.security_end_encryption";
+  static const security_end_encryption_q1 = "setting.faq.security_end_encryption_q1";
+  static const security_end_encryption_a1 = "setting.faq.security_end_encryption_a1";
+  static const security_end_encryption_q2 = "setting.faq.security_end_encryption_q2";
+  static const security_end_encryption_a2 = "setting.faq.security_end_encryption_a2";
+  static const security_end_encryption_q3 = "setting.faq.security_end_encryption_q3";
+  static const security_end_encryption_a3 = "setting.faq.security_end_encryption_a3";
+  static const security_end_encryption_q4 = "setting.faq.security_end_encryption_q4";
+  static const security_end_encryption_a4 = "setting.faq.security_end_encryption_a4";
+  static const using_the_application = "setting.faq.using_the_application";
+  static const using_the_application_q1 = "setting.faq.using_the_application_q1";
+  static const using_the_application_a1 = "setting.faq.using_the_application_a1";
+  static const using_the_application_q2 = "setting.faq.using_the_application_q2";
+  static const using_the_application_a2 = "setting.faq.using_the_application_a2";
+  static const using_the_application_q3 = "setting.faq.using_the_application_q3";
+  static const using_the_application_a3 = "setting.faq.using_the_application_a3";
+  static const using_the_application_q4 = "setting.faq.using_the_application_q4";
+  static const using_the_application_a4 = "setting.faq.using_the_application_a4";
+  static const storage_and_management = "setting.faq.storage_and_management";
+  static const storage_and_management_q1 = "setting.faq.storage_and_management_q1";
+  static const storage_and_management_a1 = "setting.faq.storage_and_management_a1";
+  static const storage_and_management_q2 = "setting.faq.storage_and_management_q2";
+  static const storage_and_management_a2 = "setting.faq.storage_and_management_a2";
+  static const storage_and_management_q3 = "setting.faq.storage_and_management_q3";
+  static const storage_and_management_a3 = "setting.faq.storage_and_management_a3";
+  static const storage_and_management_q4 = "setting.faq.storage_and_management_q4";
+  static const storage_and_management_a4 = "setting.faq.storage_and_management_a4";
+  static const storage_and_management_q5 = "setting.faq.storage_and_management_q5";
+  static const storage_and_management_a5 = "setting.faq.storage_and_management_a5";
+  static const backup_and_restore = "setting.faq.backup_and_restore";
+  static const backup_and_restore_q1 = "setting.faq.backup_and_restore_q1";
+  static const backup_and_restore_a1 = "setting.faq.backup_and_restore_a1";
+  static const backup_and_restore_q2 = "setting.faq.backup_and_restore_q2";
+  static const backup_and_restore_a2 = "setting.faq.backup_and_restore_a2";
+  static const backup_and_restore_q3 = "setting.faq.backup_and_restore_q3";
+  static const backup_and_restore_a3 = "setting.faq.backup_and_restore_a3";
+  static const backup_and_restore_q4 = "setting.faq.backup_and_restore_q4";
+  static const backup_and_restore_a4 = "setting.faq.backup_and_restore_a4";
+  static const prices_and_licenses = "setting.faq.prices_and_licenses";
+  static const prices_and_licenses_q1 = "setting.faq.prices_and_licenses_q1";
+  static const prices_and_licenses_a1 = "setting.faq.prices_and_licenses_a1";
+  static const prices_and_licenses_q2 = "setting.faq.prices_and_licenses_q2";
+  static const prices_and_licenses_a2 = "setting.faq.prices_and_licenses_a2";
+  static const prices_and_licenses_q3 = "setting.faq.prices_and_licenses_q3";
+  static const prices_and_licenses_a3 = "setting.faq.prices_and_licenses_a3";
 
   // static const = "";
   //  static const = "";
