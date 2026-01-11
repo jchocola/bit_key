@@ -1,6 +1,10 @@
 // ignore_for_file: camel_case_types
 
+import 'dart:async';
 import 'dart:io';
+import 'package:bit_key/core/di/di.dart';
+import 'package:bit_key/features/feature_analytic/data/analytics_facade_repo_impl.dart';
+import 'package:bit_key/features/feature_analytic/domain/analytic_repository.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
 import 'package:equatable/equatable.dart';
@@ -152,8 +156,24 @@ class ImportDataBloc extends Bloc<ImportDataBlocEvent, ImportDataBlocState> {
               folders: folders,
             ),
           );
+
+          // (analytic) track event IMPORT_DATA_SUCCESS
+          unawaited(
+            getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+              AnalyticEvent.IMPORT_DATA_SUCCESS.name,
+            ),
+          );
         } catch (e) {
           logger.e(e);
+          // (analytic) track event IMPORT_DATA_FAILED
+          unawaited(
+            getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+              AnalyticEvent.IMPORT_DATA_FAILED.name,
+              {
+                "ERROR": e.toString()
+              },
+            ),
+          );
         }
       } else {
         logger.e('Not picked file');
@@ -262,6 +282,14 @@ class ImportDataBloc extends Bloc<ImportDataBlocEvent, ImportDataBlocState> {
           await localDbRepository.saveCardsList(cards: cards);
           await localDbRepository.saveIdentitiesList(identities: identities);
           await folderRepository.addListFolder(folderList: folders);
+
+
+             // (analytic) track event IMPORT_DATA_TO_EXISTED
+          unawaited(
+            getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+              AnalyticEvent.IMPORT_DATA_TO_EXISTED.name,
+            ),
+          );
         } catch (e) {
           logger.e(e);
         }

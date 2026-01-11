@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/di/di.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
+import 'package:bit_key/features/feature_analytic/data/analytics_facade_repo_impl.dart';
+import 'package:bit_key/features/feature_analytic/domain/analytic_repository.dart';
 import 'package:bit_key/features/feature_auth/domain/repo/secure_storage_repository.dart';
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_import_export_data/presentation/bloc/export_data_bloc.dart';
@@ -71,15 +75,18 @@ class SettingPage extends StatelessWidget {
                   builder: (modalContext) {
                     return MultiBlocProvider(
                       providers: [
-                        BlocProvider.value(value: BlocProvider.of<LanguageBloc>(context))
+                        BlocProvider.value(
+                          value: BlocProvider.of<LanguageBloc>(context),
+                        ),
                       ],
-                      child: LanguagePage());
+                      child: LanguagePage(),
+                    );
                   },
                 );
               },
             ),
             CustomListile(
-              title:context.tr(AppText.vault),
+              title: context.tr(AppText.vault),
               icon: AppIcon.vaultIcon,
               onTap: () {
                 showModalBottomSheet(
@@ -113,6 +120,13 @@ class SettingPage extends StatelessWidget {
               title: context.tr(AppText.FAQs),
               icon: AppIcon.faqIcon,
               onTap: () {
+                // (analytic) track event READ_FAQ_PAGE
+                unawaited(
+                  getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+                    AnalyticEvent.READ_FAQ_PAGE.name,
+                  ),
+                );
+
                 showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,
@@ -131,6 +145,13 @@ class SettingPage extends StatelessWidget {
               title: context.tr(AppText.about_app),
               icon: AppIcon.infoIcon,
               onTap: () {
+
+                // (analytic) track event READ_APP_ABOUT_PAGE
+                unawaited(
+                  getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+                    AnalyticEvent.READ_APP_ABOUT_PAGE.name,
+                  ),
+                );
                 showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,

@@ -1,7 +1,11 @@
 // ignore_for_file: camel_case_types
 
+import 'dart:async';
 import 'dart:io';
 
+import 'package:bit_key/core/di/di.dart';
+import 'package:bit_key/features/feature_analytic/data/analytics_facade_repo_impl.dart';
+import 'package:bit_key/features/feature_analytic/domain/analytic_repository.dart';
 import 'package:bit_key/features/feature_auth/domain/repo/local_auth_repository.dart';
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
@@ -101,6 +105,13 @@ class ExportDataBloc extends Bloc<ExportDataBlocEvent, ExportDataBlocState> {
             dataStr: convertedData,
             file: file,
           );
+
+              // (analytic) track event EXPORT_ENCRYPTED_DATA
+          unawaited(
+            getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+              AnalyticEvent.EXPORT_ENCRYPTED_DATA.name,
+            ),
+          );
         }
       } catch (e) {
         logger.e(e);
@@ -157,6 +168,13 @@ class ExportDataBloc extends Bloc<ExportDataBlocEvent, ExportDataBlocState> {
           await importExportDataRepository.exportJsonData(
             dataStr: convertedData,
             file: file,
+          );
+
+            // (analytic) track event EXPORT_PURE_DATA
+          unawaited(
+            getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+              AnalyticEvent.EXPORT_PURE_DATA.name,
+            ),
           );
         }
       } catch (e) {

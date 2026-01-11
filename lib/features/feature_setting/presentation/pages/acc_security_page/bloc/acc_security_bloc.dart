@@ -1,5 +1,10 @@
 // ignore_for_file: camel_case_types, unnecessary_brace_in_string_interps
 
+import 'dart:async';
+
+import 'package:bit_key/core/di/di.dart';
+import 'package:bit_key/features/feature_analytic/data/analytics_facade_repo_impl.dart';
+import 'package:bit_key/features/feature_analytic/domain/analytic_repository.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/data/repo/no_screen_shot_repo_impl.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -134,6 +139,22 @@ class AccSecurityBloc extends Bloc<AccSecurityBlocEvent, AccSecurityBlocState> {
         final currentValue = await appSecurityRepository
             .getEnableShakeToLockValue();
 
+        if (currentValue) {
+          // (analytic) track event ALLOW_SHAKE_TO_LOCK
+          unawaited(
+            getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+              AnalyticEvent.ALLOW_SHAKE_TO_LOCK.name,
+            ),
+          );
+        } else {
+          // (analytic) track event PROPOSE_SHAKE_TO_LOCK
+          unawaited(
+            getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+              AnalyticEvent.PROPOSE_SHAKE_TO_LOCK.name,
+            ),
+          );
+        }
+
         logger.d('Changed shake to lock value : $currentValue');
         emit(currentState.copyWith(shakeToLock: currentValue));
       }
@@ -152,8 +173,22 @@ class AccSecurityBloc extends Bloc<AccSecurityBlocEvent, AccSecurityBlocState> {
 
         if (currentValue == true) {
           await noScreenShotRepoImpl.enableScreenshot();
+
+          // (analytic) track event ALLOW_SCREENSHOT
+          unawaited(
+            getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+              AnalyticEvent.ALLOW_SCREENSHOT.name,
+            ),
+          );
         } else {
           await noScreenShotRepoImpl.disableScreenshot();
+
+          // (analytic) track event PROPOSE_SCREENSHOT
+          unawaited(
+            getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+              AnalyticEvent.PROPOSE_SCREENSHOT.name,
+            ),
+          );
         }
 
         logger.d('Changed Screenshot value: $currentValue');
@@ -174,6 +209,15 @@ class AccSecurityBloc extends Bloc<AccSecurityBlocEvent, AccSecurityBlocState> {
         await appSecurityRepository.changeCleanKeyDurationValue(
           value: event.value,
         );
+
+        // (analytic) track event SET_CLEAR_TEMPORARY_KEY
+        unawaited(
+          getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+            AnalyticEvent.SET_CLEAR_TEMPORARY_KEY.name,
+            {"TIME": event.value.label},
+          ),
+        );
+
         final currentValue = await appSecurityRepository
             .getCleanKeyDurationValue();
 
@@ -196,6 +240,14 @@ class AccSecurityBloc extends Bloc<AccSecurityBlocEvent, AccSecurityBlocState> {
         );
         final currentValue = await appSecurityRepository
             .getSessionTimeOutValue();
+
+        // (analytic) track event SET_TIME_OUT
+        unawaited(
+          getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+            AnalyticEvent.SET_TIME_OUT.name,
+            {"TIME": event.value.label},
+          ),
+        );
 
         logger.d('Changed Screenshot value: $currentValue');
         emit(currentState.copyWith(sessionTimeout: currentValue));
