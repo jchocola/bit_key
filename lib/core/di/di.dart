@@ -107,7 +107,7 @@ Future<void> DI() async {
   );
 
   getIt.registerSingleton<AmplitudeAnalyticRepoImpl>(
-    AmplitudeAnalyticRepoImpl(apmplitude: amplitude),
+    AmplitudeAnalyticRepoImpl(amplitude: amplitude),
   );
 
   final clientsForRelease = [
@@ -117,7 +117,9 @@ Future<void> DI() async {
   final clientsForDev = [getIt<LoggerAnalyticRepoImpl>()];
 
   getIt.registerSingleton<AnalyticsFacadeRepoImpl>(
-    AnalyticsFacadeRepoImpl(clients: kReleaseMode ? clientsForRelease : clientsForDev)
+    AnalyticsFacadeRepoImpl(
+      clients: kReleaseMode ? clientsForRelease : clientsForDev,
+    ),
   );
 
   logger.i('DI initialized');

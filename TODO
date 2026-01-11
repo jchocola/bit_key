@@ -1,7 +1,7 @@
 FODLER WITH ITEMS
     - WITH COUNTS ✅
     - FOLDER INFO PAGE ✅
-    - DELETE FOLDER 
+    - DELETE FOLDER  ✅
 
 EMPTY CASE
     - 
@@ -40,27 +40,28 @@ SETTINGS PAGE
         - DELETE ALL DATA ✅
         - FOLDERS
             - DELETE FOLDERS ✅
-        - EXPORT DATA
-            - PURE_DATA
-            - ENCRYPTED_DATA
-        - IMPORT DATA
+        - EXPORT DATA ✅
+            - PURE_DATA ✅
+            - ENCRYPTED_DATA ✅
+        - IMPORT DATA ✅
 
 
-    - LANGUAGE SETTINGS
-        - SELECT LANGUAGE
-        - TRANSLATE APP
-    - ABOUT PAGE
-        - VERSION NUMBER
-        - TERMS OF SERVICE
-        - PRIVACY POLICY
-        - OPEN SOURCE LICENSES
-        - CONTACT SUPPORT
-        - FEEDBACK
+    - LANGUAGE SETTINGS ✅
+        - SELECT LANGUAGE ✅
+        - TRANSLATE APP ✅
+    - ABOUT PAGE ✅
+        - VERSION NUMBER ✅
+        - TERMS OF SERVICE ✅
+        - PRIVACY POLICY ✅
+        - OPEN SOURCE LICENSES ✅
+        - CONTACT SUPPORT ✅
+        - FEEDBACK ✅
 
     - ANALYTICS
-        - FIREBASE ANALYTIC
-        - CRASHLYTICS
-        - MIXPANEL
+        - FIREBASE ANALYTIC ✅
+        - CRASHLYTICS 
+        - AMPLITUDE
+        - WIREDASH
 
     - AUTH PAGE
         - FIRST TIME SETUP ✅
@@ -69,7 +70,7 @@ SETTINGS PAGE
         - LOG OUT FLOW ✅
     
 CRUD ITEMS
-    - EDIT ITEMS
+    - EDIT ITEMS ✅
 
 
 SECURITY 

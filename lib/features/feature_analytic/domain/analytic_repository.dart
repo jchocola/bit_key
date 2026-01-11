@@ -82,7 +82,7 @@ enum AnalyticEvent {
   IMPORT_DATA_SUCCESS, // ✅
   IMPORT_DATA_FAILED, // ✅
 
-  IMPORT_DATA_TO_EXISTED 
+  IMPORT_DATA_TO_EXISTED //✅
 }
 
 abstract class AnalyticClientBase {

@@ -1,101 +1,86 @@
 import 'package:amplitude_flutter/amplitude.dart';
+import 'package:amplitude_flutter/events/base_event.dart';
 
 import 'package:bit_key/features/feature_analytic/domain/analytic_repository.dart';
 
 class AmplitudeAnalyticRepoImpl implements AnalyticClientBase {
-  final Amplitude apmplitude;
-  AmplitudeAnalyticRepoImpl({
-    required this.apmplitude,
-  });
+  final Amplitude amplitude;
+  AmplitudeAnalyticRepoImpl({required this.amplitude});
 
   @override
-  Future<void> identifyUser({required String salt}) {
-    // TODO: implement identifyUser
-    throw UnimplementedError();
-   // amplitude.track("Sign Up");
+  Future<void> identifyUser({required String salt}) async {
+    await amplitude.track(BaseEvent('IDENIFY_USER', extra: {"SALT": salt}));
+    // amplitude.track("Sign Up");
   }
 
   @override
-  Future<void> resetUser() {
-    // TODO: implement resetUser
-    throw UnimplementedError();
+  Future<void> resetUser()async {
+     await amplitude.track(BaseEvent('RESET_USER',));
   }
 
   @override
-  Future<void> trackAppBackgrounded() {
-    // TODO: implement trackAppBackgrounded
-    throw UnimplementedError();
+  Future<void> trackAppBackgrounded() async{
+     await amplitude.track(BaseEvent('APP_BACKGROUNDED',));
   }
 
   @override
-  Future<void> trackAppCreated() {
-    // TODO: implement trackAppCreated
-    throw UnimplementedError();
+  Future<void> trackAppCreated() async{
+     await amplitude.track(BaseEvent('APP_CREATED',));
   }
 
   @override
-  Future<void> trackAppDeleted() {
-    // TODO: implement trackAppDeleted
-    throw UnimplementedError();
+  Future<void> trackAppDeleted() async{
+     await amplitude.track(BaseEvent('APP_DELETED',));
   }
 
   @override
-  Future<void> trackAppForegrounded() {
-    // TODO: implement trackAppForegrounded
-    throw UnimplementedError();
+  Future<void> trackAppForegrounded() async{
+     await amplitude.track(BaseEvent('APP_FOREGROUNDED',));
   }
 
   @override
-  Future<void> trackAppUpdated() {
-    // TODO: implement trackAppUpdated
-    throw UnimplementedError();
+  Future<void> trackAppUpdated() async{
+     await amplitude.track(BaseEvent('APP_UPDATED',));
   }
 
   @override
   Future<void> trackBottomSheetView(
     String routeName, [
     Map<String, Object>? data,
-  ]) {
-    // TODO: implement trackBottomSheetView
-    throw UnimplementedError();
+  ]) async{
+    await amplitude.track(BaseEvent('BOTTOM_SHEET_VIEW',extra: data));
   }
 
   @override
   Future<void> trackButtonPressed(
     String buttonName, [
     Map<String, Object>? data,
-  ]) {
-    // TODO: implement trackButtonPressed
-    throw UnimplementedError();
+  ]) async{
+     await amplitude.track(BaseEvent('BUTTON_PRESSED',extra: data));
   }
 
   @override
-  Future<void> trackDialogView(String dialogName, [Map<String, Object>? data]) {
-    // TODO: implement trackDialogView
-    throw UnimplementedError();
+  Future<void> trackDialogView(String dialogName, [Map<String, Object>? data])async {
+     await amplitude.track(BaseEvent('DIALOG_VIEW',extra: data));
   }
 
   @override
-  Future<void> trackEvent(String eventName, [Map<String, Object>? eventData]) {
-    // TODO: implement trackEvent
-    throw UnimplementedError();
+  Future<void> trackEvent(String eventName, [Map<String, Object>? eventData]) async{
+      await amplitude.track(BaseEvent(eventName,extra: eventData));
   }
 
   @override
-  Future<void> trackNewAppOnboarding() {
-    // TODO: implement trackNewAppOnboarding
-    throw UnimplementedError();
+  Future<void> trackNewAppOnboarding() async{
+     await amplitude.track(BaseEvent('NEW_APP_ONBOARDING',));
   }
 
   @override
-  Future<void> trackPermissionRequest(String permission, String status) {
-    // TODO: implement trackPermissionRequest
-    throw UnimplementedError();
+  Future<void> trackPermissionRequest(String permission, String status) async{
+     await amplitude.track(BaseEvent(permission,extra: {"status": status}));
   }
 
   @override
-  Future<void> trackScreenView(String routeName, String action) {
-    // TODO: implement trackScreenView
-    throw UnimplementedError();
+  Future<void> trackScreenView(String routeName, String action) async{
+     await amplitude.track(BaseEvent(routeName,extra: {"action": action}));
   }
 }
