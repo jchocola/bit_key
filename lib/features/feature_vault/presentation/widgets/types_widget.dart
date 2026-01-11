@@ -1,3 +1,4 @@
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
@@ -14,6 +15,7 @@ import 'package:bit_key/features/feature_vault/presentation/cards_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/identify_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/logins_page.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:family_bottom_sheet/family_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,7 +29,7 @@ class TypesWidget extends StatelessWidget {
       spacing: AppConstant.appPadding,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Types'),
+        Text(context.tr(AppText.types)),
 
         ///
         /// LOGIN
@@ -35,7 +37,7 @@ class TypesWidget extends StatelessWidget {
         BlocBuilder<LoginsBloc, LoginsBlocState>(
           builder: (context, state) => CustomListile(
             icon: AppIcon.loginIcon,
-            title: 'Login',
+            title: context.tr(AppText.login),
             onTap: () async {
               showModalBottomSheet(
                 context: context,
@@ -84,7 +86,7 @@ class TypesWidget extends StatelessWidget {
         BlocBuilder<CardsBloc, CardsBlocState>(
           builder: (context, state) => CustomListile(
             icon: AppIcon.cardIcon,
-            title: 'Card',
+            title: context.tr(AppText.card),
             trailingValue: state is CardsBlocState_loaded
                 ? state.cards.length.toString()
                 : '',
@@ -133,7 +135,7 @@ class TypesWidget extends StatelessWidget {
         BlocBuilder<IdentitiesBloc, IdentitiesBlocState>(
           builder: (context, state) => CustomListile(
             icon: AppIcon.identityIcon,
-            title: 'Identity',
+            title: context.tr(AppText.identity),
             trailingValue: state is IdentitiesBlocState_loaded
                 ? state.identities.length.toString()
                 : '',

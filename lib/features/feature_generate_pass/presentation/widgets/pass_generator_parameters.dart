@@ -1,7 +1,9 @@
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/features/feature_generate_pass/domain/repositories/generator_repo.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/bloc/pass_generator_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
@@ -21,7 +23,7 @@ class PassGeneratorParameters extends StatelessWidget {
             return Column(
               children: [
                 ListTile(
-                  leading: Text('Length'),
+                  leading: Text(context.tr(AppText.length)),
                   title: Slider.adaptive(
                     value: state.length.toDouble(),
                     onChanged: (value) {

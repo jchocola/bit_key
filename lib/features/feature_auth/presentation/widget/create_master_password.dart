@@ -1,5 +1,7 @@
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/shared/widgets/custom_textfield.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
@@ -22,28 +24,28 @@ class CreateMasterPassword extends StatelessWidget {
           children: [
             CustomTextfield(
               controller: masterPasswordController,
-              hintText: 'Master Password',
+              hintText: context.tr(AppText.masterKey),
               withEye: true,
               obscure: true,
             ),
 
             CustomTextfield(
               controller: confirmMasterPasswordController,
-              hintText: 'Confirm Master Password',
+              hintText: context.tr(AppText.comfirmMasterKey),
               withEye: true,
               obscure: true,
             ),
 
             Text(
-              'Please create a master password for your vault.',
+             context.tr(AppText.please_create_master_key_for_your_vault),
               style: theme.textTheme.bodySmall,
             ),
             Text(
-              'Your master password is used to encrypt and decrypt your data. Make sure to keep it safe and do not share it with anyone.',
+              context.tr(AppText.your_master_key_used_for_to),
               style: theme.textTheme.bodySmall,
             ),
 
-            Text('You cant change this masterkey . Please ', style: theme.textTheme.bodySmall,)
+            Text(context.tr(AppText.you_cant_change_this_key), style: theme.textTheme.bodySmall,)
           ],
         ),
       ),

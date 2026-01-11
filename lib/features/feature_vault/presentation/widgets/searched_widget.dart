@@ -1,3 +1,4 @@
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/card.dart';
@@ -13,6 +14,7 @@ import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_blo
 import 'package:bit_key/features/feature_vault/presentation/bloc/search_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/view_info_page.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart' hide Card;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -29,7 +31,8 @@ class SearchedWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: AppConstant.appPadding,
               children: [
-                Text('Found ${state.totalResults} results:'),
+
+                Text(context.tr(AppText.found_n_results,args: [state.totalResults.toString()])),
                 _builLoginsList(context, state.logins),
                 _buildCardsList(context, state.cards),
                 _buildIdentitiesList(context, state.identities),

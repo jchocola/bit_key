@@ -1,7 +1,9 @@
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/di/di.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/about_page/domain/repo/url_launcher_repo.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
 import 'package:wiredash/wiredash.dart';
@@ -41,15 +43,15 @@ class AboutPage extends StatelessWidget {
       shape: LiquidRoundedRectangle(borderRadius: AppConstant.appBorder),
       child: Column(
         children: [
-          Text('О приложении', style: theme.textTheme.titleMedium,),
+          Text(context.tr(AppText.about_app), style: theme.textTheme.titleMedium,),
           ListTile(
             leading: Icon(Icons.info),
-            title: Text('Версия'),
+            title: Text(context.tr(AppText.version)),
             subtitle: Text(AppConstant.appVersion),
           ),
           ListTile(
             leading: Icon(Icons.calendar_today),
-            title: Text('Дата сборки'),
+            title: Text(context.tr(AppText.build_date)),
             subtitle: Text(AppConstant.buildDate),
           ),
 
@@ -60,7 +62,7 @@ class AboutPage extends StatelessWidget {
           // ),
           ListTile(
             leading: Icon(Icons.code),
-            title: Text('Developer'),
+            title: Text(context.tr(AppText.developer)),
             subtitle: Text(AppConstant.developer),
           ),
         ],
@@ -74,26 +76,26 @@ class AboutPage extends StatelessWidget {
       shape: LiquidRoundedRectangle(borderRadius: AppConstant.appBorder),
       child: Column(
         children: [
-          Text('Безопасность', style: theme.textTheme.titleMedium,),
+          Text(context.tr(AppText.security), style: theme.textTheme.titleMedium,),
           ListTile(
             leading: Icon(Icons.security),
-            title: Text('Шифрование'),
-            subtitle: Text('AES-256-GCM / ChaCha20-Poly1305'),
+            title: Text(context.tr(AppText.cipher)),
+            subtitle: Text(context.tr(AppText.cipher_desc)),
           ),
           ListTile(
             leading: Icon(Icons.storage),
-            title: Text('Хранение данных'),
-            subtitle: Text('Локально на устройстве'),
+            title: Text(context.tr(AppText.saving_data)),
+            subtitle: Text(context.tr(AppText.saving_data_desc)),
           ),
           ListTile(
             leading: Icon(Icons.cloud_off),
-            title: Text('Синхронизация'),
-            subtitle: Text('Нет облачной синхронизации'),
+            title: Text(context.tr(AppText.synchronization)),
+            subtitle: Text(context.tr(AppText.synchronization_desc)),
           ),
           ListTile(
             leading: Icon(Icons.visibility_off),
-            title: Text('Zero-knowledge'),
-            subtitle: Text('Мы не имеем доступ к вашим паролям'),
+            title: Text(context.tr(AppText.zero_knowledge)),
+            subtitle: Text(context.tr(AppText.zero_knowledge_desc)),
           ),
         ],
       ),
@@ -106,26 +108,26 @@ class AboutPage extends StatelessWidget {
       shape: LiquidRoundedRectangle(borderRadius: AppConstant.appBorder),
       child: Column(
         children: [
-          Text('Технические детали', style: theme.textTheme.titleMedium,),
+          Text(context.tr(AppText.technical_details), style: theme.textTheme.titleMedium,),
           ListTile(
             leading: Icon(Icons.storage),
-            title: Text('База данных'),
-            subtitle: Text('Hive с шифрованием'),
+            title: Text(context.tr(AppText.database)),
+            subtitle: Text(context.tr(AppText.database_desc)),
           ),
           ListTile(
             leading: Icon(Icons.vpn_key),
-            title: Text('Алгоритмы'),
-            subtitle: Text('Argon2id, SHA-256, AES-256'),
+            title: Text(context.tr(AppText.algorithm)),
+            subtitle: Text(context.tr(AppText.algorithm_desc)),
           ),
           ListTile(
             leading: Icon(Icons.fingerprint),
-            title: Text('Биометрия'),
-            subtitle: Text('Face ID / Touch ID / Отпечаток пальца'),
+            title: Text(context.tr(AppText.biometric)),
+            subtitle: Text(context.tr(AppText.biometric_desc)),
           ),
           ListTile(
             leading: Icon(Icons.phone_android),
-            title: Text('Платформа'),
-            subtitle: Text('Flutter '),
+            title: Text(context.tr(AppText.platform)),
+            subtitle: Text(context.tr(AppText.platform_desc)),
           ),
 
           ListTile(
@@ -135,8 +137,8 @@ class AboutPage extends StatelessWidget {
               ); 
             },
             leading: Icon(Icons.phone_android),
-            title: Text('Open source'),
-            subtitle: Text('code in github'),
+            title: Text(context.tr(AppText.open_source)),
+            subtitle: Text(context.tr(AppText.open_source_desc)),
           ),
         ],
       ),
@@ -149,10 +151,10 @@ class AboutPage extends StatelessWidget {
       shape: LiquidRoundedRectangle(borderRadius: AppConstant.appBorder),
       child: Column(
         children: [
-          Text('Поддержка' , style: theme.textTheme.titleMedium,),
+          Text(context.tr(AppText.support) , style: theme.textTheme.titleMedium,),
           ListTile(
             leading: Icon(Icons.email),
-            title: Text('Email поддержки'),
+            title: Text(context.tr(AppText.email_support)),
             subtitle: Text(AppConstant.developerEmail),
             onTap: () async {
               await getIt<UrlLauncherRepo>().contactToDeveloper(
@@ -162,21 +164,21 @@ class AboutPage extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.bug_report),
-            title: Text('Сообщить об ошибке'),
+            title: Text(context.tr(AppText.bugs_report)),
             onTap: () => {
               Wiredash.of(context).show(inheritMaterialTheme: true),
             },
           ),
           ListTile(
             leading: Icon(Icons.lightbulb),
-            title: Text('Предложить функцию'),
+            title: Text(context.tr(AppText.propose_idea)),
             onTap: () => {
               Wiredash.of(context).show(inheritMaterialTheme: true),
             },
           ),
           ListTile(
             leading: Icon(Icons.rate_review),
-            title: Text('Оценить приложение'),
+            title: Text(context.tr(AppText.rate_app)),
             onTap: () async {
               await getIt<UrlLauncherRepo>().lauchURL(
                 url: AppConstant.rustoreUrl,
@@ -194,10 +196,10 @@ class AboutPage extends StatelessWidget {
       shape: LiquidRoundedRectangle(borderRadius: AppConstant.appBorder),
       child: Column(
         children: [
-          Text('Правовая информация' , style: theme.textTheme.titleMedium,),
+          Text(context.tr(AppText.legal_info) , style: theme.textTheme.titleMedium,),
           ListTile(
             leading: Icon(Icons.description),
-            title: Text('Политика конфиденциальности'),
+            title: Text(context.tr(AppText.privacy_policy)),
             onTap: () async {
               await getIt<UrlLauncherRepo>().lauchURL(
                 url: AppConstant.privacyPolicyUrl,
@@ -206,7 +208,7 @@ class AboutPage extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.gavel),
-            title: Text('Условия использования'),
+            title: Text(context.tr(AppText.term_service)),
             onTap: () async {
               await getIt<UrlLauncherRepo>().lauchURL(
                 url: AppConstant.termOfServiceUrl,
@@ -216,7 +218,7 @@ class AboutPage extends StatelessWidget {
 
           ListTile(
             leading: Icon(Icons.copyright),
-            title: Text('Авторские права'),
+            title: Text(context.tr(AppText.copy_right)),
             subtitle: Text(AppConstant.copyRightUrl),
           ),
         ],

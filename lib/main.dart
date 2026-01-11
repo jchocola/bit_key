@@ -171,7 +171,7 @@ class MyApp extends StatelessWidget {
 
         BlocProvider(
           create: (context) =>
-              PickedItemBloc(localDbRepository: getIt<LocalDbRepository>()),
+              PickedItemBloc(localDbRepository: getIt<LocalDbRepository>(), authBloc: context.read<AuthBloc>(), encryptionRepository: getIt<EncryptionRepository>(),),
         ),
 
         BlocProvider(

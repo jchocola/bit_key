@@ -1,3 +1,4 @@
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
@@ -12,6 +13,7 @@ import 'package:bit_key/features/feature_vault/presentation/view_info_page.dart'
 import 'package:bit_key/features/feature_vault/presentation/widgets/searched_widget.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
 import 'package:bit_key/shared/widgets/search_textfiled.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:family_bottom_sheet/family_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -68,7 +70,7 @@ class LoginsPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Logins', style: theme.textTheme.titleMedium),
+                  Text(context.tr(AppText.login), style: theme.textTheme.titleMedium),
                   IconButton(
                     onPressed: () {
                       Navigator.of(context).pop();

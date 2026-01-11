@@ -11,6 +11,7 @@ import 'package:bit_key/features/feature_vault/domain/entity/identity.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/login.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
 import 'package:bit_key/main.dart';
+import 'package:logger/web.dart';
 
 class HiveDbRepoImpl implements LocalDbRepository {
   final String pathDir;
@@ -155,21 +156,39 @@ class HiveDbRepoImpl implements LocalDbRepository {
   }
 
   @override
-  Future<void> updateCard({required Card card}) {
-    // TODO: implement updateCard
-    throw UnimplementedError();
+  Future<void> updateCard({required Card card})async {
+    try {
+      final index = await getCardIndexInBox(card: card);
+      logger.d('Update card with index ${index}');
+      final cardModel = CardModel.fromEntity(card);
+      await _cardsBox.putAt(index, cardModel);
+    } catch (e) {
+      logger.e(e);
+    }
   }
 
   @override
-  Future<void> updateIdentity({required Identity identity}) {
-    // TODO: implement updateIdentity
-    throw UnimplementedError();
+  Future<void> updateIdentity({required Identity identity}) async{
+   try {
+      final index = await getIdentityIndexInBox(identity: identity);
+      logger.d('Update identity with index ${index}');
+      final identityModel = IdentityModel.fromEntity(identity);
+      await _identitiesBox.putAt(index, identityModel);
+    } catch (e) {
+      logger.e(e);
+    }
   }
 
   @override
-  Future<void> updateLogin({required Login login}) {
-    // TODO: implement updateLogin
-    throw UnimplementedError();
+  Future<void> updateLogin({required Login login}) async {
+    try {
+      final index = await getLoginIndexInBox(login: login);
+      logger.d('Update login with index ${index}');
+      final loginModel = LoginModel.fromEntity(login);
+      await _loginsBox.putAt(index, loginModel);
+    } catch (e) {
+      logger.e(e);
+    }
   }
 
   @override

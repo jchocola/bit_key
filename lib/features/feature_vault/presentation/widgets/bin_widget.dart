@@ -1,3 +1,4 @@
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/features/feature_vault/presentation/bin_page.dart';
@@ -10,6 +11,7 @@ import 'package:bit_key/features/feature_vault/presentation/bloc/logins_bloc.dar
 import 'package:bit_key/features/feature_vault/presentation/bloc/no_folders_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -56,12 +58,12 @@ class BinWidget extends StatelessWidget {
       spacing: AppConstant.appPadding,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Bin'),
+        Text(context.tr(AppText.bin)),
         BlocBuilder<BinBloc, BinBlocState>(
           builder: (context, state) => CustomListile(
             onTap: onBinTapped,
             icon: AppIcon.deleteIcon,
-            title: 'Bin',
+            title: context.tr(AppText.bin),
             trailingValue: state is BinBlocState_loaded
                 ? state.totalCount.toString()
                 : '',

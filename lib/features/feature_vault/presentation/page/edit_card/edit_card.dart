@@ -1,30 +1,22 @@
-import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/enum/card_brand.dart';
 import 'package:bit_key/core/enum/exp_month.dart';
-import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
-import 'package:bit_key/features/feature_vault/domain/entity/card.dart'
-    show Card;
-import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
+import 'package:bit_key/features/feature_vault/data/model/card_model.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
-import 'package:bit_key/features/feature_vault/presentation/page/creating_card/bloc/create_card_bloc.dart';
-import 'package:bit_key/main.dart';
-import 'package:bit_key/shared/widgets/custom_listile.dart';
+import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
 import 'package:bit_key/shared/widgets/custom_textfield.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart' hide Card;
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uuid/uuid.dart';
 
-class CreatingCardPage extends StatefulWidget {
-  const CreatingCardPage({super.key});
+class EditCardPage extends StatefulWidget {
+  const EditCardPage({super.key});
 
   @override
-  State<CreatingCardPage> createState() => _CreatingCardPageState();
+  State<EditCardPage> createState() => _EditCardPageState();
 }
 
-class _CreatingCardPageState extends State<CreatingCardPage> {
+class _EditCardPageState extends State<EditCardPage> {
   late TextEditingController itemNameController;
   late TextEditingController cardHolderNameController;
   late TextEditingController cardNumberController;
@@ -33,38 +25,6 @@ class _CreatingCardPageState extends State<CreatingCardPage> {
   String? brand;
   int? expMonth;
   String? folder;
-
-  @override
-  void initState() {
-    super.initState();
-    itemNameController = TextEditingController();
-    cardHolderNameController = TextEditingController();
-    cardNumberController = TextEditingController();
-    secCodeController = TextEditingController();
-    expYearController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    itemNameController.dispose();
-    cardHolderNameController.dispose();
-    cardNumberController.dispose();
-    secCodeController.dispose();
-    expYearController.dispose();
-    super.dispose();
-  }
-
-  void _setBrand({required String value}) {
-    if (brand == value) {
-      setState(() {
-        brand = null;
-      });
-    } else {
-      setState(() {
-        brand = value;
-      });
-    }
-  }
 
   void _setFolder({required String value}) {
     if (folder == value) {
@@ -90,52 +50,99 @@ class _CreatingCardPageState extends State<CreatingCardPage> {
     }
   }
 
-  void _onSaveTapped() {
-    try {
-      // generate card
-      final Card card = Card(
-        id: Uuid().v4(),
-        itemName: itemNameController.text,
-        folderName: folder,
-        cardHolderName: cardHolderNameController.text,
-        number: cardNumberController.text,
-        brand: brand,
-        expMonth: expMonth,
-        expYear: expYearController.text.isNotEmpty
-            ? int.parse(expYearController.text)
-            : null,
-        secCode: secCodeController.text.isNotEmpty
-            ? int.parse(secCodeController.text)
-            : null,
-      );
-
-      // CREATINF CARD
-      context.read<CreateCardBloc>().add(
-        CreateCardBlocEvent_createCard(card: card),
-      );
-
-      // Pop
-      Navigator.of(context).pop();
-
-      logger.d(card.toString());
-    } catch (e) {
-      logger.e(e);
+  void _setBrand({required String value}) {
+    if (brand == value) {
+      setState(() {
+        brand = null;
+      });
+    } else {
+      setState(() {
+        brand = value;
+      });
     }
+  }
+
+  void _setInitialValues() {
+    final pickedItemBlocState = context.read<PickedItemBloc>().state;
+
+    if (pickedItemBlocState is PickedItemBlocState_loaded) {
+      final pickedCard = pickedItemBlocState.card;
+      if (pickedCard != null) {
+        setState(() {
+          itemNameController.text = pickedCard.itemName;
+          cardHolderNameController.text = pickedCard.cardHolderName ?? '';
+          cardNumberController.text = pickedCard.number ?? '';
+          secCodeController.text = pickedCard.secCode.toString();
+          expYearController.text = pickedCard.expYear.toString();
+          brand = pickedCard.brand;
+          expMonth = pickedCard.expMonth;
+          folder = pickedCard.folderName;
+        });
+      }
+    }
+  }
+
+  void _onSaveTapped() {
+    final pickedItemBlocState = context.read<PickedItemBloc>().state;
+    if (pickedItemBlocState is PickedItemBlocState_loaded) {
+      final pickedCard = pickedItemBlocState.card;
+
+      if (pickedCard != null) {
+        var cardModel = CardModel.fromEntity(pickedCard);
+
+        cardModel = cardModel.copyWith(
+          itemName: itemNameController.text,
+          cardHolderName: cardHolderNameController.text,
+          number: cardNumberController.text,
+          secCode: int.parse(secCodeController.text),
+          expYear: int.parse(expYearController.text),
+          brand: brand,
+          folderName: folder,
+          expMonth: expMonth,
+        );
+
+        context.read<PickedItemBloc>().add(
+          PickedItemBloc_Event_editCard(updatedCard: cardModel.toEntity()),
+        );
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // init controllers
+    itemNameController = TextEditingController();
+    cardHolderNameController = TextEditingController();
+    cardNumberController = TextEditingController();
+    secCodeController = TextEditingController();
+    expYearController = TextEditingController();
+
+    // set value
+    _setInitialValues();
+  }
+
+  @override
+  void dispose() {
+    itemNameController.dispose();
+    cardHolderNameController.dispose();
+    cardNumberController.dispose();
+    secCodeController.dispose();
+    expYearController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: AppBg(
+    return Scaffold(
+      body: AppBg(
         child: Padding(
           padding: const EdgeInsets.all(AppConstant.appPadding),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             spacing: AppConstant.appPadding,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -144,42 +151,31 @@ class _CreatingCardPageState extends State<CreatingCardPage> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text(context.tr(AppText.cancel), style: theme.textTheme.bodyMedium),
+                    child: Text('Cancel', style: theme.textTheme.bodyMedium),
                   ),
-                  Text(context.tr(AppText.new_card), style: theme.textTheme.titleMedium),
+                  Text('Edit card', style: theme.textTheme.titleMedium),
 
-                  BlocListener<FoldersBloc, FoldersBlocState>(
-                    listener: (context, state) {
-                      if (state is FoldersBlocError) {
-                        logger.e('error');
-                      }
-                      if (state is FoldersBlocSuccess) {
-                        logger.e('success');
-                        Navigator.pop(context);
-                      }
-                    },
-                    child: TextButton(
-                      onPressed: _onSaveTapped,
-                      child: Text(context.tr(AppText.save), style: theme.textTheme.bodyMedium),
-                    ),
+                  TextButton(
+                    onPressed: _onSaveTapped,
+                    child: Text('Save', style: theme.textTheme.bodyMedium),
                   ),
                 ],
               ),
 
               Divider(),
 
-              Text(context.tr(AppText.item_details),),
+              Text('Item Details'),
               Row(
                 spacing: AppConstant.appPadding,
                 children: [
                   CustomTextfield(
                     controller: itemNameController,
-                    hintText: context.tr(AppText.item_name),
+                    hintText: 'Item name (required)',
                   ),
 
                   BlocBuilder<FoldersBloc, FoldersBlocState>(
                     builder: (context, state) => PopupMenuButton(
-                      child: Text(folder ?? context.tr(AppText.folder)),
+                      child: Text(folder ?? 'Folder'),
                       itemBuilder: (context) {
                         if (state is FoldersBlocLoaded) {
                           return List.generate(state.folders.length, (index) {
@@ -201,15 +197,15 @@ class _CreatingCardPageState extends State<CreatingCardPage> {
                 ],
               ),
 
-              Text(context.tr(AppText.card_details)),
+              Text('Card Details'),
               CustomTextfield(
                 controller: cardHolderNameController,
-                hintText: context.tr(AppText.card_holder),
+                hintText: 'Cardholder name 🔒',
               ),
               CustomTextfield(
                 inputType: TextInputType.number,
                 controller: cardNumberController,
-                hintText:  context.tr(AppText.card_number),
+                hintText: 'Number 🔒',
               ),
 
               Row(
@@ -217,7 +213,7 @@ class _CreatingCardPageState extends State<CreatingCardPage> {
                 spacing: AppConstant.appPadding,
                 children: [
                   PopupMenuButton(
-                    child: Text(brand ??  context.tr(AppText.brand),),
+                    child: Text(brand ?? 'Brand'),
                     itemBuilder: (context) {
                       return List.generate(CardBrand.values.length, (index) {
                         final value = CardBrand.values[index];
@@ -235,7 +231,7 @@ class _CreatingCardPageState extends State<CreatingCardPage> {
                     child: Text(
                       expMonth != null
                           ? ExpMonthToString(index: expMonth!)
-                          :  context.tr(AppText.exp_month),
+                          : 'Exp. month',
                     ),
                     itemBuilder: (context) {
                       return List.generate(ExpMonth.values.length, (index) {
@@ -253,13 +249,13 @@ class _CreatingCardPageState extends State<CreatingCardPage> {
               CustomTextfield(
                 inputType: TextInputType.number,
                 controller: expYearController,
-                hintText:  context.tr(AppText.exp_year),
+                hintText: 'Expiration year',
               ),
 
               CustomTextfield(
                 inputType: TextInputType.number,
                 controller: secCodeController,
-                hintText:  context.tr(AppText.security_code),
+                hintText: 'Security code',
                 withEye: true,
                 obscure: true,
               ),

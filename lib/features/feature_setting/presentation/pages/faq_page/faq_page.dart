@@ -1,5 +1,7 @@
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
 
@@ -20,15 +22,30 @@ class FaqPage extends StatelessWidget {
             child: Column(
               spacing: AppConstant.appPadding,
               children: [
-                Text('🔐 Безопасность и шифрование' , style: theme.textTheme.titleMedium,),
+                Text(
+                  context.tr(AppText.security_end_encryption),
+                  style: theme.textTheme.titleMedium,
+                ),
                 _buildSecAndEncrypQA(context),
-                Text('📱 Использование приложения',style: theme.textTheme.titleMedium,),
+                Text(
+                  context.tr(AppText.using_the_application),
+                  style: theme.textTheme.titleMedium,
+                ),
                 _buildUseQA(context),
-                Text('🗄️ Хранение и управление',style: theme.textTheme.titleMedium,),
+                Text(
+                  context.tr(AppText.storage_and_management),
+                  style: theme.textTheme.titleMedium,
+                ),
                 _buildStoreAndSavingQA(context),
-                Text('🔄 Резервное копирование и восстановление',style: theme.textTheme.titleMedium,),
+                Text(
+                  context.tr(AppText.backup_and_restore),
+                  style: theme.textTheme.titleMedium,
+                ),
                 _buildRestoreCopyQA(context),
-                Text('💰 Цены и лицензии',style: theme.textTheme.titleMedium,),
+                Text(
+                  context.tr(AppText.prices_and_licenses),
+                  style: theme.textTheme.titleMedium,
+                ),
                 _buildPriceLicenceCopyQA(context),
               ],
             ),
@@ -66,7 +83,7 @@ class FaqPage extends StatelessWidget {
       child: Column(
         children: List.generate(QAs.length, (index) {
           final qa = QAs[index];
-      
+
           return ExpansionTile(
             title: Text(qa['q'] ?? '', style: theme.textTheme.bodyMedium),
             children: [Text(qa['a'] ?? '', style: theme.textTheme.bodySmall)],
@@ -85,7 +102,7 @@ class FaqPage extends StatelessWidget {
       child: Column(
         children: List.generate(QAs.length, (index) {
           final qa = QAs[index];
-      
+
           return ExpansionTile(
             title: Text(qa['q'] ?? '', style: theme.textTheme.bodyMedium),
             children: [Text(qa['a'] ?? '', style: theme.textTheme.bodySmall)],
@@ -104,7 +121,7 @@ class FaqPage extends StatelessWidget {
       child: Column(
         children: List.generate(QAs.length, (index) {
           final qa = QAs[index];
-      
+
           return ExpansionTile(
             title: Text(qa['q'] ?? '', style: theme.textTheme.bodyMedium),
             children: [Text(qa['a'] ?? '', style: theme.textTheme.bodySmall)],
@@ -123,7 +140,7 @@ class FaqPage extends StatelessWidget {
       child: Column(
         children: List.generate(QAs.length, (index) {
           final qa = QAs[index];
-      
+
           return ExpansionTile(
             title: Text(qa['q'] ?? '', style: theme.textTheme.bodyMedium),
             children: [Text(qa['a'] ?? '', style: theme.textTheme.bodySmall)],
@@ -137,60 +154,39 @@ class FaqPage extends StatelessWidget {
 List<Map<String, String>> getSecurityAndEncryptionQAs(BuildContext context) {
   return [
     {
-      'q': 'Где хранятся мои пароли?',
-      'a':
-          'Все данные хранятся локально на вашем устройстве в зашифрованном виде. Мы не используем облачные серверы для хранения ваших паролей.',
+      'q': context.tr(AppText.security_end_encryption_q1),
+      'a': context.tr(AppText.security_end_encryption_a1),
     },
     {
-      'q': 'Какое шифрование используется?',
-      'a': """
-  Мы используем :
-    AES-256-GCM / ChaCha20-Poly1305 для шифрования данных
-    Argon2id для защиты мастер-пароля
-    SHA-256 для хеширования
-    Все данные шифруются перед сохранением на устройстве.
-""",
+      'q': context.tr(AppText.security_end_encryption_q2),
+      'a': context.tr(AppText.security_end_encryption_a2),
     },
 
     {
-      'q': 'Что будет, если я забуду мастер-пароль?',
-      'a':
-          'К сожалению, восстановить доступ невозможно. Мастер-пароль не хранится на наших серверах и не может быть восстановлен. Мы следуем принципу "zero-knowledge" (нулевого знания).',
+      'q': context.tr(AppText.security_end_encryption_q3),
+      'a': context.tr(AppText.security_end_encryption_a3),
     },
     {
-      'q': ' Безопасно ли использовать биометрию?',
-      'a':
-          ' Да, биометрия (Face ID/Touch ID/отпечаток) используется только для удобного доступа к уже расшифрованным данным. Мастер-ключ по-прежнему защищен вашим паролем.',
+      'q': context.tr(AppText.security_end_encryption_q4),
+      'a': context.tr(AppText.security_end_encryption_a4),
     },
   ];
 }
 
 List<Map<String, String>> getUseQAs(BuildContext context) {
   return [
-    {'q': ' Как импортировать пароли из других менеджеров?', 'a': ''},
+    {'q': context.tr(AppText.using_the_application_q1), 'a':  context.tr(AppText.using_the_application_a1)},
     {
-      'q': ' Как создать резервную копию?',
-      'a': """
-1. Перейдите в Настройки → Безопасность → Экспорт данных
-2. Выберите формат (рекомендуем .kdbx для KeePass)
-3. Установите пароль для бэкапа
-4. Сохраните файл в безопасное место
-""",
+      'q':  context.tr(AppText.using_the_application_q2),
+      'a':  context.tr(AppText.using_the_application_a2),
     },
     {
-      'q': 'Как синхронизировать между устройствами?',
-      'a':
-          'На данный момент синхронизация не поддерживается. Каждое устройство имеет свою независимую базу. Для переноса данных используйте функцию экспорта/импорта.',
+      'q':  context.tr(AppText.using_the_application_q3),
+      'a':  context.tr(AppText.using_the_application_a3),
     },
     {
-      'q': ' Почему нет облачной синхронизации?',
-      'a': """
-Мы сознательно отказались от облачной синхронизации для:
-
-Максимальной безопасности (данные никогда не покидают устройство)
-Контроля пользователя (вы полностью владеете своими данными)
-Отсутствия точек отказа (не зависит от интернета)
-""",
+      'q':  context.tr(AppText.using_the_application_q4),
+      'a': context.tr(AppText.using_the_application_a4),
     },
   ];
 }
@@ -198,33 +194,25 @@ List<Map<String, String>> getUseQAs(BuildContext context) {
 List<Map<String, String>> getStoreSavingQAs(BuildContext context) {
   return [
     {
-      'q': ' Сколько паролей можно хранить?',
-      'a':
-          'Ограничений нет! Приложение оптимизировано для работы с тысячами записей. Все зависит от свободного места на вашем устройстве.',
+      'q': context.tr(AppText.storage_and_management_q1),
+      'a': context.tr(AppText.storage_and_management_a1),
     },
 
-    {'q': 'Можно ли хранить файлы и документы?', 'a': 'No'},
     {
-      'q': 'Как организовать пароли?',
-      'a': """
-Используйте:
-
-Папки для категорий (Работа, Личное, Соцсети)
-Теги для быстрого поиска
-Избранное для часто используемых
-Поиск по всем полям
-""",
+      'q': context.tr(AppText.storage_and_management_q2),
+      'a': context.tr(AppText.storage_and_management_a2),
     },
-    {'q': 'Есть ли история изменений паролей?', 'a': 'Нет'},
     {
-      'q': ' Забыл мастер-пароль, что делать?',
-      'a': """
-К сожалению, без мастер-пароля доступ к данным невозможен. Вы можете:
-
-Попробовать восстановить пароль из бэкапа
-Создать новую базу (старые данные будут утеряны)
-Использовать инструменты восстановления (если сохранили подсказку)
-""",
+      'q': context.tr(AppText.storage_and_management_q3),
+      'a': context.tr(AppText.storage_and_management_a3),
+    },
+    {
+      'q': context.tr(AppText.storage_and_management_q4),
+      'a': context.tr(AppText.storage_and_management_a4),
+    },
+    {
+      'q': context.tr(AppText.storage_and_management_q5),
+      'a': context.tr(AppText.storage_and_management_a5),
     },
   ];
 }
@@ -232,47 +220,37 @@ List<Map<String, String>> getStoreSavingQAs(BuildContext context) {
 List<Map<String, String>> getRestoreCopyQAs(BuildContext context) {
   return [
     {
-      'q': 'Как часто делать бэкапы?',
-      'a': """
-  Рекомендуем:
-
-Еженедельно при активном использовании
-Перед обновлением приложения
-При добавлении важных данных
-""",
+      'q': context.tr(AppText.backup_and_restore_q1),
+      'a': context.tr(AppText.backup_and_restore_a1),
     },
     {
-      'q': 'Где хранить бэкапы?',
-      'a': """
-Рекомендуемые места:
-
-Внешний USB-накопитель (самый безопасный)
-Локальный компьютер (в зашифрованном разделе)
-Несколько копий в разных местах
-Не рекомендуется: публичные облака, email
-""",
+      'q': context.tr(AppText.backup_and_restore_q2),
+      'a': context.tr(AppText.backup_and_restore_a2),
     },
     {
-      'q': 'Можно ли зашифровать бэкап отдельным паролем?',
-      'a':
-          "Да! При экспорте вы можете установить отдельный пароль для бэкапа, который отличается от мастер-пароля.",
+      'q': context.tr(AppText.backup_and_restore_q3),
+      'a': context.tr(AppText.backup_and_restore_a3),
     },
-    {'q': 'Что входит в бэкап?', 'a': 'Полная копия всех данных'},
+    {
+      'q': context.tr(AppText.backup_and_restore_q4),
+      'a': context.tr(AppText.backup_and_restore_a4),
+    },
   ];
 }
 
 List<Map<String, String>> getPriceLicenseQAs(BuildContext context) {
   return [
     {
-      'q': 'Приложение бесплатное?',
-      'a':
-          'Да, полностью бесплатное без скрытых платежей. Мы верим, что безопасность должна быть доступна всем.',
+      'q': context.tr(AppText.prices_and_licenses_q1),
+      'a': context.tr(AppText.prices_and_licenses_a1),
     },
-    {'q': 'Как вы зарабатываете?', 'a': 'Мы не зарабатываем на пользователях'},
     {
-      'q': 'Есть ли платные функции?',
-      'a':
-          'Нет, все функции бесплатны. В будущем возможны премиум-функции для корпоративных пользователей, но базовый функционал останется бесплатным.',
+      'q': context.tr(AppText.prices_and_licenses_q2),
+      'a': context.tr(AppText.prices_and_licenses_a2),
+    },
+    {
+      'q': context.tr(AppText.prices_and_licenses_q3),
+      'a': context.tr(AppText.prices_and_licenses_a3),
     },
   ];
 }
