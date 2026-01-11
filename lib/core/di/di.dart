@@ -1,5 +1,10 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:amplitude_flutter/amplitude.dart';
+import 'package:amplitude_flutter/configuration.dart';
+import 'package:bit_key/features/feature_analytic/data/amplitude_analytic_repo_impl.dart';
+import 'package:bit_key/features/feature_analytic/data/logger_analytic_repo_impl.dart';
+import 'package:bit_key/features/feature_analytic/data/wiredash_analytic_impl.dart';
 import 'package:bit_key/features/feature_auth/data/repo/local_auth_repo_impl.dart';
 import 'package:bit_key/features/feature_auth/data/repo/secure_storage_repo_impl.dart';
 import 'package:bit_key/features/feature_auth/domain/repo/local_auth_repository.dart';
@@ -23,12 +28,14 @@ import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository
 import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
 import 'package:bit_key/main.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:jailbreak_root_detection/jailbreak_root_detection.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pointycastle/pointycastle.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wiredash/wiredash.dart';
 
 final getIt = GetIt.instance;
 
@@ -39,7 +46,9 @@ Future<void> DI() async {
   getIt.registerSingleton<FolderRepository>(
     FolderRepoImpl(prefs: shared_prefs),
   );
-  getIt.registerSingleton<LanguageSettingRepo>(LanguageSettingRepoImpl(sharedPreferences: shared_prefs));
+  getIt.registerSingleton<LanguageSettingRepo>(
+    LanguageSettingRepoImpl(sharedPreferences: shared_prefs),
+  );
 
   getIt.registerSingleton<AppSecurityRepository>(
     AppSecurityRepoImpl(sharedPreferences: shared_prefs),
@@ -80,6 +89,22 @@ Future<void> DI() async {
   );
 
   getIt.registerSingleton<UrlLauncherRepo>(UrlLauncherRepoImpl());
+
+  ///
+  /// ANALYTICS
+  ///
+  final WiredashAnalytics wiredash = WiredashAnalytics();
+  getIt.registerSingleton<WiredashAnalyticImpl>(
+    WiredashAnalyticImpl(wiredashAnalytic: wiredash),
+  );
+
+  getIt.registerSingleton<LoggerAnalyticRepoImpl>(LoggerAnalyticRepoImpl());
+
+  final Amplitude amplitude = Amplitude(
+    Configuration(apiKey: dotenv.env['AMPLITUDE_KEY'] ?? ''),
+  );
+
+  getIt.registerSingleton<AmplitudeAnalyticRepoImpl>(AmplitudeAnalyticRepoImpl(apmplitude: amplitude));
 
   logger.i('DI initialized');
 }

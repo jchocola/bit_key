@@ -1,18 +1,18 @@
-import 'package:wiredash/wiredash.dart';
+import 'package:amplitude_flutter/amplitude.dart';
 
 import 'package:bit_key/features/feature_analytic/domain/analytic_repository.dart';
 
-class WiredashAnalyticImpl implements AnalyticClientBase {
-  final WiredashAnalytics wiredashAnalytic;
-  WiredashAnalyticImpl({
-    required this.wiredashAnalytic,
+class AmplitudeAnalyticRepoImpl implements AnalyticClientBase {
+  final Amplitude apmplitude;
+  AmplitudeAnalyticRepoImpl({
+    required this.apmplitude,
   });
 
-  
   @override
   Future<void> identifyUser({required String salt}) {
     // TODO: implement identifyUser
     throw UnimplementedError();
+   // amplitude.track("Sign Up");
   }
 
   @override
