@@ -1,5 +1,10 @@
+import 'dart:async';
+
 import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
+import 'package:bit_key/core/di/di.dart';
+import 'package:bit_key/features/feature_analytic/data/analytics_facade_repo_impl.dart';
+import 'package:bit_key/features/feature_analytic/domain/analytic_repository.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/bloc/name_generator_bloc.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/bloc/pass_generator_bloc.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/widgets/generated_password.dart';
@@ -29,7 +34,12 @@ class GeneratorUser extends StatelessWidget {
               if (currentState is NameGeneratorBlocState_loaded) {
                 Clipboard.setData(ClipboardData(text: currentState.generatedName));
               }
-              
+                // (analytic) track event COPY_TAPPED
+                unawaited(
+                  getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+                    AnalyticEvent.COPY_TAPPED.name,
+                  ),
+                );
             },
           ),
 

@@ -1,3 +1,8 @@
+import 'dart:async';
+
+import 'package:bit_key/core/di/di.dart';
+import 'package:bit_key/features/feature_analytic/data/analytics_facade_repo_impl.dart';
+import 'package:bit_key/features/feature_analytic/domain/analytic_repository.dart';
 import 'package:bit_key/features/feature_generate_pass/domain/repositories/generator_repo.dart';
 import 'package:bit_key/main.dart';
 import 'package:equatable/equatable.dart';
@@ -211,6 +216,13 @@ class NameGeneratorBloc
           fullName: currentState.fullName,
           zone: currentState.zone,
         );
+
+          // (analytic) track event GENERATE_PROFILE
+          unawaited(
+            getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+              AnalyticEvent.GENERATE_PROFILE.name,
+            ),
+          );
 
         emit(currentState.copyWith(generatedName: name));
         logger.d(name);

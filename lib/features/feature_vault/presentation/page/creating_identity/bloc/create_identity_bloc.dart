@@ -1,5 +1,10 @@
 // ignore_for_file: camel_case_types
 
+import 'dart:async';
+
+import 'package:bit_key/core/di/di.dart';
+import 'package:bit_key/features/feature_analytic/data/analytics_facade_repo_impl.dart';
+import 'package:bit_key/features/feature_analytic/domain/analytic_repository.dart';
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
 import 'package:bit_key/main.dart';
@@ -46,6 +51,7 @@ class CreateIdentityBloc
   final LocalDbRepository localDbRepository;
   final AuthBloc authBloc;
   final EncryptionRepository encryptionRepository;
+
   CreateIdentityBloc({
     required this.localDbRepository,
     required this.authBloc,
@@ -67,8 +73,15 @@ class CreateIdentityBloc
           logger.f(event.identity.toString());
           logger.f('encrypted identity: ${encryptedIdentity.toString()}');
 
-
           await localDbRepository.saveIdentity(identity: encryptedIdentity);
+
+          // (analytic) track event CREATE_IDENTITY
+          unawaited(
+            getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+              AnalyticEvent.CREATE_IDENTITY.name,
+            ),
+          );
+          
         } catch (e) {
           logger.e(e);
         }

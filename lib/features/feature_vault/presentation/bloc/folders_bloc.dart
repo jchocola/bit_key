@@ -1,7 +1,11 @@
 // ignore_for_file: camel_case_types
 
+import 'dart:async';
 import 'dart:developer';
 
+import 'package:bit_key/core/di/di.dart';
+import 'package:bit_key/features/feature_analytic/data/analytics_facade_repo_impl.dart';
+import 'package:bit_key/features/feature_analytic/domain/analytic_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -142,6 +146,9 @@ class FoldersBloc extends Bloc<FoldersBlocEvent, FoldersBlocState> {
               emit(FoldersBlocSuccess());
             });
 
+        // (analytic) track event CREATE_FOLDER
+        unawaited(getIt<AnalyticsFacadeRepoImpl>().trackEvent(AnalyticEvent.CREATE_FOLDER.name));
+
         add(FoldersBlocEvent_loadFolders());
       } catch (e) {
         logger.e(e);
@@ -167,6 +174,9 @@ class FoldersBloc extends Bloc<FoldersBlocEvent, FoldersBlocState> {
     on<FolderBlocEvent_deleteFolder>((event, emit) async {
       try {
         await folderRepository.deleteFolder(folderName: event.folderName);
+
+          // (analytic) track event DELETE_FOLDER
+        unawaited(getIt<AnalyticsFacadeRepoImpl>().trackEvent(AnalyticEvent.DELETE_FOLDER.name));
 
         add(FoldersBlocEvent_loadFolders());
       } catch (e) {

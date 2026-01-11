@@ -1,87 +1,86 @@
 import 'package:bit_key/features/feature_analytic/domain/analytic_repository.dart';
+import 'package:bit_key/main.dart';
 
-class LoggerAnalyticRepoImpl implements AnalyticClientBase{
+class LoggerAnalyticRepoImpl implements AnalyticClientBase {
   @override
-  Future<void> identifyUser({required String salt}) {
-    // TODO: implement identifyUser
-    throw UnimplementedError();
+  Future<void> identifyUser({required String salt}) async {
+    logger.d('Identify User ${salt}');
   }
 
   @override
-  Future<void> resetUser() {
-    // TODO: implement resetUser
-    throw UnimplementedError();
+  Future<void> resetUser() async {
+    logger.d('Reset User');
   }
 
   @override
-  Future<void> trackAppBackgrounded() {
-    // TODO: implement trackAppBackgrounded
-    throw UnimplementedError();
+  Future<void> trackAppBackgrounded() async {
+    logger.d('Track App Backgrounded');
   }
 
   @override
-  Future<void> trackAppCreated() {
-    // TODO: implement trackAppCreated
-    throw UnimplementedError();
+  Future<void> trackAppCreated() async {
+    logger.d('Track App Created');
   }
 
   @override
-  Future<void> trackAppDeleted() {
-    // TODO: implement trackAppDeleted
-    throw UnimplementedError();
+  Future<void> trackAppDeleted() async {
+    logger.d('Track app deleted');
   }
 
   @override
-  Future<void> trackAppForegrounded() {
-    // TODO: implement trackAppForegrounded
-    throw UnimplementedError();
+  Future<void> trackAppForegrounded() async {
+    logger.d('Track app froegrounded');
   }
 
   @override
-  Future<void> trackAppUpdated() {
-    // TODO: implement trackAppUpdated
-    throw UnimplementedError();
+  Future<void> trackAppUpdated() async {
+    logger.d('Track app updated');
   }
 
   @override
-  Future<void> trackBottomSheetView(String routeName, [Map<String, Object>? data]) {
-    // TODO: implement trackBottomSheetView
-    throw UnimplementedError();
+  Future<void> trackBottomSheetView(
+    String routeName, [
+    Map<String, Object>? data,
+  ]) async {
+    logger.d('Track bottom sheet view');
   }
 
   @override
-  Future<void> trackButtonPressed(String buttonName, [Map<String, Object>? data]) {
-    // TODO: implement trackButtonPressed
-    throw UnimplementedError();
+  Future<void> trackButtonPressed(
+    String buttonName, [
+    Map<String, Object>? data,
+  ]) async {
+    logger.d('Track button pressed');
   }
 
   @override
-  Future<void> trackDialogView(String dialogName, [Map<String, Object>? data]) {
-    // TODO: implement trackDialogView
-    throw UnimplementedError();
+  Future<void> trackDialogView(
+    String dialogName, [
+    Map<String, Object>? data,
+  ]) async {
+    logger.d('Track dialog view');
   }
 
   @override
-  Future<void> trackEvent(String eventName, [Map<String, Object>? eventData]) {
-    // TODO: implement trackEvent
-    throw UnimplementedError();
+  Future<void> trackEvent(
+    String eventName, [
+    Map<String, Object>? eventData,
+  ]) async {
+    logger.d('Track event ${eventName}');
   }
 
   @override
-  Future<void> trackNewAppOnboarding() {
-    // TODO: implement trackNewAppOnboarding
-    throw UnimplementedError();
+  Future<void> trackNewAppOnboarding() async {
+    logger.d('Track new app onboarding');
   }
 
   @override
-  Future<void> trackPermissionRequest(String permission, String status) {
-    // TODO: implement trackPermissionRequest
-    throw UnimplementedError();
+  Future<void> trackPermissionRequest(String permission, String status) async {
+    logger.d('Track permission request $permission');
   }
 
   @override
-  Future<void> trackScreenView(String routeName, String action) {
-    // TODO: implement trackScreenView
-    throw UnimplementedError();
+  Future<void> trackScreenView(String routeName, String action) async {
+    logger.d('Track Screen View $routeName');
   }
 }

@@ -1,5 +1,10 @@
 // ignore_for_file: camel_case_types
 
+import 'dart:async';
+
+import 'package:bit_key/core/di/di.dart';
+import 'package:bit_key/features/feature_analytic/data/analytics_facade_repo_impl.dart';
+import 'package:bit_key/features/feature_analytic/domain/analytic_repository.dart';
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/login.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
@@ -54,7 +59,6 @@ class CreateLoginBloc extends Bloc<CreateLoginBlocEvent, CreateLoginBlocState> {
       try {
         final authBlocState = authBloc.state;
         if (authBlocState is AuthBlocAuthenticated) {
-
           final encryptedLogin = await encryptionRepository.encryptLogin(
             login: event.login,
             masterKey: authBlocState.MASTER_KEY,
@@ -63,7 +67,12 @@ class CreateLoginBloc extends Bloc<CreateLoginBlocEvent, CreateLoginBlocState> {
           logger.f('Login : ${event.login.toString()}');
           logger.f('Encrypted Login : ${encryptedLogin.toString()}');
 
+         
+
           await localDbRepository.saveLogin(login: encryptedLogin);
+
+           //(analytic) track event CREATE_LOGIN
+          unawaited(getIt<AnalyticsFacadeRepoImpl>().trackEvent(AnalyticEvent.CREATE_LOGIN.name));
         }
       } catch (e) {
         logger.e(e);
