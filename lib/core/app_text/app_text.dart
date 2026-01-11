@@ -127,7 +127,43 @@ class AppText {
   static const shake_to_lock = "setting.shake_to_lock";
   static const shake_to_lock_desc = "setting.shake_to_lock_desc";
   static const note_acc_setting = "setting.note";
-  //  static const = "setting.";
+
+  ///
+  /// SETTING.ABOUT
+  ///
+
+  static const version = "setting.about.version";
+  static const build_date = "setting.about.build_date";
+  static const developer = "setting.about.developer";
+  static const security = "setting.about.security";
+  static const cipher = "setting.about.cipher";
+  static const cipher_desc = "setting.about.cipher_desc";
+  static const saving_data = "setting.about.saving_data";
+  static const saving_data_desc = "setting.about.saving_data_desc";
+  static const synchronization = "setting.about.synchronization";
+  static const synchronization_desc = "setting.about.synchronization_desc";
+  static const zero_knowledge = "setting.about.zero_knowledge";
+   static const zero_knowledge_desc = "setting.about.zero_knowledge_desc";
+  static const technical_details = "setting.about.technical_details";
+  static const database = "setting.about.database";
+  static const database_desc = "setting.about.database_desc";
+  static const algorithm = "setting.about.algorithm";
+  static const algorithm_desc = "setting.about.algorithm_desc";
+  static const biometric = "setting.about.biometric";
+  static const biometric_desc = "setting.about.biometric_desc";
+  static const platform = "setting.about.platform";
+  static const platform_desc = "setting.about.platform_desc";
+  static const open_source = "setting.about.open_source";
+  static const open_source_desc = "setting.about.open_source_desc";
+  static const support = "setting.about.support";
+  static const email_support = "setting.about.email_support";
+  static const bugs_report = "setting.about.bugs_report";
+  static const propose_idea = "setting.about.propose_idea";
+  static const rate_app = "setting.about.rate_app";
+  static const legal_info = "setting.about.legal_info";
+  static const privacy_policy = "setting.about.privacy_policy";
+  static const term_service = "setting.about.term_service";
+  static const copy_right = "setting.about.copy_right";
 
   // static const = "";
   //  static const = "";
