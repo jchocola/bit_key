@@ -1,8 +1,10 @@
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/features/feature_generate_pass/domain/repositories/generator_repo.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/bloc/name_generator_bloc.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/bloc/pass_generator_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
@@ -23,7 +25,7 @@ class NameGeneratorParameters extends StatelessWidget {
             return Column(
               children: [
                 ListTile(
-                  leading: Text(state.isMale ? 'Male' : 'Female'),
+                  leading: Text(state.isMale ? context.tr(AppText.male) : context.tr(AppText.female)),
                   trailing: Switch.adaptive(
                     value: state.isMale,
                     onChanged: (val) {
@@ -37,7 +39,7 @@ class NameGeneratorParameters extends StatelessWidget {
                 Divider(),
 
                 ListTile(
-                  leading: Text('First name'),
+                  leading: Text(context.tr(AppText.first_name_generator)),
                   trailing: Switch.adaptive(
                     value: state.firstName,
                     onChanged: (val) {
@@ -51,7 +53,7 @@ class NameGeneratorParameters extends StatelessWidget {
                 const Divider(),
 
                 ListTile(
-                  leading: Text('Last name'),
+                  leading: Text(context.tr(AppText.last_name_generator)),
 
                   trailing: Switch.adaptive(
                     value: state.lastName,
@@ -66,7 +68,7 @@ class NameGeneratorParameters extends StatelessWidget {
                 const Divider(),
 
                 ListTile(
-                  leading: Text('Full name'),
+                  leading: Text(context.tr(AppText.full_name)),
 
                   trailing: Switch.adaptive(
                     value: state.fullName,
@@ -81,7 +83,7 @@ class NameGeneratorParameters extends StatelessWidget {
                 const Divider(),
 
                 ListTile(
-                  leading: Text('Zone'),
+                  leading: Text(context.tr(AppText.zone)),
 
                   trailing: PopupMenuButton(
                     child: Text(state.zone.id),

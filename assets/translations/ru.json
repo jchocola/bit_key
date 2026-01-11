@@ -25,6 +25,7 @@
   "commons": {
     "cancel": "Отмена",
     "clear_all": "Удалить все",
+    "copy": "Копировать",
     "delete": "Удалить",
     "details": "Детали",
     "edit": "Редактировать",
@@ -36,6 +37,17 @@
     "restore": "Восстановить",
     "save": "Сохранить",
     "unlock_vault": ""
+  },
+  "generator": {
+    "female": "Женсий",
+    "first_name": "Фамилия",
+    "full_name": "ФИО",
+    "generator_password": "Генератор паролей",
+    "genrator_profile": "Генератор личностей",
+    "last_name": "Имя",
+    "length": "Длина",
+    "male": "Мужский",
+    "zone": "Зона"
   },
   "identity": {
     "address": "Адрес",

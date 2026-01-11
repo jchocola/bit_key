@@ -15,6 +15,7 @@ class AppText {
   static const edit = "commons.edit";
   static const restore = "commons.restore";
   static const clear_all = "commons.clear_all";
+  static const copy = "commons.copy";
 
   ///
   /// AUTH
@@ -94,6 +95,19 @@ class AppText {
   static const country = "identity.country";
   static const post_code = "identity.post_code";
   static const identity_credentials = "identity.identity_credentials";
+
+  ///
+  /// GENERATOR
+  ///
+  static const generator_password = "generator.generator_password";
+  static const genrator_profile = "generator.genrator_profile";
+  static const length = "generator.length";
+  static const male = "generator.male";
+  static const female = "generator.female";
+  static const first_name_generator = "generator.first_name";
+  static const last_name_generator = "generator.last_name";
+  static const full_name = "generator.full_name";
+  static const zone = "generator.zone";
 
   // static const = "";
   //  static const = "";

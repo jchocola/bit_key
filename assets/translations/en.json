@@ -25,6 +25,7 @@
   "commons": {
     "cancel": "Cancel",
     "clear_all": "Clear all",
+    "copy": "Copy",
     "delete": "Delete",
     "details": "Details",
     "edit": "edit",
@@ -36,6 +37,17 @@
     "restore": "Restore",
     "save": "Save",
     "unlock_vault": ""
+  },
+  "generator": {
+    "female": "Female",
+    "first_name": "First name",
+    "full_name": "Full name",
+    "generator_password": "Generator Password",
+    "genrator_profile": "Generator Profile",
+    "last_name": "Last name",
+    "length": "Length",
+    "male": "Male",
+    "zone": "Zone"
   },
   "identity": {
     "address": "Address",

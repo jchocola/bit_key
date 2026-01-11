@@ -1,8 +1,10 @@
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/core/theme/app_color.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/bloc/pass_generator_bloc.dart';
 import 'package:bit_key/shared/widgets/search_textfiled.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glassy_real_navbar/glassy_real_navbar.dart';
@@ -31,7 +33,7 @@ class GeneratingPageAppbar extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: AppConstant.appPadding,
                   children: [
-                    Text(state.pageviewIndex == 0 ? 'Generator Password' : 'Generator Profile'),
+                    Text(state.pageviewIndex == 0 ? context.tr(AppText.generator_password) : context.tr(AppText.genrator_profile)),
                     GlassNavBar(
                       height: 40,
                       // preset: GlassNavBarPreset.gaming,
@@ -55,12 +57,12 @@ class GeneratingPageAppbar extends StatelessWidget {
                       items: [
                         GlassNavBarItem(
                           icon: AppIcon.passwordIcon,
-                          title: 'Password',
+                          title: context.tr(AppText.generator_password),
                         ),
                         // GlassNavBarItem(icon: AppIcon.userIcon, title: 'Search'),
                         GlassNavBarItem(
                           icon: AppIcon.userIcon,
-                          title: 'Profile',
+                          title: context.tr(AppText.genrator_profile),
                         ),
                       ],
                     ),

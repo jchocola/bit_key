@@ -25,6 +25,7 @@
   "commons": {
     "cancel": "",
     "clear_all": "",
+    "copy": "",
     "delete": "",
     "details": "",
     "edit": "",
@@ -36,6 +37,17 @@
     "restore": "",
     "save": "",
     "unlock_vault": ""
+  },
+  "generator": {
+    "female": "",
+    "first_name": "",
+    "full_name": "",
+    "generator_password": "",
+    "genrator_profile": "",
+    "last_name": "",
+    "length": "",
+    "male": "",
+    "zone": ""
   },
   "identity": {
     "address": "",
