@@ -21,6 +21,7 @@ import 'package:bit_key/features/feature_vault/presentation/delete_all_from_bin_
 import 'package:bit_key/main.dart';
 
 import 'package:bit_key/shared/widgets/custom_listile.dart';
+import 'package:bit_key/shared/widgets/empty_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart' hide Card;
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -431,6 +432,12 @@ class BinPage extends StatelessWidget {
               BlocBuilder<BinBloc, BinBlocState>(
                 builder: (context, state) {
                   if (state is BinBlocState_loaded) {
+
+                   
+                      if (state.totalCount == 0) {
+                      return EmptyWidget();
+                    }
+
                     return Expanded(
                       child: SingleChildScrollView(
                         child: Column(

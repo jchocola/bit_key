@@ -10,6 +10,7 @@ import 'package:bit_key/features/feature_vault/presentation/bloc/no_folders_bloc
 import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/view_info_page.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
+import 'package:bit_key/shared/widgets/empty_widget.dart';
 import 'package:bit_key/shared/widgets/search_textfiled.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:family_bottom_sheet/family_bottom_sheet.dart';
@@ -86,6 +87,11 @@ class IdentifyPage extends StatelessWidget {
               BlocBuilder<IdentitiesBloc, IdentitiesBlocState>(
                 builder: (context, state) {
                   if (state is IdentitiesBlocState_loaded) {
+                  
+                      if (state.identities.isEmpty) {
+                      return EmptyWidget();
+                    }
+
                     return Expanded(
                       child: SingleChildScrollView(
                         child: Column(
