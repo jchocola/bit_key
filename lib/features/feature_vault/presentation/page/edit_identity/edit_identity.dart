@@ -1,3 +1,4 @@
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/features/feature_vault/data/model/identity_model.dart';
@@ -5,6 +6,7 @@ import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.da
 import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
 import 'package:bit_key/main.dart';
 import 'package:bit_key/shared/widgets/custom_textfield.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -186,9 +188,9 @@ class _EditIdentityPageState extends State<EditIdentityPage> {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text('Cancel', style: theme.textTheme.bodyMedium),
+                      child: Text(context.tr(AppText.cancel), style: theme.textTheme.bodyMedium),
                     ),
-                    Text('Edit Identity', style: theme.textTheme.titleMedium),
+                    Text(context.tr(AppText.edit_identity), style: theme.textTheme.titleMedium),
 
                     BlocListener<FoldersBloc, FoldersBlocState>(
                       listener: (context, state) {
@@ -202,7 +204,7 @@ class _EditIdentityPageState extends State<EditIdentityPage> {
                       },
                       child: TextButton(
                         onPressed: _onSaveTapped,
-                        child: Text('Save', style: theme.textTheme.bodyMedium),
+                        child: Text(context.tr(AppText.save), style: theme.textTheme.bodyMedium),
                       ),
                     ),
                   ],
@@ -215,18 +217,18 @@ class _EditIdentityPageState extends State<EditIdentityPage> {
                 child: ListView(
                   physics: AlwaysScrollableScrollPhysics(),
                   children: [
-                    Text('Item Details'),
+                    Text(context.tr(AppText.item_details)),
                     Row(
                       spacing: AppConstant.appPadding,
                       children: [
                         CustomTextfield(
                           controller: itemNameController,
-                          hintText: 'Item name (required)',
+                          hintText: context.tr(AppText.item_name),
                         ),
 
                         BlocBuilder<FoldersBloc, FoldersBlocState>(
                           builder: (context, state) => PopupMenuButton(
-                            child: Text(folder ?? 'Folder'),
+                            child: Text(folder ?? context.tr(AppText.none)),
                             itemBuilder: (context) {
                               if (state is FoldersBlocLoaded) {
                                 return List.generate(state.folders.length, (
@@ -249,84 +251,84 @@ class _EditIdentityPageState extends State<EditIdentityPage> {
                       ],
                     ),
 
-                    Text('Personal Details'),
+                    Text(context.tr(AppText.personal_detail)),
                     CustomTextfield(
                       controller: firstNameController,
-                      hintText: 'First name',
+                      hintText: context.tr(AppText.first_name)
                     ),
                     CustomTextfield(
                       controller: middleNameController,
-                      hintText: 'Middle name',
+                      hintText:context.tr(AppText.middle_name),
                     ),
                     CustomTextfield(
                       controller: lastNameController,
-                      hintText: 'Last name',
+                      hintText: context.tr(AppText.last_name),
                     ),
                     CustomTextfield(
                       controller: userNameController,
-                      hintText: 'Username 🔒',
+                      hintText: context.tr(AppText.user_name_identity),
                     ),
 
                     CustomTextfield(
                       controller: companyController,
-                      hintText: 'Company 🔒',
+                      hintText: context.tr(AppText.company),
                     ),
 
-                    Text('Identification'),
+                    Text(context.tr(AppText.identification)),
                     CustomTextfield(
                       controller: nationalInsuranceNumberController,
-                      hintText: 'National Insurance number 🔒',
+                      hintText: context.tr(AppText.national_insurance_number),
                     ),
 
                     CustomTextfield(
                       controller: passportController,
-                      hintText: 'Passport number 🔒',
+                      hintText: context.tr(AppText.passport_number),
                     ),
 
                     CustomTextfield(
                       controller: licenseNumberController,
-                      hintText: 'License number 🔒',
+                      hintText: context.tr(AppText.license_number),
                     ),
 
-                    Text('Contact info'),
+                    Text(context.tr(AppText.contact_info)),
 
                     CustomTextfield(
                       controller: emailController,
-                      hintText: 'Email 🔒',
+                      hintText: context.tr(AppText.email),
                     ),
 
                     CustomTextfield(
                       controller: phoneController,
-                      hintText: 'Phone 🔒',
+                      hintText: context.tr(AppText.phone),
                     ),
 
-                    Text('Address'),
+                    Text(context.tr(AppText.address)),
                     CustomTextfield(
                       controller: address1Controller,
-                      hintText: 'Address 1 🔒',
+                      hintText: context.tr(AppText.address1),
                     ),
                     CustomTextfield(
                       controller: address2Controller,
-                      hintText: 'Address 2 🔒',
+                      hintText: context.tr(AppText.address2),
                     ),
                     CustomTextfield(
                       controller: address3Controller,
-                      hintText: 'Address 3 🔒',
+                      hintText: context.tr(AppText.address3),
                     ),
 
                     CustomTextfield(
                       controller: cityController,
-                      hintText: 'City/Town',
+                      hintText: context.tr(AppText.city_town),
                     ),
 
                     CustomTextfield(
                       controller: countryController,
-                      hintText: 'Country',
+                      hintText:context.tr(AppText.country),
                     ),
 
                     CustomTextfield(
                       controller: postcodeController,
-                      hintText: 'Postcode',
+                      hintText: context.tr(AppText.post_code),
                     ),
                   ],
                 ),

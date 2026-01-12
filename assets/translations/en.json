@@ -20,7 +20,8 @@
     "exp_month": "Exp. month",
     "exp_year": "Exp. year",
     "new_card": "New card",
-    "security_code": "Security code"
+    "security_code": "Security code",
+    "edit_card": "Edit Card"
   },
   "commons": {
     "cancel": "Cancel",
@@ -74,14 +75,16 @@
     "personal_detail": "Personal details",
     "phone": "Phone 🔒",
     "post_code": "Post code",
-    "user_name": "Username 🔒"
+    "user_name": "Username 🔒",
+    "edit_identity": "Edit Identity"
   },
   "login": {
     "login_credentials": "Login credentials",
     "new_login": "New Login",
     "password": "Password 🔒",
     "user_name": "User name 🔒",
-    "website": "Website(URL) 🔒"
+    "website": "Website(URL) 🔒",
+    "edit_login" : "Edit Login"
   },
   "setting": {
     "FAQs": "FAQs",

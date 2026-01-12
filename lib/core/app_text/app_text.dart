@@ -57,6 +57,7 @@ class AppText {
   static const user_name = "login.user_name";
   static const password = "login.password";
   static const website = "login.website";
+  static const edit_login = "login.edit_login";
 
   ///
   /// CARD
@@ -70,6 +71,7 @@ class AppText {
   static const exp_year = "card.exp_year";
   static const security_code = "card.security_code";
   static const card_credentials = "card.card_credentials";
+  static const edit_card = "card.edit_card";
 
   ///
   /// IDENTITY
@@ -98,6 +100,7 @@ class AppText {
   static const country = "identity.country";
   static const post_code = "identity.post_code";
   static const identity_credentials = "identity.identity_credentials";
+  static const edit_identity = "identity.edit_identity";
 
   ///
   /// GENERATOR
