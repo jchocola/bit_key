@@ -1,5 +1,6 @@
 import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
+import 'package:bit_key/core/enum/lang_code_coverter.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/core/theme/app_color.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/about_page/about_page.dart';
@@ -44,7 +45,7 @@ class AuthPageAppbar extends StatelessWidget {
                       ) {
                         final Locale locale = context.supportedLocales[index];
                         return PopupMenuItem(
-                          child: Text(locale.languageCode),
+                          child: Text(langCodeConverter(langCode: locale.languageCode)),
                           onTap: () {
                             context.setLocale(locale);
 

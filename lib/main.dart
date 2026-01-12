@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:bit_key/core/di/di.dart';
 import 'package:bit_key/core/router/app_router_config.dart';
+import 'package:bit_key/core/supported_locales.dart';
 import 'package:bit_key/core/theme/app_theme.dart';
 import 'package:bit_key/features/feature_analytic/data/analytics_facade_repo_impl.dart';
 import 'package:bit_key/features/feature_auth/domain/repo/local_auth_repository.dart';
@@ -66,8 +67,8 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.android);
 
   FlutterError.onError = (errorDetails) {
-      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-    };
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
 
   // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
   PlatformDispatcher.instance.onError = (error, stack) {
@@ -82,7 +83,7 @@ Future<void> main() async {
   // run app
   runApp(
     EasyLocalization(
-      supportedLocales: [Locale('en'), Locale('ru'), Locale('vi')],
+      supportedLocales: supportedLocales,
       path: 'assets/translations',
       assetLoader: JsonAssetLoader(),
       fallbackLocale: Locale('en'),
