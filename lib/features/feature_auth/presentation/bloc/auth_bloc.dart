@@ -152,7 +152,11 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
     ///
     on<AppBlocEvent_UserFirstimeRegister>((event, emit) async {
       try {
-        emit(AuthBlocLoading());
+        // emit(AuthBlocLoading());
+
+        if (event.MASTER_KEY!.isEmpty) {
+          throw AppException.empty_key;
+        }
 
         if (event.MASTER_KEY != event.CONFIRM_MASTER_KEY) {
           throw AppException.passwords_do_not_match;
@@ -194,8 +198,9 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
         );
       } catch (e) {
         logger.e(e);
-        emit(AuthBlocFailure(exception: e as AppException?));
-        add(AppBlocEvent_LoadSaltAndHashedMasterKey());
+        rethrow;
+        // emit(AuthBlocFailure(exception: e as AppException?));
+        // add(AppBlocEvent_LoadSaltAndHashedMasterKey());
       }
     });
 
@@ -204,7 +209,7 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
     ///
     on<AppBlocEvent_UserUnlockVaultViaMasterKey>((event, emit) async {
       try {
-        emit(AuthBlocLoading());
+        //emit(AuthBlocLoading());
 
         if (event.MASTER_KEY!.isEmpty) {
           throw AppException.empty_key;
@@ -252,6 +257,7 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
         await secureStorageRepository.setSessionKey(sessionKey);
       } catch (e) {
         logger.e(e);
+        //rethrow;
         emit(AuthBlocFailure(exception: e as AppException?));
         add(AppBlocEvent_LoadSaltAndHashedMasterKey());
       }

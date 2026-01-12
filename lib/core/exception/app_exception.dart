@@ -116,5 +116,6 @@ enum AppException {
   // LOCAL AUTH
   device_not_supported_local_auth,
   no_biometric_enrolled,
+  failed_to_authenticate,
 
 }

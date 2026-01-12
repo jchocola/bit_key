@@ -18,7 +18,7 @@ class LocalAuthRepoImpl implements LocalAuthRepository {
       );
     } catch (e) {
       logger.e(e);
-       throw AppException.no_biometric_enrolled;
+      throw AppException.failed_to_authenticate;
     }
   }
 
@@ -26,6 +26,9 @@ class LocalAuthRepoImpl implements LocalAuthRepository {
   Future<bool> canAuthenticate() async {
     try {
       final bool canAuthenticateWithBiometrics = await auth.canCheckBiometrics;
+      if (!canAuthenticateWithBiometrics) {
+         throw AppException.no_biometric_enrolled;
+      }
       final bool canAuthenticate =
           canAuthenticateWithBiometrics || await auth.isDeviceSupported();
       return canAuthenticate;

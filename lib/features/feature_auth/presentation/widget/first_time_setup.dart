@@ -3,6 +3,7 @@ import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_auth/presentation/widget/create_master_password.dart';
 import 'package:bit_key/shared/widgets/big_button.dart';
+import 'package:bit_key/shared/widgets/error_snackbar.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,7 +47,7 @@ class _FirstTimeSetupState extends State<FirstTimeSetup> {
           ),
         );
       } catch (e) {
-        logger.e('Error creating master password: $e');
+        showErrorSnackbar(context, e);
       }
     }
 
