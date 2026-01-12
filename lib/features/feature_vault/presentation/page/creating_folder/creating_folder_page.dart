@@ -5,6 +5,7 @@ import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dar
 import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
 import 'package:bit_key/main.dart';
 import 'package:bit_key/shared/widgets/custom_textfield.dart';
+import 'package:bit_key/shared/widgets/error_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -53,7 +54,7 @@ class _CreatingFolderPageState extends State<CreatingFolderPage> {
                 BlocListener<FoldersBloc, FoldersBlocState>(
                   listener: (context, state) {
                     if (state is FoldersBlocError) {
-                      logger.e('error');
+                      showErrorSnackbar(context, state.error);
                     }
                     if (state is FoldersBlocSuccess) {
                       logger.e('success');
@@ -67,6 +68,7 @@ class _CreatingFolderPageState extends State<CreatingFolderPage> {
                           folderName: folderController.text,
                         ),
                       );
+                      Navigator.pop(context);
                     },
                     child: Text('Save', style: theme.textTheme.bodyMedium),
                   ),

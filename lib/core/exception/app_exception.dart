@@ -5,6 +5,7 @@ enum AppException {
   invalid_master_key,
   empty_key,
   cannot_auth_via_local_auth,
+  empty_item_name,
 
   ///
   /// FOLDER
