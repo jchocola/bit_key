@@ -29,6 +29,8 @@ class AppText {
   static const pick_file = "commons.pick_file";
   static const extract_file = "commons.extract_file";
   static const import_to_existed_data = "commons.import_to_existed_data";
+  static const confirm_delete_all_data = "commons.confirm_delete_all_data";
+  static const everything_wil_be_deleted = "commons.everything_wil_be_deleted";
 
   ///
   /// AUTH
