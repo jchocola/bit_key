@@ -137,14 +137,16 @@ class _EditLoginPageState extends State<EditLoginPage> {
                 Row(
                   spacing: AppConstant.appPadding,
                   children: [
-                    CustomTextfield(
-                      hintText: context.tr(AppText.item_name),
-                      controller: itemNameController,
+                    Flexible(
+                      child: CustomTextfield(
+                        hintText: context.tr(AppText.item_name),
+                        controller: itemNameController,
+                      ),
                     ),
 
                     BlocBuilder<FoldersBloc, FoldersBlocState>(
                       builder: (context, state) => PopupMenuButton(
-                        child: Text(selectedFolder ?? context.tr(AppText.none)),
+                        child: Text(selectedFolder ?? context.tr(AppText.folder)),
                         itemBuilder: (context) {
                           if (state is FoldersBlocLoaded) {
                             return List.generate(state.folders.length, (index) {

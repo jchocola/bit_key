@@ -153,7 +153,7 @@ class _CreatingLoginPageState extends State<CreatingLoginPage> {
 
                   BlocBuilder<FoldersBloc, FoldersBlocState>(
                     builder: (context, state) => PopupMenuButton(
-                      child: Text(selectedFolder ?? context.tr(AppText.none)),
+                      child: Text(selectedFolder ?? context.tr(AppText.folder)),
                       itemBuilder: (context) {
                         if (state is FoldersBlocLoaded) {
                           return List.generate(state.folders.length, (index) {
