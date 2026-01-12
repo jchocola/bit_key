@@ -25,6 +25,7 @@
   "commons": {
     "cancel": "Cancel",
     "clear_all": "Clear all",
+    "confirm": "Confirm",
     "copy": "Copy",
     "delete": "Delete",
     "details": "Details",
@@ -34,6 +35,7 @@
     "language": "Language",
     "lock_app": "Lock app",
     "master_key": "",
+    "move_to_bin_confirm": "Do you really want to send to the bin?",
     "none": "None",
     "restore": "Restore",
     "save": "Save",

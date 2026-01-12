@@ -17,6 +17,8 @@ class AppText {
   static const clear_all = "commons.clear_all";
   static const copy = "commons.copy";
   static const lock_app = "commons.lock_app";
+  static const move_to_bin_confirm = "commons.move_to_bin_confirm";
+  static const confirm = "commons.confirm";
 
   ///
   /// AUTH
@@ -169,34 +171,60 @@ class AppText {
   /// SETTING.FAQ
   ///
   static const security_end_encryption = "setting.faq.security_end_encryption";
-  static const security_end_encryption_q1 = "setting.faq.security_end_encryption_q1";
-  static const security_end_encryption_a1 = "setting.faq.security_end_encryption_a1";
-  static const security_end_encryption_q2 = "setting.faq.security_end_encryption_q2";
-  static const security_end_encryption_a2 = "setting.faq.security_end_encryption_a2";
-  static const security_end_encryption_q3 = "setting.faq.security_end_encryption_q3";
-  static const security_end_encryption_a3 = "setting.faq.security_end_encryption_a3";
-  static const security_end_encryption_q4 = "setting.faq.security_end_encryption_q4";
-  static const security_end_encryption_a4 = "setting.faq.security_end_encryption_a4";
+  static const security_end_encryption_q1 =
+      "setting.faq.security_end_encryption_q1";
+  static const security_end_encryption_a1 =
+      "setting.faq.security_end_encryption_a1";
+  static const security_end_encryption_q2 =
+      "setting.faq.security_end_encryption_q2";
+  static const security_end_encryption_a2 =
+      "setting.faq.security_end_encryption_a2";
+  static const security_end_encryption_q3 =
+      "setting.faq.security_end_encryption_q3";
+  static const security_end_encryption_a3 =
+      "setting.faq.security_end_encryption_a3";
+  static const security_end_encryption_q4 =
+      "setting.faq.security_end_encryption_q4";
+  static const security_end_encryption_a4 =
+      "setting.faq.security_end_encryption_a4";
   static const using_the_application = "setting.faq.using_the_application";
-  static const using_the_application_q1 = "setting.faq.using_the_application_q1";
-  static const using_the_application_a1 = "setting.faq.using_the_application_a1";
-  static const using_the_application_q2 = "setting.faq.using_the_application_q2";
-  static const using_the_application_a2 = "setting.faq.using_the_application_a2";
-  static const using_the_application_q3 = "setting.faq.using_the_application_q3";
-  static const using_the_application_a3 = "setting.faq.using_the_application_a3";
-  static const using_the_application_q4 = "setting.faq.using_the_application_q4";
-  static const using_the_application_a4 = "setting.faq.using_the_application_a4";
+  static const using_the_application_q1 =
+      "setting.faq.using_the_application_q1";
+  static const using_the_application_a1 =
+      "setting.faq.using_the_application_a1";
+  static const using_the_application_q2 =
+      "setting.faq.using_the_application_q2";
+  static const using_the_application_a2 =
+      "setting.faq.using_the_application_a2";
+  static const using_the_application_q3 =
+      "setting.faq.using_the_application_q3";
+  static const using_the_application_a3 =
+      "setting.faq.using_the_application_a3";
+  static const using_the_application_q4 =
+      "setting.faq.using_the_application_q4";
+  static const using_the_application_a4 =
+      "setting.faq.using_the_application_a4";
   static const storage_and_management = "setting.faq.storage_and_management";
-  static const storage_and_management_q1 = "setting.faq.storage_and_management_q1";
-  static const storage_and_management_a1 = "setting.faq.storage_and_management_a1";
-  static const storage_and_management_q2 = "setting.faq.storage_and_management_q2";
-  static const storage_and_management_a2 = "setting.faq.storage_and_management_a2";
-  static const storage_and_management_q3 = "setting.faq.storage_and_management_q3";
-  static const storage_and_management_a3 = "setting.faq.storage_and_management_a3";
-  static const storage_and_management_q4 = "setting.faq.storage_and_management_q4";
-  static const storage_and_management_a4 = "setting.faq.storage_and_management_a4";
-  static const storage_and_management_q5 = "setting.faq.storage_and_management_q5";
-  static const storage_and_management_a5 = "setting.faq.storage_and_management_a5";
+  static const storage_and_management_q1 =
+      "setting.faq.storage_and_management_q1";
+  static const storage_and_management_a1 =
+      "setting.faq.storage_and_management_a1";
+  static const storage_and_management_q2 =
+      "setting.faq.storage_and_management_q2";
+  static const storage_and_management_a2 =
+      "setting.faq.storage_and_management_a2";
+  static const storage_and_management_q3 =
+      "setting.faq.storage_and_management_q3";
+  static const storage_and_management_a3 =
+      "setting.faq.storage_and_management_a3";
+  static const storage_and_management_q4 =
+      "setting.faq.storage_and_management_q4";
+  static const storage_and_management_a4 =
+      "setting.faq.storage_and_management_a4";
+  static const storage_and_management_q5 =
+      "setting.faq.storage_and_management_q5";
+  static const storage_and_management_a5 =
+      "setting.faq.storage_and_management_a5";
   static const backup_and_restore = "setting.faq.backup_and_restore";
   static const backup_and_restore_q1 = "setting.faq.backup_and_restore_q1";
   static const backup_and_restore_a1 = "setting.faq.backup_and_restore_a1";
