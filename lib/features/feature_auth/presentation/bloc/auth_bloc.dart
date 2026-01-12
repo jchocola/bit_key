@@ -132,7 +132,7 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
         }
 
         //(analytic) identify user
-        unawaited(getIt<AnalyticsFacadeRepoImpl> ().identifyUser(salt: salt));
+        unawaited(getIt<AnalyticsFacadeRepoImpl>().identifyUser(salt: salt));
 
         emit(
           AuthBlocUnauthenticated(
@@ -180,7 +180,7 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
 
         // (analytic) track event SETUP_MASTER_KEY
         unawaited(
-        getIt<AnalyticsFacadeRepoImpl> ().trackEvent(
+          getIt<AnalyticsFacadeRepoImpl>().trackEvent(
             AnalyticEvent.SETUP_MASTER_KEY.name,
           ),
         );
@@ -206,12 +206,16 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
       try {
         emit(AuthBlocLoading());
 
+        if (event.MASTER_KEY!.isEmpty) {
+          throw AppException.empty_key;
+        }
+
         final isValid = await secureStorageRepository.isMasterKeyValid(
           event.MASTER_KEY!,
         );
 
         if (!isValid) {
-          throw AppException.invalid_master_password;
+          throw AppException.invalid_master_key;
         }
 
         // For simplicity, using fixed strings as MASTER_KEY and SESSION_KEY.
@@ -230,7 +234,7 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
 
         // (analytic) track event AUTH_VIA_MASTER_KEY
         unawaited(
-         getIt<AnalyticsFacadeRepoImpl> ().trackEvent(
+          getIt<AnalyticsFacadeRepoImpl>().trackEvent(
             AnalyticEvent.AUTH_VIA_MASTER_KEY.name,
           ),
         );
@@ -262,7 +266,7 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
 
         if (canAuth) {
           final result = await localAuthRepository.authenticate(
-            reason: 'opEN',
+            reason: 'UNLOCK THE VAULT',
             biometricOnly: false,
           );
           if (result) {
@@ -288,7 +292,7 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
 
                   // (analytic) track event AUTH_VIA_BOMETRIC
                   unawaited(
-                    getIt<AnalyticsFacadeRepoImpl> ().trackEvent(
+                    getIt<AnalyticsFacadeRepoImpl>().trackEvent(
                       AnalyticEvent.AUTH_VIA_BIOMETRIC.name,
                     ),
                   );
@@ -306,9 +310,13 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
           }
         } else {
           logger.e('Cant auth');
+
+          throw AppException.cannot_auth_via_local_auth;
         }
       } catch (e) {
         logger.e(e);
+        emit(AuthBlocFailure(exception: e as AppException));
+        add(AppBlocEvent_LoadSaltAndHashedMasterKey());
       }
     });
 
@@ -317,7 +325,11 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
     ///
     on<AuthBlocEvent_lockApp>((event, emit) {
       //(analytic) track event
-      unawaited(getIt<AnalyticsFacadeRepoImpl> ().trackEvent(AnalyticEvent.LOCK_APP.name));
+      unawaited(
+        getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+          AnalyticEvent.LOCK_APP.name,
+        ),
+      );
 
       add(AppBlocEvent_LoadSaltAndHashedMasterKey());
     });
@@ -352,7 +364,7 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
 
           //(analytic) track event DELETE_ALL_DATA
           unawaited(
-            getIt<AnalyticsFacadeRepoImpl> ().trackEvent(
+            getIt<AnalyticsFacadeRepoImpl>().trackEvent(
               AnalyticEvent.DELETE_ALL_DATA.name,
             ),
           );

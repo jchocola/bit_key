@@ -1,3 +1,4 @@
+import 'package:bit_key/core/exception/app_exception.dart';
 import 'package:bit_key/features/feature_auth/domain/repo/local_auth_repository.dart';
 import 'package:bit_key/main.dart';
 import 'package:local_auth/local_auth.dart';
@@ -17,7 +18,7 @@ class LocalAuthRepoImpl implements LocalAuthRepository {
       );
     } catch (e) {
       logger.e(e);
-      rethrow;
+       throw AppException.no_biometric_enrolled;
     }
   }
 
@@ -30,7 +31,8 @@ class LocalAuthRepoImpl implements LocalAuthRepository {
       return canAuthenticate;
     } catch (e) {
       logger.e(e);
-      return false;
+      throw AppException.device_not_supported_local_auth;
+      //return false;
     }
   }
 }

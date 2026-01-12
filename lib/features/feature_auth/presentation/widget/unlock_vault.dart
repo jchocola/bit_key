@@ -50,10 +50,16 @@ class _UnlockVaultState extends State<UnlockVault> {
     }
 
     void onFingerPrintTapped() {
-      context.read<AuthBloc>().add(
-        AuthBlocEvent_UserUnblockVaultViaLocalAuth(),
-      );
-      logger.i('Finger Print Tapped');
+      try {
+        context.read<AuthBloc>().add(
+          AuthBlocEvent_UserUnblockVaultViaLocalAuth(),
+        );
+        logger.i('Finger Print Tapped');
+      } catch (e) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(e.toString())));
+      }
     }
 
     return Column(
@@ -63,7 +69,10 @@ class _UnlockVaultState extends State<UnlockVault> {
           masterKeyController: masterKeyController,
           onFingerPrintTapped: onFingerPrintTapped,
         ),
-        BigButton(title: context.tr(AppText.unlockVault), onTap: () => _onUnlockVault()),
+        BigButton(
+          title: context.tr(AppText.unlockVault),
+          onTap: () => _onUnlockVault(),
+        ),
       ],
     );
   }

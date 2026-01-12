@@ -1,6 +1,11 @@
 // ignore_for_file: constant_identifier_names
 
 enum AppException {
+  passwords_do_not_match,
+  invalid_master_key,
+  empty_key,
+  cannot_auth_via_local_auth,
+
   ///
   /// FOLDER
   ///
@@ -100,7 +105,6 @@ enum AppException {
   failed_to_contact_developer,
   failed_to_launch_url,
 
-
   ///
   /// APP SECURITY
   ///
@@ -109,6 +113,8 @@ enum AppException {
   failed_to_toogle_allow_screenshot_value,
   failed_to_toogle_shake_to_lock,
 
-  passwords_do_not_match,
-  invalid_master_password,
+  // LOCAL AUTH
+  device_not_supported_local_auth,
+  no_biometric_enrolled,
+
 }
