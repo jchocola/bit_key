@@ -215,9 +215,11 @@ class _CreatingIdentityPageState extends State<CreatingIdentityPage> {
                       Row(
                         spacing: AppConstant.appPadding,
                         children: [
-                          CustomTextfield(
-                            controller: itemNameController,
-                            hintText: context.tr(AppText.item_name),
+                          Flexible(
+                            child: CustomTextfield(
+                              controller: itemNameController,
+                              hintText: context.tr(AppText.item_name),
+                            ),
                           ),
 
                           BlocBuilder<FoldersBloc, FoldersBlocState>(
