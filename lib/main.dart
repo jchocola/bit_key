@@ -41,6 +41,7 @@ import 'package:easy_localization_loader/easy_localization_loader.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -79,6 +80,13 @@ Future<void> main() async {
   // get current langcode
   final currentLangCode = await getIt<LanguageSettingRepo>()
       .getCurrentLangCode();
+
+  // 2. Set preferred orientations
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+    
 
   // run app
   runApp(
