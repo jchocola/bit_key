@@ -32,8 +32,10 @@ import 'package:bit_key/features/feature_vault/presentation/bloc/search_bloc.dar
 import 'package:bit_key/features/feature_vault/presentation/page/creating_card/bloc/create_card_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_identity/bloc/create_identity_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_login/bloc/create_login_bloc.dart';
+import 'package:bit_key/firebase_options.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:easy_localization_loader/easy_localization_loader.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -57,7 +59,9 @@ Future<void> main() async {
   // init local db
   await getIt<LocalDbRepository>().init();
 
-  
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.android,
+);
 
   // get current langcode
   final currentLangCode = await getIt<LanguageSettingRepo>().getCurrentLangCode();

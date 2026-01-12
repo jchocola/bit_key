@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "639137510286",
+    "project_id": "bitkey-e12a4",
+    "storage_bucket": "bitkey-e12a4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:639137510286:android:2ddc0daf0d88b290c92adf",
+        "android_client_info": {
+          "package_name": "com.example.bit_key"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6E207Ij2dERgK3volpnm-148tPEehtkY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
