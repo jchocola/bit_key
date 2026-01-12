@@ -28,7 +28,7 @@ class Aes256EncryptionRepoImpl implements EncryptionRepository {
       return decryptResult;
     } catch (e) {
       logger.e(e);
-      rethrow;
+      throw AppException.failed_to_decrypt_str;
     }
   }
 
@@ -49,7 +49,7 @@ class Aes256EncryptionRepoImpl implements EncryptionRepository {
       return encryptedStr;
     } catch (e) {
       logger.e(e);
-      throw AppException.failed_encrypt_str;
+      throw AppException.failed_to_encrypt_str;
     }
   }
 
@@ -69,7 +69,7 @@ class Aes256EncryptionRepoImpl implements EncryptionRepository {
       return hexString.substring(0, 32); // 32 шестнадцатеричных символа
     } catch (e) {
       logger.e(e);
-      throw AppException.failedConvertKeyToValidForUse;
+      throw AppException.failed_to_convert_key_to_valid_for_use;
     }
   }
 
@@ -104,7 +104,7 @@ class Aes256EncryptionRepoImpl implements EncryptionRepository {
       return decrypted.toEntity();
     } catch (e) {
       logger.e(e);
-      rethrow;
+      throw AppException.failed_to_decrypt_card;
     }
   }
 
@@ -192,7 +192,7 @@ class Aes256EncryptionRepoImpl implements EncryptionRepository {
       return decryptedModel.toEntity();
     } catch (e) {
       logger.e(e);
-      rethrow;
+     throw AppException.failed_to_decrypt_identity;
     }
   }
 
@@ -229,7 +229,7 @@ class Aes256EncryptionRepoImpl implements EncryptionRepository {
       return decryptedModel.toEntity();
     } catch (e) {
       logger.e(e);
-      rethrow;
+     throw AppException.failed_to_decrypt_login;
     }
   }
 
@@ -263,7 +263,7 @@ class Aes256EncryptionRepoImpl implements EncryptionRepository {
       return encryptedModel.toEntity();
     } catch (e) {
       logger.e(e);
-      rethrow;
+     throw AppException.failed_to_encrypt_card;
     }
   }
 
@@ -345,7 +345,7 @@ class Aes256EncryptionRepoImpl implements EncryptionRepository {
       return encryptedModel.toEntity();
     } catch (e) {
       logger.e(e);
-      rethrow;
+      throw AppException.failed_to_encrypt_identity;
     }
   }
 
@@ -383,7 +383,7 @@ class Aes256EncryptionRepoImpl implements EncryptionRepository {
       return encryptedModel.toEntity();
     } catch (e) {
       logger.e(e);
-      rethrow;
+      throw AppException.failed_to_encrypt_login;
     }
   }
 
@@ -437,7 +437,7 @@ class Aes256EncryptionRepoImpl implements EncryptionRepository {
     required String masterKey,
   }) async {
     try {
-       List<Identity> decryptedList = [];
+      List<Identity> decryptedList = [];
 
       for (var e in encryptedIdentities) {
         final decrypted = await decryptIdentity(
@@ -448,7 +448,7 @@ class Aes256EncryptionRepoImpl implements EncryptionRepository {
       }
       return decryptedList;
     } catch (e) {
-       logger.e(e);
+      logger.e(e);
       rethrow;
     }
   }

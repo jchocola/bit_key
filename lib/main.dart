@@ -229,7 +229,7 @@ class MyApp extends StatelessWidget {
           supportedLocales: context.supportedLocales,
           locale: context.locale,
           localizationsDelegates: context.localizationDelegates,
-          title: 'Flutter Demo',
+          title: 'BitKey',
           theme: appTheme,
 
           // debugShowMaterialGrid: true,

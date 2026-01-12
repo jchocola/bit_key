@@ -1,5 +1,6 @@
 import 'package:bit_key/core/enum/clean_key_duration.dart';
 import 'package:bit_key/core/enum/session_timout.dart';
+import 'package:bit_key/core/exception/app_exception.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/acc_security_page/domain/repo/app_security_repository.dart';
 import 'package:bit_key/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,6 +26,7 @@ class AppSecurityRepoImpl implements AppSecurityRepository {
       await sharedPreferences.setInt(CLEAN_KEY, value.hours);
     } catch (e) {
       logger.e(e);
+      throw AppException.failed_to_change_clean_key_duration;
     }
   }
 
@@ -35,7 +37,7 @@ class AppSecurityRepoImpl implements AppSecurityRepository {
     try {
       await sharedPreferences.setInt(SESSION_KEY, value.minutes);
     } catch (e) {
-      logger.e(e);
+     throw AppException.failed_to_change_session_timeout;
     }
   }
 
@@ -92,6 +94,7 @@ class AppSecurityRepoImpl implements AppSecurityRepository {
       await sharedPreferences.setBool(ENABLE_SCREENSHOOT_KEY, !currentValue);
     } catch (e) {
       logger.e(e);
+        throw AppException.failed_to_toogle_allow_screenshot_value;
     }
   }
 
@@ -103,6 +106,7 @@ class AppSecurityRepoImpl implements AppSecurityRepository {
       await sharedPreferences.setBool(SHAKE_TO_LOCK_KEY, !currentValue);
     } catch (e) {
       logger.e(e);
+        throw AppException.failed_to_toogle_shake_to_lock;
     }
   }
 }

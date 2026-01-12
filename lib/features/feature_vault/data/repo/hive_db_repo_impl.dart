@@ -11,7 +11,6 @@ import 'package:bit_key/features/feature_vault/domain/entity/identity.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/login.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
 import 'package:bit_key/main.dart';
-import 'package:logger/web.dart';
 
 class HiveDbRepoImpl implements LocalDbRepository {
   final String pathDir;
@@ -37,6 +36,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
       logger.d('Deleted card');
     } catch (e) {
       logger.e(e);
+      throw AppException.failed_to_delete_card;
     }
   }
 
@@ -48,6 +48,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
       logger.d('Deleted identity');
     } catch (e) {
       logger.e(e);
+      throw AppException.failed_to_delete_identity;
     }
   }
 
@@ -59,6 +60,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
       logger.d('Deleted login');
     } catch (e) {
       logger.e(e);
+      throw AppException.failed_to_delete_login;
     }
   }
 
@@ -129,6 +131,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
       logger.d('Added new card');
     } catch (e) {
       logger.e(e);
+      throw AppException.failed_to_save_card;
     }
   }
 
@@ -140,6 +143,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
       logger.d('Added new identity');
     } catch (e) {
       logger.e(e);
+      throw AppException.failed_to_save_identity;
     }
   }
 
@@ -156,7 +160,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
   }
 
   @override
-  Future<void> updateCard({required Card card})async {
+  Future<void> updateCard({required Card card}) async {
     try {
       final index = await getCardIndexInBox(card: card);
       logger.d('Update card with index ${index}');
@@ -164,18 +168,20 @@ class HiveDbRepoImpl implements LocalDbRepository {
       await _cardsBox.putAt(index, cardModel);
     } catch (e) {
       logger.e(e);
+      throw AppException.failed_to_updated_card;
     }
   }
 
   @override
-  Future<void> updateIdentity({required Identity identity}) async{
-   try {
+  Future<void> updateIdentity({required Identity identity}) async {
+    try {
       final index = await getIdentityIndexInBox(identity: identity);
       logger.d('Update identity with index ${index}');
       final identityModel = IdentityModel.fromEntity(identity);
       await _identitiesBox.putAt(index, identityModel);
     } catch (e) {
       logger.e(e);
+      throw AppException.failed_to_updated_identity;
     }
   }
 
@@ -188,6 +194,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
       await _loginsBox.putAt(index, loginModel);
     } catch (e) {
       logger.e(e);
+      throw AppException.failed_to_updated_login;
     }
   }
 
@@ -329,6 +336,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
       logger.d('Moved card to bin ${card.itemName}');
     } catch (e) {
       logger.e(e);
+      throw AppException.failed_to_move_card_to_bin;
     }
   }
 
@@ -343,6 +351,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
       logger.d('Moved identity to bin ${identity.itemName}');
     } catch (e) {
       logger.e(e);
+      throw AppException.failed_to_move_identity_to_bin;
     }
   }
 
@@ -357,6 +366,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
       logger.d('Moved login to bin ${login.itemName}');
     } catch (e) {
       logger.e(e);
+      throw AppException.failed_to_move_login_to_bin;
     }
   }
 
@@ -371,6 +381,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
       logger.d('Restored card from bin ${card.itemName}');
     } catch (e) {
       logger.e(e);
+      throw AppException.failed_to_restore_card;
     }
   }
 
@@ -385,6 +396,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
       logger.d('Restored identity from bin ${identity.itemName}');
     } catch (e) {
       logger.e(e);
+      throw AppException.failed_to_restore_identity;
     }
   }
 
@@ -399,6 +411,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
       logger.d('Restored login from bin ${login.itemName}');
     } catch (e) {
       logger.e(e);
+      throw AppException.failed_to_restore_login;
     }
   }
 
@@ -557,6 +570,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
       }
     } catch (e) {
       logger.e(e);
+      throw AppException.failed_to_delete_all_card_from_bin;
     }
   }
 
@@ -571,6 +585,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
       }
     } catch (e) {
       logger.e(e);
+      throw AppException.failed_to_delete_all_identity_from_bin;
     }
   }
 
@@ -585,6 +600,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
       }
     } catch (e) {
       logger.e(e);
+      throw AppException.failed_to_delete_all_login_from_bin;
     }
   }
 
@@ -673,6 +689,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
       logger.d('Deleted all cards');
     } catch (e) {
       logger.e(e);
+      throw AppException.failed_to_delete_all_cards;
     }
   }
 
@@ -683,6 +700,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
       logger.d('Deleted all identities');
     } catch (e) {
       logger.e(e);
+      throw AppException.failed_to_delete_all_identities;
     }
   }
 
@@ -693,6 +711,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
       logger.d('Deleted all logins');
     } catch (e) {
       logger.e(e);
+      throw AppException.failed_to_delete_all_logins;
     }
   }
 
@@ -704,6 +723,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
       }
     } catch (e) {
       logger.e(e);
+      throw AppException.failed_to_save_card_list;
     }
   }
 
@@ -715,6 +735,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
       }
     } catch (e) {
       logger.e(e);
+      throw AppException.failed_to_save_identity_list;
     }
   }
 
@@ -726,6 +747,7 @@ class HiveDbRepoImpl implements LocalDbRepository {
       }
     } catch (e) {
       logger.e(e);
+      throw AppException.failed_to_save_login_list;
     }
   }
 }
