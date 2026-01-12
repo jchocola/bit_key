@@ -1,3 +1,4 @@
+import 'package:bit_key/core/exception/app_exception.dart';
 import 'package:bit_key/features/feature_setting/presentation/pages/about_page/domain/repo/url_launcher_repo.dart';
 import 'package:bit_key/main.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -17,9 +18,11 @@ class UrlLauncherRepoImpl implements UrlLauncherRepo {
         await launchUrl(params);
       } else {
         logger.e('Could not launch');
+         throw AppException.failed_to_launch_url;
       }
     } catch (e) {
       logger.e(e);
+      throw AppException.failed_to_contact_developer;
     }
   }
 
@@ -30,6 +33,7 @@ class UrlLauncherRepoImpl implements UrlLauncherRepo {
       await launchUrl(uri);
     } catch (e) {
       logger.e(e);
+        throw AppException.failed_to_launch_url;
     }
   }
 }

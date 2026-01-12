@@ -1,3 +1,4 @@
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/features/feature_vault/data/model/login_model.dart';
@@ -5,6 +6,7 @@ import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.da
 import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
 import 'package:bit_key/main.dart';
 import 'package:bit_key/shared/widgets/custom_textfield.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -119,13 +121,13 @@ class _EditLoginPageState extends State<EditLoginPage> {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text('Cancel', style: theme.textTheme.bodyMedium),
+                      child: Text(context.tr(AppText.cancel), style: theme.textTheme.bodyMedium),
                     ),
-                    Text('Edit login', style: theme.textTheme.titleMedium),
+                    Text(context.tr(AppText.edit_login), style: theme.textTheme.titleMedium),
 
                     TextButton(
                       onPressed: _onSaveTapped,
-                      child: Text('Save', style: theme.textTheme.bodyMedium),
+                      child: Text(context.tr(AppText.save), style: theme.textTheme.bodyMedium),
                     ),
                   ],
                 ),
@@ -136,13 +138,13 @@ class _EditLoginPageState extends State<EditLoginPage> {
                   spacing: AppConstant.appPadding,
                   children: [
                     CustomTextfield(
-                      hintText: 'Item name (required)',
+                      hintText: context.tr(AppText.item_name),
                       controller: itemNameController,
                     ),
 
                     BlocBuilder<FoldersBloc, FoldersBlocState>(
                       builder: (context, state) => PopupMenuButton(
-                        child: Text(selectedFolder ?? 'None'),
+                        child: Text(selectedFolder ?? context.tr(AppText.none)),
                         itemBuilder: (context) {
                           if (state is FoldersBlocLoaded) {
                             return List.generate(state.folders.length, (index) {
@@ -164,20 +166,20 @@ class _EditLoginPageState extends State<EditLoginPage> {
                   ],
                 ),
 
-                Text('Login Credentials'),
+                Text(context.tr(AppText.login_credentials)),
                 CustomTextfield(
-                  hintText: 'Username 🔒',
+                  hintText: context.tr(AppText.user_name),
                   controller: userNameController,
                 ),
                 CustomTextfield(
                   controller: passwordController,
                   withEye: true,
                   obscure: true,
-                  hintText: 'Password 🔒',
+                  hintText: context.tr(AppText.password),
                 ),
                 CustomTextfield(
                   controller: urlController,
-                  hintText: 'Website (URI) 🔒',
+                  hintText: context.tr(AppText.website),
                 ),
               ],
             ),

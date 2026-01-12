@@ -1,5 +1,6 @@
 // ignore_for_file: camel_case_types
 
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
@@ -7,6 +8,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:bit_key/core/di/di.dart';
+import 'package:bit_key/core/exception/app_exception.dart';
+import 'package:bit_key/features/feature_analytic/data/analytics_facade_repo_impl.dart';
+import 'package:bit_key/features/feature_analytic/domain/analytic_repository.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
 import 'package:bit_key/main.dart';
@@ -84,7 +89,12 @@ class FoldersBlocLoaded extends FoldersBlocState {
   }
 }
 
-class FoldersBlocError extends FoldersBlocState {}
+class FoldersBlocError extends FoldersBlocState {
+  final Object error;
+  FoldersBlocError({required this.error});
+  @override
+  List<Object?> get props => [error];
+}
 
 class FoldersBlocSuccess extends FoldersBlocState {}
 
@@ -126,7 +136,7 @@ class FoldersBloc extends Bloc<FoldersBlocEvent, FoldersBlocState> {
         emit(FoldersBlocLoaded(folders: folders, counts: counts));
       } catch (e) {
         logger.e(e);
-        emit(FoldersBlocError());
+        emit(FoldersBlocError(error: e));
       }
     });
 
@@ -136,16 +146,27 @@ class FoldersBloc extends Bloc<FoldersBlocEvent, FoldersBlocState> {
     on<FoldersBlocEvent_createFolder>((event, emit) async {
       logger.d('Create folder');
       try {
+        if (event.folderName.isEmpty) {
+          throw AppException.empty_item_name;
+        }
+
         await folderRepository
             .createNewFolder(folderName: event.folderName)
             .then((_) {
               emit(FoldersBlocSuccess());
             });
 
+        // (analytic) track event CREATE_FOLDER
+        unawaited(
+          getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+            AnalyticEvent.CREATE_FOLDER.name,
+          ),
+        );
+
         add(FoldersBlocEvent_loadFolders());
       } catch (e) {
         logger.e(e);
-        emit(FoldersBlocError());
+        emit(FoldersBlocError(error: e));
       }
     });
 
@@ -167,6 +188,13 @@ class FoldersBloc extends Bloc<FoldersBlocEvent, FoldersBlocState> {
     on<FolderBlocEvent_deleteFolder>((event, emit) async {
       try {
         await folderRepository.deleteFolder(folderName: event.folderName);
+
+        // (analytic) track event DELETE_FOLDER
+        unawaited(
+          getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+            AnalyticEvent.DELETE_FOLDER.name,
+          ),
+        );
 
         add(FoldersBlocEvent_loadFolders());
       } catch (e) {

@@ -2,6 +2,9 @@
 
 import 'dart:async';
 
+import 'package:bit_key/core/di/di.dart';
+import 'package:bit_key/features/feature_analytic/data/analytics_facade_repo_impl.dart';
+import 'package:bit_key/features/feature_analytic/domain/analytic_repository.dart';
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
 import 'package:bit_key/main.dart';
@@ -156,6 +159,14 @@ class BinBloc extends Bloc<BinBlocEvent, BinBlocState> {
         await localDbRepository.deleteAllIdentitiesFromBin();
         event.completer?.complete();
         logger.f('Bin bloc deleted all from bin');
+
+        // (analytic) track event CLEAR_BIN
+        unawaited(
+          getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+            AnalyticEvent.CLEAR_BIN.name,
+          ),
+        );
+
         add(BinBlocEvent_load());
       } catch (e) {
         logger.e(e);
@@ -171,10 +182,29 @@ class BinBloc extends Bloc<BinBlocEvent, BinBlocState> {
         final item = event.item;
         if (item is Login) {
           await localDbRepository.restoreLoginFromBin(login: item);
+
+          // (analytic) track event RESTORE_LOGIN
+          unawaited(
+            getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+              AnalyticEvent.RESTORE_LOGIN.name,
+            ),
+          );
         } else if (item is Card) {
           await localDbRepository.restoreCardFromBin(card: item);
+          // (analytic) track event RESTORE_CARD
+          unawaited(
+            getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+              AnalyticEvent.RESTORE_CARD.name,
+            ),
+          );
         } else if (item is Identity) {
           await localDbRepository.restoreIdentityFromBin(identity: item);
+          // (analytic) track event RESTORE_IDENTITY
+          unawaited(
+            getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+              AnalyticEvent.RESTORE_IDENTITY.name,
+            ),
+          );
         }
         logger.f('Bin bloc restored item');
         event.completer?.complete();
@@ -193,10 +223,28 @@ class BinBloc extends Bloc<BinBlocEvent, BinBlocState> {
         final item = event.item;
         if (item is Login) {
           await localDbRepository.deleteLogin(login: item);
+          // (analytic) track event DELETE_LOGIN
+          unawaited(
+            getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+              AnalyticEvent.DELETE_LOGIN.name,
+            ),
+          );
         } else if (item is Card) {
           await localDbRepository.deleteCard(card: item);
+          // (analytic) track event DELETE_CARD
+          unawaited(
+            getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+              AnalyticEvent.DELETE_CARD.name,
+            ),
+          );
         } else if (item is Identity) {
           await localDbRepository.deleteIdentity(identtity: item);
+          // (analytic) track event DELETE_IDENTITY
+          unawaited(
+            getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+              AnalyticEvent.DELETE_IDENTITY.name,
+            ),
+          );
         }
         logger.f('Bin bloc deleted permantly item');
         event.completer?.complete();

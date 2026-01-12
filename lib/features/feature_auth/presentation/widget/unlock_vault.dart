@@ -6,6 +6,7 @@ import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_auth/presentation/widget/master_password_input.dart';
 import 'package:bit_key/main.dart';
 import 'package:bit_key/shared/widgets/big_button.dart';
+import 'package:bit_key/shared/widgets/error_snackbar.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,17 +44,19 @@ class _UnlockVaultState extends State<UnlockVault> {
           ),
         );
       } catch (e) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(e.toString())));
+        showErrorSnackbar(context, e);
       }
     }
 
     void onFingerPrintTapped() {
-      context.read<AuthBloc>().add(
-        AuthBlocEvent_UserUnblockVaultViaLocalAuth(),
-      );
-      logger.i('Finger Print Tapped');
+      try {
+        context.read<AuthBloc>().add(
+          AuthBlocEvent_UserUnblockVaultViaLocalAuth(),
+        );
+        logger.i('Finger Print Tapped');
+      } catch (e) {
+         showErrorSnackbar(context, e);
+      }
     }
 
     return Column(
@@ -63,7 +66,10 @@ class _UnlockVaultState extends State<UnlockVault> {
           masterKeyController: masterKeyController,
           onFingerPrintTapped: onFingerPrintTapped,
         ),
-        BigButton(title: context.tr(AppText.unlockVault), onTap: () => _onUnlockVault()),
+        BigButton(
+          title: context.tr(AppText.unlockVault),
+          onTap: () => _onUnlockVault(),
+        ),
       ],
     );
   }

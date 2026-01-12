@@ -1,7 +1,9 @@
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/features/feature_import_export_data/presentation/bloc/export_data_bloc.dart';
 import 'package:bit_key/shared/widgets/big_button.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,9 +19,9 @@ class ExportDataModal extends StatelessWidget {
           child: Column(
             spacing: AppConstant.appPadding,
             children: [
-              Text('Export Data'),
+              Text(context.tr(AppText.export_data)),
               BigButton(
-                title: 'Export Pure Data (for human, high risk) .json',
+                title: context.tr(AppText.export_pure_data),
                 onTap: () {
                   context.read<ExportDataBloc>().add(
                     ExportDataBlocEvent_exportDecryptedData(),
@@ -27,7 +29,7 @@ class ExportDataModal extends StatelessWidget {
                 },
               ),
               BigButton(
-                title: 'Export Encrypted Data (for security/import) .json',
+                title: context.tr(AppText.export_encrypted_data),
                 onTap: () {
                   context.read<ExportDataBloc>().add(
                     ExportDataBlocEvent_exportEncryptedData(),
@@ -35,7 +37,7 @@ class ExportDataModal extends StatelessWidget {
                 },
               ),
 
-              Text('Надежно храните файлы!!!'),
+              Text(context.tr(AppText.safety_save_file),),
             ],
           ),
         ),

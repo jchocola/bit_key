@@ -1,5 +1,10 @@
 // ignore_for_file: non_constant_identifier_names, camel_case_types
 
+import 'dart:async';
+
+import 'package:bit_key/core/di/di.dart';
+import 'package:bit_key/features/feature_analytic/data/analytics_facade_repo_impl.dart';
+import 'package:bit_key/features/feature_analytic/domain/analytic_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -106,7 +111,6 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
     required this.localAuthRepository,
     required this.folderRepository,
     required this.localDbRepository,
-    re,
   }) : super(AuthBlocInitial()) {
     ///
     /// LOAD SALT AND CONTROL SUM STRING
@@ -126,6 +130,10 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
           emit(AuthBlocFirstTimeUser());
           return;
         }
+
+        //(analytic) identify user
+        unawaited(getIt<AnalyticsFacadeRepoImpl>().identifyUser(salt: salt));
+
         emit(
           AuthBlocUnauthenticated(
             SALT: salt,
@@ -144,7 +152,11 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
     ///
     on<AppBlocEvent_UserFirstimeRegister>((event, emit) async {
       try {
-        emit(AuthBlocLoading());
+        // emit(AuthBlocLoading());
+
+        if (event.MASTER_KEY!.isEmpty) {
+          throw AppException.empty_key;
+        }
 
         if (event.MASTER_KEY != event.CONFIRM_MASTER_KEY) {
           throw AppException.passwords_do_not_match;
@@ -170,6 +182,13 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
         logger.i('New SALT set: $newSalt');
         logger.i('New HASHED MASTER KEY: $newHashedMasterKey');
 
+        // (analytic) track event SETUP_MASTER_KEY
+        unawaited(
+          getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+            AnalyticEvent.SETUP_MASTER_KEY.name,
+          ),
+        );
+
         emit(
           AuthBlocUnauthenticated(
             SALT: newSalt,
@@ -179,8 +198,9 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
         );
       } catch (e) {
         logger.e(e);
-        emit(AuthBlocFailure(exception: e as AppException?));
-        add(AppBlocEvent_LoadSaltAndHashedMasterKey());
+        rethrow;
+        // emit(AuthBlocFailure(exception: e as AppException?));
+        // add(AppBlocEvent_LoadSaltAndHashedMasterKey());
       }
     });
 
@@ -189,14 +209,18 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
     ///
     on<AppBlocEvent_UserUnlockVaultViaMasterKey>((event, emit) async {
       try {
-        emit(AuthBlocLoading());
+        //emit(AuthBlocLoading());
+
+        if (event.MASTER_KEY!.isEmpty) {
+          throw AppException.empty_key;
+        }
 
         final isValid = await secureStorageRepository.isMasterKeyValid(
           event.MASTER_KEY!,
         );
 
         if (!isValid) {
-          throw AppException.invalid_master_password;
+          throw AppException.invalid_master_key;
         }
 
         // For simplicity, using fixed strings as MASTER_KEY and SESSION_KEY.
@@ -213,6 +237,13 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
         logger.f('SESSION KEY: $sessionKey');
         logger.f('ENCRYPTED MASTER KEY: $encryptedMasterKey');
 
+        // (analytic) track event AUTH_VIA_MASTER_KEY
+        unawaited(
+          getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+            AnalyticEvent.AUTH_VIA_MASTER_KEY.name,
+          ),
+        );
+
         emit(
           AuthBlocAuthenticated(
             MASTER_KEY: masterKey,
@@ -226,6 +257,7 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
         await secureStorageRepository.setSessionKey(sessionKey);
       } catch (e) {
         logger.e(e);
+        //rethrow;
         emit(AuthBlocFailure(exception: e as AppException?));
         add(AppBlocEvent_LoadSaltAndHashedMasterKey());
       }
@@ -240,7 +272,7 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
 
         if (canAuth) {
           final result = await localAuthRepository.authenticate(
-            reason: 'opEN',
+            reason: 'UNLOCK THE VAULT',
             biometricOnly: false,
           );
           if (result) {
@@ -264,6 +296,13 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
                 if (decryptedMasterKey != null) {
                   logger.d('User authenticated');
 
+                  // (analytic) track event AUTH_VIA_BOMETRIC
+                  unawaited(
+                    getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+                      AnalyticEvent.AUTH_VIA_BIOMETRIC.name,
+                    ),
+                  );
+
                   emit(
                     AuthBlocAuthenticated(
                       MASTER_KEY: decryptedMasterKey,
@@ -277,9 +316,13 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
           }
         } else {
           logger.e('Cant auth');
+
+          throw AppException.cannot_auth_via_local_auth;
         }
       } catch (e) {
         logger.e(e);
+        emit(AuthBlocFailure(exception: e as AppException));
+        add(AppBlocEvent_LoadSaltAndHashedMasterKey());
       }
     });
 
@@ -287,6 +330,13 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
     /// lock app
     ///
     on<AuthBlocEvent_lockApp>((event, emit) {
+      //(analytic) track event
+      unawaited(
+        getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+          AnalyticEvent.LOCK_APP.name,
+        ),
+      );
+
       add(AppBlocEvent_LoadSaltAndHashedMasterKey());
     });
 
@@ -316,6 +366,13 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
 
           logger.d(
             'DELETED ALL DATA , KEYS, SESSION KEY , CONTROLL SUM , SALT',
+          );
+
+          //(analytic) track event DELETE_ALL_DATA
+          unawaited(
+            getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+              AnalyticEvent.DELETE_ALL_DATA.name,
+            ),
           );
 
           add(AppBlocEvent_LoadSaltAndHashedMasterKey());

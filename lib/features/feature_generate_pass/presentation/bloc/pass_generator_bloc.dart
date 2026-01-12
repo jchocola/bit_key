@@ -1,7 +1,11 @@
 // ignore_for_file: camel_case_types
 
+import 'dart:async';
 import 'dart:math';
 
+import 'package:bit_key/core/di/di.dart';
+import 'package:bit_key/features/feature_analytic/data/analytics_facade_repo_impl.dart';
+import 'package:bit_key/features/feature_analytic/domain/analytic_repository.dart';
 import 'package:bit_key/features/feature_generate_pass/data/model/password_strength.dart';
 import 'package:bit_key/features/feature_generate_pass/domain/repositories/generator_repo.dart';
 import 'package:equatable/equatable.dart';
@@ -307,6 +311,14 @@ class PassGeneratorBloc
       );
       final currentState = state;
       if (currentState is PassGeneratorBlocState_state) {
+
+         // (analytic) track event GENERATE_PASSWORD
+          unawaited(
+            getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+              AnalyticEvent.GENERATE_PASSWORD.name,
+            ),
+          );
+
         emit(
           currentState.copyWith(
             generatedPass: generatedPass,

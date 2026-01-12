@@ -13,6 +13,7 @@ import 'package:bit_key/features/feature_vault/presentation/page/creating_identi
 import 'package:bit_key/main.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
 import 'package:bit_key/shared/widgets/custom_textfield.dart';
+import 'package:bit_key/shared/widgets/error_snackbar.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -182,12 +183,12 @@ class _CreatingIdentityPageState extends State<CreatingIdentityPage> {
                         style: theme.textTheme.titleMedium,
                       ),
 
-                      BlocListener<FoldersBloc, FoldersBlocState>(
+                      BlocListener<CreateIdentityBloc, CreateIdentityState>(
                         listener: (context, state) {
-                          if (state is FoldersBlocError) {
-                            logger.e('error');
+                          if (state is CreateIdentityState_error) {
+                            showErrorSnackbar(context, state.error);
                           }
-                          if (state is FoldersBlocSuccess) {
+                          if (state is CreateIdentityState_success) {
                             logger.e('success');
                             Navigator.pop(context);
                           }
@@ -287,12 +288,12 @@ class _CreatingIdentityPageState extends State<CreatingIdentityPage> {
 
                       CustomTextfield(
                         controller: emailController,
-                        hintText: context.tr(AppText.email)
+                        hintText: context.tr(AppText.email),
                       ),
 
                       CustomTextfield(
                         controller: phoneController,
-                        hintText: context.tr(AppText.phone)
+                        hintText: context.tr(AppText.phone),
                       ),
 
                       Text(context.tr(AppText.address)),

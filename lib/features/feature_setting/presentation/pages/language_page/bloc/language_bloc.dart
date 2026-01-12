@@ -1,5 +1,10 @@
 // ignore_for_file: camel_case_types
 
+import 'dart:async';
+
+import 'package:bit_key/core/di/di.dart';
+import 'package:bit_key/features/feature_analytic/data/analytics_facade_repo_impl.dart';
+import 'package:bit_key/features/feature_analytic/domain/analytic_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -70,6 +75,15 @@ class LanguageBloc extends Bloc<LanguageBlocEvent, LanguageBlocState> {
         // chngae lang code on shared prefs
         await languageSettingRepo.setLangCode(langCode: event.langCode);
 
+        // (analytic) track event CHANGE_LANGUAGE
+        unawaited(
+          getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+            AnalyticEvent.CHANGE_LANGUAGE.name,
+            {
+              "LANG_CODE": event.langCode,
+            },
+          ),
+        );
 
         // reload
         add(LanguageBlocEvent_loadCurrentLangCode());

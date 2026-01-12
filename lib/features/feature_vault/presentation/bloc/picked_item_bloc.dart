@@ -2,6 +2,9 @@
 
 import 'dart:async';
 
+import 'package:bit_key/core/di/di.dart';
+import 'package:bit_key/features/feature_analytic/data/analytics_facade_repo_impl.dart';
+import 'package:bit_key/features/feature_analytic/domain/analytic_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -155,6 +158,13 @@ class PickedItemBloc extends Bloc<PickedItemBlocEvent, PickedItemBlocState> {
                   logger.f('Moved card to bin!!!!');
                   event.completer?.complete();
                 });
+
+            // (analytic) track event MOVE_CARD_TO_BIN
+            unawaited(
+              getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+                AnalyticEvent.MOVE_CARD_TO_BIN.name,
+              ),
+            );
           } else {
             logger.e('Card empty');
           }
@@ -181,6 +191,13 @@ class PickedItemBloc extends Bloc<PickedItemBlocEvent, PickedItemBlocState> {
                   logger.f('Moved login to bin!!!!');
                   event.completer?.complete();
                 });
+
+            // (analytic) track event MOVE_LOGIN_TO_BIN
+            unawaited(
+              getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+                AnalyticEvent.MOVE_LOGIN_TO_BIN.name,
+              ),
+            );
           } else {
             logger.e('Login empty');
           }
@@ -207,6 +224,13 @@ class PickedItemBloc extends Bloc<PickedItemBlocEvent, PickedItemBlocState> {
                   logger.f('Moved identity to bin!!!!');
                   event.completer?.complete();
                 });
+
+            // (analytic) track event MOVE_IDENTITY_TO_BIN
+            unawaited(
+              getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+                AnalyticEvent.MOVE_IDENTITY_TO_BIN.name,
+              ),
+            );
           } else {
             logger.e('Identity empty');
           }
@@ -235,6 +259,13 @@ class PickedItemBloc extends Bloc<PickedItemBlocEvent, PickedItemBlocState> {
           logger.f('Encrypted Login : ${encryptedLogin.toString()}');
 
           await localDbRepository.updateLogin(login: encryptedLogin);
+
+          // (analytic) track event EDIT_LOGIN
+          unawaited(
+            getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+              AnalyticEvent.EDIT_LOGIN.name,
+            ),
+          );
         }
       } catch (e) {
         logger.e(e);
@@ -258,15 +289,20 @@ class PickedItemBloc extends Bloc<PickedItemBlocEvent, PickedItemBlocState> {
           logger.f('Encrypted card : ${encryptedCard.toString()}');
 
           await localDbRepository.updateCard(card: encryptedCard);
+
+          // (analytic) track event EDIT_CARD
+          unawaited(
+            getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+              AnalyticEvent.EDIT_CARD.name,
+            ),
+          );
         }
       } catch (e) {
         logger.e(e);
       }
     });
 
-
-
-        ///
+    ///
     /// EDIT IDENTITY
     ///
     on<PickedItemBloc_Event_editIdentity>((event, emit) async {
@@ -283,6 +319,13 @@ class PickedItemBloc extends Bloc<PickedItemBlocEvent, PickedItemBlocState> {
           logger.f('Encrypted card : ${encryptedIdentity.toString()}');
 
           await localDbRepository.updateIdentity(identity: encryptedIdentity);
+
+          // (analytic) track event EDIT_IDENTITY
+          unawaited(
+            getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+              AnalyticEvent.EDIT_IDENTITY.name,
+            ),
+          );
         }
       } catch (e) {
         logger.e(e);

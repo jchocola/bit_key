@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:bit_key/core/exception/app_exception.dart';
 import 'package:bit_key/features/feature_auth/domain/repo/secure_storage_repository.dart';
 import 'package:bit_key/main.dart';
 import 'package:crypto/crypto.dart';
@@ -35,7 +36,7 @@ class SecureStorageRepoImpl implements SecureStorageRepository {
       logger.i('Control Sum String deleted from secure storage');
     } catch (e) {
       logger.e(e);
-      rethrow;
+      throw AppException.failed_to_delete_hashed_master_key;
     }
   }
 
@@ -46,7 +47,7 @@ class SecureStorageRepoImpl implements SecureStorageRepository {
       logger.i('SALT deleted from secure storage');
     } catch (e) {
       logger.e(e);
-      rethrow;
+      throw AppException.failed_to_delete_salt;
     }
   }
 
@@ -57,7 +58,7 @@ class SecureStorageRepoImpl implements SecureStorageRepository {
       logger.i('Session Key deleted from secure storage');
     } catch (e) {
       logger.e(e);
-      rethrow;
+      throw AppException.failed_to_delete_session_key;
     }
   }
 
@@ -67,7 +68,7 @@ class SecureStorageRepoImpl implements SecureStorageRepository {
       return await secureStorage.read(key: HASHED_MASTER_KEY);
     } catch (e) {
       logger.e(e);
-      rethrow;
+      throw AppException.failed_to_get_hashed_master_key;
     }
   }
 
@@ -77,7 +78,7 @@ class SecureStorageRepoImpl implements SecureStorageRepository {
       return await secureStorage.read(key: SALT_KEY);
     } catch (e) {
       logger.e(e);
-      rethrow;
+      throw AppException.failed_to_get_salt;
     }
   }
 
@@ -87,7 +88,7 @@ class SecureStorageRepoImpl implements SecureStorageRepository {
       return await secureStorage.read(key: SESSION_KEY);
     } catch (e) {
       logger.e(e);
-      rethrow;
+      throw AppException.failed_to_get_session_key;
     }
   }
 
@@ -97,7 +98,7 @@ class SecureStorageRepoImpl implements SecureStorageRepository {
       await secureStorage.write(key: HASHED_MASTER_KEY, value: hashedMasterKey);
     } catch (e) {
       logger.e(e);
-      rethrow;
+      throw AppException.failed_to_set_hashed_master_key;
     }
   }
 
@@ -107,7 +108,7 @@ class SecureStorageRepoImpl implements SecureStorageRepository {
       await secureStorage.write(key: SALT_KEY, value: salt);
     } catch (e) {
       logger.e(e);
-      rethrow;
+      throw AppException.failed_to_set_salt;
     }
   }
 
@@ -117,7 +118,7 @@ class SecureStorageRepoImpl implements SecureStorageRepository {
       await secureStorage.write(key: SESSION_KEY, value: sessionKey);
     } catch (e) {
       logger.e(e);
-      rethrow;
+      throw AppException.failed_to_set_session_key;
     }
   }
 
@@ -127,7 +128,7 @@ class SecureStorageRepoImpl implements SecureStorageRepository {
       return secureStorage.deleteAll();
     } catch (e) {
       logger.e(e);
-      rethrow;
+      throw AppException.failed_to_clear_all_secure_data;
     }
   }
 
@@ -139,7 +140,7 @@ class SecureStorageRepoImpl implements SecureStorageRepository {
       return Future.value(salt);
     } catch (e) {
       logger.e(e);
-      rethrow;
+      throw AppException.failed_to_generate_salt;
     }
   }
 
@@ -163,7 +164,7 @@ class SecureStorageRepoImpl implements SecureStorageRepository {
       return false;
     } catch (e) {
       logger.e(e);
-      rethrow;
+      throw AppException.failed_to_check_validity_master_key;
     }
   }
 
@@ -173,7 +174,7 @@ class SecureStorageRepoImpl implements SecureStorageRepository {
       await secureStorage.delete(key: ENCRYPTED_MASTER_KEY);
     } catch (e) {
       logger.e(e);
-      rethrow;
+      throw AppException.failed_to_delete_encrypted_master_key;
     }
   }
 
@@ -183,6 +184,7 @@ class SecureStorageRepoImpl implements SecureStorageRepository {
       return await secureStorage.read(key: ENCRYPTED_MASTER_KEY);
     } catch (e) {
       logger.e(e);
+      throw AppException.failed_to_get_encrypted_master_key;
     }
   }
 
@@ -195,6 +197,7 @@ class SecureStorageRepoImpl implements SecureStorageRepository {
       );
     } catch (e) {
       logger.e(e);
+       throw AppException.failed_to_set_encrypted_master_key;
     }
   }
 
@@ -249,7 +252,7 @@ class SecureStorageRepoImpl implements SecureStorageRepository {
       return base64Key;
     } catch (e) {
       logger.e(e);
-      rethrow;
+      throw AppException.failed_to_generate_hashed_master_key;
     }
   }
 
@@ -261,7 +264,7 @@ class SecureStorageRepoImpl implements SecureStorageRepository {
       return Future.value(sessionKey);
     } catch (e) {
       logger.e(e);
-      rethrow;
+     throw AppException.failed_to_generate_session_key;
     }
   }
 
@@ -353,7 +356,7 @@ class SecureStorageRepoImpl implements SecureStorageRepository {
       return result;
     } catch (e) {
       logger.e(e);
-      rethrow;
+       throw AppException.failed_to_generate_encrypted_master_key;
     }
   }
 
@@ -363,29 +366,29 @@ class SecureStorageRepoImpl implements SecureStorageRepository {
     required String encryptedMasterKey,
   }) async {
     try {
-       final data = jsonDecode(encryptedMasterKey) as Map<String, dynamic>;
+      final data = jsonDecode(encryptedMasterKey) as Map<String, dynamic>;
 
-        // 2. Декодируем base64
-    final ciphertext = base64Decode(data['ciphertext'] as String);
-    final authTag = base64Decode(data['authTag'] as String);
-    final nonce = base64Decode(data['nonce'] as String);
-    final associatedData = base64Decode(data['associatedData'] as String);
+      // 2. Декодируем base64
+      final ciphertext = base64Decode(data['ciphertext'] as String);
+      final authTag = base64Decode(data['authTag'] as String);
+      final nonce = base64Decode(data['nonce'] as String);
+      final associatedData = base64Decode(data['associatedData'] as String);
 
-    // 3. Получаем 32-байтовый ключ из sessionKey
-    // Если sessionKey уже 32 байта - используем как есть
-    // Если строка - конвертируем через SHA-256
-    Uint8List keyBytes;
-    if (sessionKey.length == 44 && sessionKey.endsWith('==')) {
-      // Возможно это base64 32 байта
-      keyBytes = base64Decode(sessionKey);
-    } else {
-      // Конвертируем строку в 32 байта через SHA-256
-      final hash = sha256.convert(utf8.encode(sessionKey));
-      keyBytes = Uint8List.fromList(hash.bytes);
-    }
+      // 3. Получаем 32-байтовый ключ из sessionKey
+      // Если sessionKey уже 32 байта - используем как есть
+      // Если строка - конвертируем через SHA-256
+      Uint8List keyBytes;
+      if (sessionKey.length == 44 && sessionKey.endsWith('==')) {
+        // Возможно это base64 32 байта
+        keyBytes = base64Decode(sessionKey);
+      } else {
+        // Конвертируем строку в 32 байта через SHA-256
+        final hash = sha256.convert(utf8.encode(sessionKey));
+        keyBytes = Uint8List.fromList(hash.bytes);
+      }
 
-     // 4. Проверяем размеры
-    print('''
+      // 4. Проверяем размеры
+      print('''
 🔧 Попытка расшифрования:
 ├─ ciphertext: ${ciphertext.length} байт
 ├─ authTag: ${authTag.length} байт
@@ -394,8 +397,7 @@ class SecureStorageRepoImpl implements SecureStorageRepository {
 └─ associatedData: ${utf8.decode(associatedData)}
 ''');
 
-
- // 6. Параметры для шифрования
+      // 6. Параметры для шифрования
       final params = AEADParameters<KeyParameter>(
         KeyParameter(keyBytes), // Сессионный ключ для шифрования
         128, // Размер тега аутентификации в битах (16 байт для Poly1305)
@@ -403,42 +405,44 @@ class SecureStorageRepoImpl implements SecureStorageRepository {
         associatedData, // Дополнительные данные для аутентификации
       );
 
+      // 6. Инициализируем для РАСШИФРОВАНИЯ
+      aeadCipher.init(false, params);
 
-       // 6. Инициализируем для РАСШИФРОВАНИЯ
-    aeadCipher.init(false, params);
-    
-    // 7. Добавляем associated data
-    aeadCipher.processAADBytes(associatedData, 0, associatedData.length);
-    
-    // 8. Объединяем ciphertext и authTag
-    final inputWithTag = Uint8List(ciphertext.length + authTag.length)
-      ..setAll(0, ciphertext)
-      ..setAll(ciphertext.length, authTag);
-    
-    // 9. Расшифровываем
-    final outputSize = aeadCipher.getOutputSize(inputWithTag.length);
-    final output = Uint8List(outputSize);
-    
-    var outOff = aeadCipher.processBytes(
-      inputWithTag, 0, inputWithTag.length,
-      output, 0,
-    );
-    
-    outOff += aeadCipher.doFinal(output, outOff);
+      // 7. Добавляем associated data
+      aeadCipher.processAADBytes(associatedData, 0, associatedData.length);
 
+      // 8. Объединяем ciphertext и authTag
+      final inputWithTag = Uint8List(ciphertext.length + authTag.length)
+        ..setAll(0, ciphertext)
+        ..setAll(ciphertext.length, authTag);
 
-    // 10. Получаем результат
-    final decryptedBytes = output.sublist(0, outOff);
-    final masterKey = utf8.decode(decryptedBytes);
-    
-    print('✅ Успешно расшифровано!');
-    print('   Master key: "$masterKey"');
-    print('   Длина: ${masterKey.length} символов');
-    
-    return masterKey;
+      // 9. Расшифровываем
+      final outputSize = aeadCipher.getOutputSize(inputWithTag.length);
+      final output = Uint8List(outputSize);
+
+      var outOff = aeadCipher.processBytes(
+        inputWithTag,
+        0,
+        inputWithTag.length,
+        output,
+        0,
+      );
+
+      outOff += aeadCipher.doFinal(output, outOff);
+
+      // 10. Получаем результат
+      final decryptedBytes = output.sublist(0, outOff);
+      final masterKey = utf8.decode(decryptedBytes);
+
+      print('✅ Успешно расшифровано!');
+      print('   Master key: "$masterKey"');
+      print('   Длина: ${masterKey.length} символов');
+
+      return masterKey;
     } catch (e) {
       logger.e(e);
-      return null;
+     // return null;
+      throw AppException.failed_to_decrypt_encrypted_master_key;
     }
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:bit_key/core/app_text/app_text.dart';
@@ -7,6 +8,8 @@ import 'package:bit_key/core/enum/session_timout.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/core/theme/app_color.dart';
+import 'package:bit_key/features/feature_analytic/data/analytics_facade_repo_impl.dart';
+import 'package:bit_key/features/feature_analytic/domain/analytic_repository.dart';
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_auth/presentation/bloc/session_manager.dart';
 import 'package:bit_key/features/feature_generate_pass/presentation/generating_page.dart';
@@ -51,6 +54,13 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
   void _lockApp() {
     logger.e('Lock app');
 
+    // (analytic) track event CLOSE_BY_TIME_OUT
+    unawaited(
+      getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+        AnalyticEvent.CLOSE_BY_TIME_OUT.name,
+      ),
+    );
+
     context.read<AuthBloc>().add(AuthBlocEvent_lockApp());
     context.go('/auth');
   }
@@ -91,6 +101,15 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
       logger.d('Shake timestamp: ${event.timestamp}');
       logger.d('User shaked');
       _lockApp();
+
+
+       // (analytic) track event CLOSE_BY_SHAKE
+    unawaited(
+      getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+        AnalyticEvent.CLOSE_BY_SHAKE.name,
+      ),
+    );
+
     }
   }
 
@@ -112,7 +131,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
       // Приложение ушло в фон
-      _sessionManager.dispose();
+      // _sessionManager.dispose();
     } else if (state == AppLifecycleState.resumed) {
       _sessionManager.recordUserActivity();
     }
@@ -332,7 +351,9 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
                                         },
                                       ),
                                       PopupMenuItem(
-                                        child: Text(context.tr(AppText.identity)),
+                                        child: Text(
+                                          context.tr(AppText.identity),
+                                        ),
                                         onTap: () {
                                           onCreateIdentityTapped(context);
                                         },

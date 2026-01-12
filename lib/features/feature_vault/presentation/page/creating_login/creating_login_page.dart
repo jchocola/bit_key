@@ -10,6 +10,7 @@ import 'package:bit_key/features/feature_vault/presentation/page/creating_login/
 import 'package:bit_key/main.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
 import 'package:bit_key/shared/widgets/custom_textfield.dart';
+import 'package:bit_key/shared/widgets/error_snackbar.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,7 +58,7 @@ class _CreatingLoginPageState extends State<CreatingLoginPage> {
         login: userNameController.text,
         password: passwordController.text,
         url: urlController.text,
-        folderName: selectedFolder
+        folderName: selectedFolder,
       );
       logger.i(login.toString());
       // create login
@@ -69,6 +70,7 @@ class _CreatingLoginPageState extends State<CreatingLoginPage> {
       Navigator.pop(context);
     } catch (e) {
       logger.e(e);
+     
     }
   }
 
@@ -106,14 +108,20 @@ class _CreatingLoginPageState extends State<CreatingLoginPage> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text(context.tr(AppText.cancel), style: theme.textTheme.bodyMedium),
+                    child: Text(
+                      context.tr(AppText.cancel),
+                      style: theme.textTheme.bodyMedium,
+                    ),
                   ),
-                  Text(context.tr(AppText.new_login), style: theme.textTheme.titleMedium),
+                  Text(
+                    context.tr(AppText.new_login),
+                    style: theme.textTheme.titleMedium,
+                  ),
 
                   BlocListener<CreateLoginBloc, CreateLoginBlocState>(
                     listener: (context, state) {
                       if (state is CreateLoginBlocState_error) {
-                        logger.e('error');
+                        showErrorSnackbar(context, state.error);
                       }
                       if (state is CreateLoginBlocState_success) {
                         logger.e('success');
@@ -122,7 +130,10 @@ class _CreatingLoginPageState extends State<CreatingLoginPage> {
                     },
                     child: TextButton(
                       onPressed: onSaveLoginTapped,
-                      child: Text(context.tr(AppText.save), style: theme.textTheme.bodyMedium),
+                      child: Text(
+                        context.tr(AppText.save),
+                        style: theme.textTheme.bodyMedium,
+                      ),
                     ),
                   ),
                 ],
@@ -138,7 +149,6 @@ class _CreatingLoginPageState extends State<CreatingLoginPage> {
                     hintText: context.tr(AppText.item_name),
                   ),
 
-                
                   BlocBuilder<FoldersBloc, FoldersBlocState>(
                     builder: (context, state) => PopupMenuButton(
                       child: Text(selectedFolder ?? context.tr(AppText.none)),

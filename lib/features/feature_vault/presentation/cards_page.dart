@@ -10,6 +10,7 @@ import 'package:bit_key/features/feature_vault/presentation/bloc/no_folders_bloc
 import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/view_info_page.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
+import 'package:bit_key/shared/widgets/empty_widget.dart';
 import 'package:bit_key/shared/widgets/search_textfiled.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:family_bottom_sheet/family_bottom_sheet.dart';
@@ -37,15 +38,11 @@ class CardsPage extends StatelessWidget {
                 value: BlocProvider.of<PickedItemBloc>(context),
               ),
               BlocProvider.value(value: BlocProvider.of<CardsBloc>(context)),
-               BlocProvider.value(
-                          value: BlocProvider.of<BinBloc>(context),
-                        ),
-                BlocProvider.value(
-                          value: BlocProvider.of<NoFoldersBloc>(context),
-                        ),   
-                          BlocProvider.value(
-                value: BlocProvider.of<FoldersBloc>(context),
-              ),     
+              BlocProvider.value(value: BlocProvider.of<BinBloc>(context)),
+              BlocProvider.value(
+                value: BlocProvider.of<NoFoldersBloc>(context),
+              ),
+              BlocProvider.value(value: BlocProvider.of<FoldersBloc>(context)),
             ],
             child: SizedBox(
               height:
@@ -72,7 +69,10 @@ class CardsPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(context.tr(AppText.card), style: theme.textTheme.titleMedium),
+                  Text(
+                    context.tr(AppText.card),
+                    style: theme.textTheme.titleMedium,
+                  ),
                   IconButton(
                     onPressed: () {
                       Navigator.pop(context);
@@ -81,11 +81,15 @@ class CardsPage extends StatelessWidget {
                   ),
                 ],
               ),
-              //SearchTextfiled(),
 
+              //SearchTextfiled(),
               BlocBuilder<CardsBloc, CardsBlocState>(
                 builder: (context, state) {
                   if (state is CardsBlocState_loaded) {
+                    if (state.cards.isEmpty) {
+                      return EmptyWidget();
+                    }
+
                     return Expanded(
                       child: SingleChildScrollView(
                         child: Column(

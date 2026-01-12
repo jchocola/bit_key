@@ -1,15 +1,19 @@
 // ignore_for_file: camel_case_types
 
-import 'dart:math';
+import 'dart:async';
 
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:bit_key/core/di/di.dart';
+import 'package:bit_key/core/exception/app_exception.dart';
+import 'package:bit_key/features/feature_analytic/data/analytics_facade_repo_impl.dart';
+import 'package:bit_key/features/feature_analytic/domain/analytic_repository.dart';
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/features/feature_vault/domain/entity/card.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
-import 'package:bit_key/features/feature_vault/presentation/page/creating_login/bloc/create_login_bloc.dart';
 import 'package:bit_key/main.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 ///
 /// EVENT
@@ -37,7 +41,13 @@ abstract class CreateCardBlocState extends Equatable {
 
 class CreateCardBlocState_init extends CreateCardBlocState {}
 
-class CreateCardBlocState_error extends CreateCardBlocState {}
+class CreateCardBlocState_error extends CreateCardBlocState {
+  final Object error;
+  CreateCardBlocState_error({required this.error});
+
+  @override
+  List<Object?> get props => [error];
+}
 
 class CreateCardBlocState_success extends CreateCardBlocState {}
 
@@ -58,9 +68,12 @@ class CreateCardBloc extends Bloc<CreateCardBlocEvent, CreateCardBlocState> {
     ///
     on<CreateCardBlocEvent_createCard>((event, emit) async {
       final authBlocState = authBloc.state;
-
       if (authBlocState is AuthBlocAuthenticated) {
         try {
+          if (event.card.itemName.isEmpty) {
+            throw AppException.empty_item_name;
+          }
+
           logger.d('Create new card');
 
           final encryptedCard = await encryptionRepository.encryptCard(
@@ -73,8 +86,17 @@ class CreateCardBloc extends Bloc<CreateCardBlocEvent, CreateCardBlocState> {
 
           await localDbRepository.saveCard(card: encryptedCard);
           logger.i('Created new card!');
+
+          // (analytic) track event CREATE_CARD
+          unawaited(
+            getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+              AnalyticEvent.CREATE_CARD.name,
+            ),
+          );
         } catch (e) {
           logger.e(e);
+          emit(CreateCardBlocState_error(error: e));
+          emit(CreateCardBlocState_init());
         }
       }
     });

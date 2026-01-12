@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
+import 'package:bit_key/core/di/di.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
-import 'package:bit_key/core/theme/app_bg.dart';
-import 'package:bit_key/core/theme/app_color.dart';
+import 'package:bit_key/features/feature_analytic/data/analytics_facade_repo_impl.dart';
+import 'package:bit_key/features/feature_analytic/domain/analytic_repository.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/bin_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/cards_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
@@ -16,7 +18,6 @@ import 'package:bit_key/features/feature_vault/presentation/identify_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/logins_page.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:family_bottom_sheet/family_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -32,13 +33,20 @@ class TypesWidget extends StatelessWidget {
         Text(context.tr(AppText.types)),
 
         ///
-        /// LOGIN
+        /// LOGINS
         ///
         BlocBuilder<LoginsBloc, LoginsBlocState>(
           builder: (context, state) => CustomListile(
             icon: AppIcon.loginIcon,
             title: context.tr(AppText.login),
             onTap: () async {
+              // (analytic) track event VIEW_LOGINS_FOLDER
+              unawaited(
+                getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+                  AnalyticEvent.VIEW_LOGINS_FOLDER.name,
+                ),
+              );
+
               showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
@@ -91,6 +99,13 @@ class TypesWidget extends StatelessWidget {
                 ? state.cards.length.toString()
                 : '',
             onTap: () async {
+               // (analytic) track event VIEW_CARDS_FOLDER
+              unawaited(
+                getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+                  AnalyticEvent.VIEW_CARDS_FOLDER.name,
+                ),
+              );
+
               showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
@@ -140,6 +155,14 @@ class TypesWidget extends StatelessWidget {
                 ? state.identities.length.toString()
                 : '',
             onTap: () async {
+               // (analytic) track event VIEW_IDENTITIES_FOLDER
+              unawaited(
+                getIt<AnalyticsFacadeRepoImpl>().trackEvent(
+                  AnalyticEvent.VIEW_IDENTITIES_FOLDER.name,
+                ),
+              );
+
+
               showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,

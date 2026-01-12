@@ -1,11 +1,13 @@
 // ignore_for_file: camel_case_types
 
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/features/feature_import_export_data/presentation/import_data_bloc.dart';
 import 'package:bit_key/shared/widgets/big_button.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -15,6 +17,7 @@ class ImportDataModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       body: AppBg(
         child: Padding(
@@ -23,20 +26,20 @@ class ImportDataModal extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: AppConstant.appPadding,
             children: [
-              Text('Import Data'),
+              Text(context.tr(AppText.import_data)),
               TextButton(
                 onPressed: () {
                   context.read<ImportDataBloc>().add(
                     ImportDataBlocEvent_pickFile(),
                   );
                 },
-                child: Text('1) Pick File'),
+                child: Text(context.tr(AppText.pick_file), style: theme.textTheme.bodySmall,),
               ),
 
               BlocBuilder<ImportDataBloc, ImportDataBlocState>(
                 builder: (context, state) {
                   if (state is ImportDataBlocState_pickedFile) {
-                    return Text(state.file.path);
+                    return Text(state.file.path, style: theme.textTheme.bodySmall,);
                   } else {
                     return SizedBox();
                   }
@@ -49,7 +52,7 @@ class ImportDataModal extends StatelessWidget {
                     ImportDataBlocEvent_extractFile(),
                   );
                 },
-                child: Text('2) Extract File'),
+                child: Text(context.tr(AppText.extract_file , ),style: theme.textTheme.bodySmall,),
               ),
               _buildFolders(),
               Divider(),
@@ -61,16 +64,18 @@ class ImportDataModal extends StatelessWidget {
                 spacing: AppConstant.appPadding,
                 children: [
                   Expanded(
+                    flex: 1,
                     child: BigButton(
-                      title: 'Cancel',
+                      title: context.tr(AppText.cancel),
                       onTap: () {
                         context.pop();
                       },
                     ),
                   ),
                   Expanded(
+                    flex: 2,
                     child: BigButton(
-                      title: 'Import to exsiting data',
+                      title: context.tr(AppText.import_to_existed_data),
                       onTap: () {
                         context.read<ImportDataBloc>().add(
                           ImportDataBlocEvent_importToExistingData(),

@@ -12,6 +12,7 @@ import 'package:bit_key/features/feature_vault/presentation/bloc/search_bloc.dar
 import 'package:bit_key/features/feature_vault/presentation/view_info_page.dart';
 import 'package:bit_key/features/feature_vault/presentation/widgets/searched_widget.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
+import 'package:bit_key/shared/widgets/empty_widget.dart';
 import 'package:bit_key/shared/widgets/search_textfiled.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:family_bottom_sheet/family_bottom_sheet.dart';
@@ -94,6 +95,10 @@ class LoginsPage extends StatelessWidget {
               BlocBuilder<LoginsBloc, LoginsBlocState>(
                 builder: (context, state) {
                   if (state is LoginsBlocState_loaded) {
+                      if (state.logins.isEmpty) {
+                      return EmptyWidget();
+                    }
+
                     return Expanded(
                       child: SingleChildScrollView(
                         child: Column(

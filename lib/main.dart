@@ -1,6 +1,7 @@
 import 'package:bit_key/core/di/di.dart';
 import 'package:bit_key/core/router/app_router_config.dart';
 import 'package:bit_key/core/theme/app_theme.dart';
+import 'package:bit_key/features/feature_analytic/data/analytics_facade_repo_impl.dart';
 import 'package:bit_key/features/feature_auth/domain/repo/local_auth_repository.dart';
 import 'package:bit_key/features/feature_auth/domain/repo/secure_storage_repository.dart';
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
@@ -44,6 +45,9 @@ final logger = Logger();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // load .env
+  await dotenv.load(fileName: ".env");
+
   // localization
   await EasyLocalization.ensureInitialized();
 
@@ -53,8 +57,7 @@ Future<void> main() async {
   // init local db
   await getIt<LocalDbRepository>().init();
 
-  // load .env
-  await dotenv.load(fileName: ".env");
+  
 
   // get current langcode
   final currentLangCode = await getIt<LanguageSettingRepo>().getCurrentLangCode();
@@ -226,7 +229,7 @@ class MyApp extends StatelessWidget {
           supportedLocales: context.supportedLocales,
           locale: context.locale,
           localizationsDelegates: context.localizationDelegates,
-          title: 'Flutter Demo',
+          title: 'BitKey',
           theme: appTheme,
 
           // debugShowMaterialGrid: true,

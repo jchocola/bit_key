@@ -1,7 +1,6 @@
 import 'package:bit_key/core/exception/app_exception.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
 import 'package:bit_key/main.dart';
-import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FolderRepoImpl implements FolderRepository {
@@ -65,6 +64,7 @@ class FolderRepoImpl implements FolderRepository {
       }
     } catch (e) {
       logger.e(e);
+      throw AppException.failed_to_add_list_folder;
     }
   }
 }
