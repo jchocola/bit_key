@@ -58,6 +58,7 @@ class AppText {
   static const no_folders = "vault.no_folders";
   static const bin = "vault.bin";
   static const found_n_results = "vault.found_n_results";
+  static const add_folder = "vault.add_folder";
 
   ///
   /// LOGIN

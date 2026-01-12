@@ -1,9 +1,11 @@
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/core/theme/app_color.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
@@ -20,7 +22,7 @@ class FoldersModalPage extends StatelessWidget {
           padding: const EdgeInsets.all(AppConstant.appPadding),
           child: Column(
             children: [
-              Text('Folders', style: theme.textTheme.titleMedium),
+              Text(context.tr(AppText.folder), style: theme.textTheme.titleMedium),
               _buildFolders(context),
             ],
           ),

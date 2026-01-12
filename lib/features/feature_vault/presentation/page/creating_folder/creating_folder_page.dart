@@ -1,3 +1,4 @@
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
@@ -6,6 +7,7 @@ import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.da
 import 'package:bit_key/main.dart';
 import 'package:bit_key/shared/widgets/custom_textfield.dart';
 import 'package:bit_key/shared/widgets/error_snackbar.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -47,9 +49,9 @@ class _CreatingFolderPageState extends State<CreatingFolderPage> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('Cancel', style: theme.textTheme.bodyMedium),
+                  child: Text(context.tr(AppText.cancel), style: theme.textTheme.bodyMedium),
                 ),
-                Text('Add Folder', style: theme.textTheme.titleMedium),
+                Text(context.tr(AppText.add_folder), style: theme.textTheme.titleMedium),
 
                 BlocListener<FoldersBloc, FoldersBlocState>(
                   listener: (context, state) {
@@ -68,15 +70,15 @@ class _CreatingFolderPageState extends State<CreatingFolderPage> {
                           folderName: folderController.text,
                         ),
                       );
-                      Navigator.pop(context);
+                    //  Navigator.pop(context);
                     },
-                    child: Text('Save', style: theme.textTheme.bodyMedium),
+                    child: Text(context.tr(AppText.save), style: theme.textTheme.bodyMedium),
                   ),
                 ),
               ],
             ),
 
-            CustomTextfield(controller: folderController, hintText: 'Name'),
+            CustomTextfield(controller: folderController, hintText: context.tr(AppText.item_name)),
           ],
         ),
       ),

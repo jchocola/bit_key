@@ -203,6 +203,7 @@
     "login": "Login",
     "my_vault": "My Vault",
     "no_folders": "No folders ({count})",
-    "types": "Types"
+    "types": "Types",
+    "add_folder" : "Add Folder"
   }
 }
