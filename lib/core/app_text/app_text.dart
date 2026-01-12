@@ -19,6 +19,16 @@ class AppText {
   static const lock_app = "commons.lock_app";
   static const move_to_bin_confirm = "commons.move_to_bin_confirm";
   static const confirm = "commons.confirm";
+  static const remove_all_from_bin = "commons.remove_all_from_bin";
+  static const export_data = "commons.export_data";
+  static const import_data = "commons.import_data";
+  static const clear_all_data = "commons.clear_all_data";
+  static const export_pure_data = "commons.export_pure_data";
+  static const export_encrypted_data = "commons.export_encrypted_data";
+  static const safety_save_file = "commons.safety_save_file";
+  static const pick_file = "commons.pick_file";
+  static const extract_file = "commons.extract_file";
+  static const import_to_existed_data = "commons.import_to_existed_data";
 
   ///
   /// AUTH

@@ -1,5 +1,6 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
 
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/core/theme/app_color.dart';
@@ -13,6 +14,7 @@ import 'package:bit_key/features/feature_setting/presentation/pages/vault_page/m
 import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
 import 'package:bit_key/shared/widgets/big_button.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -108,16 +110,16 @@ class VaultPage extends StatelessWidget {
           child: Column(
             spacing: AppConstant.appPadding,
             children: [
-              Text('Vault', style: theme.textTheme.titleMedium,),
+              Text(context.tr(AppText.vault), style: theme.textTheme.titleMedium,),
 
-              CustomListile(title: 'Folders', onTap: _onFoldersTapped),
+              CustomListile(title: context.tr(AppText.folder), onTap: _onFoldersTapped),
 
-              CustomListile(title: 'Export Data', onTap: _exportDataTapped),
+              CustomListile(title: context.tr(AppText.export_data), onTap: _exportDataTapped),
 
-              CustomListile(title: 'Import Data', onTap: _exportImportTapped),
+              CustomListile(title: context.tr(AppText.import_data), onTap: _exportImportTapped),
 
               BigButton(
-                title: 'Clear all data',
+                title: context.tr(AppText.clear_all_data),
                 color: AppColor.error,
                 onTap: _deleteEveryThingTapped,
               ),
