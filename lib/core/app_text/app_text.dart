@@ -31,6 +31,9 @@ class AppText {
   static const import_to_existed_data = "commons.import_to_existed_data";
   static const confirm_delete_all_data = "commons.confirm_delete_all_data";
   static const everything_wil_be_deleted = "commons.everything_wil_be_deleted";
+  static const confirm_delete_folder = "commons.confirm_delete_folder";
+  static const item_on_folder_will_not_be_delete =
+      "commons.item_on_folder_will_not_be_delete";
 
   ///
   /// AUTH

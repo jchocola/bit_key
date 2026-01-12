@@ -78,13 +78,14 @@ class _deleteFolderConfirm extends StatelessWidget {
   final void Function()? onConfirmPressed;
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return FakeGlass(
       settings: LiquidGlassSettings(
         glassColor: AppColor.primary.withOpacity(0.1),
       ),
       shape: LiquidRoundedSuperellipse(borderRadius: AppConstant.appBorder),
       child: AlertDialog(
-        title: Text('Do you really want to delete this folder?'),
+        title: Text(context.tr(AppText.confirm_delete_folder)),
 
         actionsAlignment: MainAxisAlignment.spaceBetween,
         content: SizedBox.fromSize(
@@ -92,7 +93,7 @@ class _deleteFolderConfirm extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Items on this folder will not be delete'),
+              Text(context.tr(AppText.item_on_folder_will_not_be_delete)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -100,11 +101,14 @@ class _deleteFolderConfirm extends StatelessWidget {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text('Cancel'),
+                    child: Text(context.tr(AppText.cancel) , style: theme.textTheme.bodySmall,),
                   ),
                   ElevatedButton(
+                     style: ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(AppColor.primary)
+                ),
                     onPressed: onConfirmPressed,
-                    child: Text('Confirm'),
+                    child: Text(context.tr(AppText.confirm) ,style: theme.textTheme.bodyMedium,),
                   ),
                 ],
               ),

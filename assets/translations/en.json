@@ -52,7 +52,9 @@
     "save": "Save",
     "unlock_vault": "",
     "confirm_delete_all_data" : "Do you really want to delete all data?",
-    "everything_wil_be_deleted" : "Will delete everything"
+    "everything_wil_be_deleted" : "Will delete everything",
+    "confirm_delete_folder" : "Do you really want to delete this folder?",
+    "item_on_folder_will_not_be_delete" : "Items on this folder will not be delete"
   },
   "generator": {
     "female": "Female",
