@@ -152,7 +152,7 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
     ///
     on<AppBlocEvent_UserFirstimeRegister>((event, emit) async {
       try {
-        // emit(AuthBlocLoading());
+         emit(AuthBlocLoading());
 
         if (event.MASTER_KEY!.isEmpty) {
           throw AppException.empty_key;
@@ -209,7 +209,7 @@ class AuthBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
     ///
     on<AppBlocEvent_UserUnlockVaultViaMasterKey>((event, emit) async {
       try {
-        //emit(AuthBlocLoading());
+        emit(AuthBlocLoading());
 
         if (event.MASTER_KEY!.isEmpty) {
           throw AppException.empty_key;

@@ -51,21 +51,20 @@ import 'package:wiredash/wiredash.dart';
 final logger = Logger();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   // load .env
   await dotenv.load(fileName: ".env");
 
-  // localization
-  await EasyLocalization.ensureInitialized();
+  // firebase init app
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.android);
 
   // DI
   await DI();
 
+  // localization
+  await EasyLocalization.ensureInitialized();
+
   // init local db
   await getIt<LocalDbRepository>().init();
-
-  // firebase init app
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.android);
 
   FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
@@ -86,7 +85,6 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-    
 
   // run app
   runApp(
