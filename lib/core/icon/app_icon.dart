@@ -43,4 +43,7 @@ class AppIcon {
   static const IconData clearKeyIcon = LucideIcons.rotateCcwKey;
   static const IconData screenShootIcon = LucideIcons.scanEye;
   static const IconData shakeIcon = LucideIcons.squarePower;
+
+  static const IconData exportDataIcon = LucideIcons.fileInput;
+  static const IconData importDataIcon = LucideIcons.fileOutput;
 }

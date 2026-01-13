@@ -15,6 +15,7 @@ class LanguagePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       body: AppBg(
         child: Padding(
@@ -22,7 +23,7 @@ class LanguagePage extends StatelessWidget {
           child: Column(
             spacing: AppConstant.appPadding,
             children: [
-              Text(context.tr(AppText.language)),
+              Text(context.tr(AppText.language), style: theme.textTheme.titleMedium,),
               buildSupportedLocales(context),
             ],
           ),
@@ -33,29 +34,34 @@ class LanguagePage extends StatelessWidget {
 
   Widget buildSupportedLocales(BuildContext context) {
     return BlocBuilder<LanguageBloc, LanguageBlocState>(
-      builder: (context, state) => Column(
-        spacing: AppConstant.appPadding,
-        children: List.generate(context.supportedLocales.length, (index) {
-          final Locale locale = context.supportedLocales[index];
-          return BigButton(
-            onTap: () {
-              context.setLocale(locale);
+      builder: (context, state) => Expanded(
+        child: SingleChildScrollView(
+          child: Column(
+            spacing: AppConstant.appPadding,
+            children: List.generate(context.supportedLocales.length, (index) {
+              final Locale locale = context.supportedLocales[index];
+              return BigButton(
+                onTap: () {
+                  context.setLocale(locale);
 
-            logger.e(context.locale.toString());
-            
-              context.read<LanguageBloc>().add(
-                LanguageBlocEvent_setLangCode(langCode: locale.languageCode),
+                  logger.e(context.locale.toString());
+
+                  context.read<LanguageBloc>().add(
+                    LanguageBlocEvent_setLangCode(
+                      langCode: locale.languageCode,
+                    ),
+                  );
+                },
+                title: langCodeConverter(langCode: locale.languageCode),
+                color: state is LanguageBlocState_loaded
+                    ? state.currentLangCode == locale.languageCode
+                          ? AppColor.error
+                          : null
+                    : null,
               );
-
-            },
-            title: langCodeConverter(langCode: locale.languageCode),
-            color: state is LanguageBlocState_loaded
-                ? state.currentLangCode == locale.languageCode
-                      ? AppColor.error
-                      : null
-                : null,
-          );
-        }),
+            }),
+          ),
+        ),
       ),
     );
   }
