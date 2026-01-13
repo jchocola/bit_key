@@ -25,9 +25,10 @@ abstract class CreateIdentityEvent extends Equatable {
 
 class CreateIdentityEvent_createIdentity extends CreateIdentityEvent {
   final Identity identity;
-  CreateIdentityEvent_createIdentity({required this.identity});
+   final Completer<void>? completer;
+  CreateIdentityEvent_createIdentity({required this.identity, this.completer});
   @override
-  List<Object?> get props => [identity];
+  List<Object?> get props => [identity, completer];
 }
 
 ///
@@ -84,6 +85,8 @@ class CreateIdentityBloc
           logger.f('encrypted identity: ${encryptedIdentity.toString()}');
 
           await localDbRepository.saveIdentity(identity: encryptedIdentity);
+
+            event.completer?.complete();
 
           // (analytic) track event CREATE_IDENTITY
           unawaited(
