@@ -4,6 +4,7 @@ import 'package:amplitude_flutter/amplitude.dart';
 import 'package:amplitude_flutter/configuration.dart';
 import 'package:bit_key/features/feature_analytic/data/amplitude_analytic_repo_impl.dart';
 import 'package:bit_key/features/feature_analytic/data/analytics_facade_repo_impl.dart';
+import 'package:bit_key/features/feature_analytic/data/firebase_analytic_repo_impl.dart';
 import 'package:bit_key/features/feature_analytic/data/logger_analytic_repo_impl.dart';
 import 'package:bit_key/features/feature_analytic/data/wiredash_analytic_impl.dart';
 import 'package:bit_key/features/feature_auth/data/repo/local_auth_repo_impl.dart';
@@ -29,6 +30,7 @@ import 'package:bit_key/features/feature_vault/domain/repo/encryption_repository
 import 'package:bit_key/features/feature_vault/domain/repo/folder_repository.dart';
 import 'package:bit_key/features/feature_vault/domain/repo/local_db_repository.dart';
 import 'package:bit_key/main.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -110,9 +112,15 @@ Future<void> DI() async {
     AmplitudeAnalyticRepoImpl(amplitude: amplitude),
   );
 
+  final FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.instance;
+  getIt.registerSingleton<FirebaseAnalyticRepoImpl>(
+    FirebaseAnalyticRepoImpl(firebaseAnalytics: firebaseAnalytics),
+  );
+
   final clientsForRelease = [
     getIt<WiredashAnalyticImpl>(),
     getIt<AmplitudeAnalyticRepoImpl>(),
+    getIt<FirebaseAnalyticRepoImpl>(),
   ];
   final clientsForDev = [getIt<LoggerAnalyticRepoImpl>()];
 
