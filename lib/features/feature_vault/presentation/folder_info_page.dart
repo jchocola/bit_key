@@ -14,8 +14,6 @@ import 'package:bit_key/features/feature_vault/presentation/bloc/no_folders_bloc
 import 'package:bit_key/features/feature_vault/presentation/bloc/picked_item_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/view_info_page.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
-import 'package:bit_key/shared/widgets/search_textfiled.dart';
-import 'package:family_bottom_sheet/family_bottom_sheet.dart';
 import 'package:flutter/material.dart' hide Card;
 import 'package:flutter_bloc/flutter_bloc.dart';
 

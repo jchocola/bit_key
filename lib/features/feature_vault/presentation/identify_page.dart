@@ -101,6 +101,7 @@ class IdentifyPage extends StatelessWidget {
                           ) {
                             final identity = state.identities[index];
                             return CustomListile(
+                              icon: AppIcon.identityIcon,
                               title: identity.itemName,
                               subTitle: identity.firstName,
                               onTap: () =>

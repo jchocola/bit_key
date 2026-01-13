@@ -2,6 +2,7 @@
 
 import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
+import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/core/theme/app_color.dart';
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
@@ -112,11 +113,11 @@ class VaultPage extends StatelessWidget {
             children: [
               Text(context.tr(AppText.vault), style: theme.textTheme.titleMedium,),
 
-              CustomListile(title: context.tr(AppText.folder), onTap: _onFoldersTapped),
+              CustomListile(title: context.tr(AppText.folder), onTap: _onFoldersTapped, icon: AppIcon.folderIcon,),
 
-              CustomListile(title: context.tr(AppText.export_data), onTap: _exportDataTapped),
+              CustomListile(title: context.tr(AppText.export_data), onTap: _exportDataTapped, icon: AppIcon.exportDataIcon,),
 
-              CustomListile(title: context.tr(AppText.import_data), onTap: _exportImportTapped),
+              CustomListile(title: context.tr(AppText.import_data), onTap: _exportImportTapped, icon: AppIcon.importDataIcon,),
 
               BigButton(
                 title: context.tr(AppText.clear_all_data),

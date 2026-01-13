@@ -65,6 +65,10 @@ titleMedium: appTextStyle.copyWith(color: AppColor.secondary),
 
   expansionTileTheme: ExpansionTileThemeData(
    childrenPadding: EdgeInsets.all(AppConstant.appPadding) 
+  ),
+
+  progressIndicatorTheme: ProgressIndicatorThemeData(
+    color: AppColor.primary.withOpacity(0.1),
   )
 
 );

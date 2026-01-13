@@ -144,14 +144,16 @@ class _CreatingLoginPageState extends State<CreatingLoginPage> {
               Row(
                 spacing: AppConstant.appPadding,
                 children: [
-                  CustomTextfield(
-                    controller: itemNameController,
-                    hintText: context.tr(AppText.item_name),
+                  Flexible(
+                    child: CustomTextfield(
+                      controller: itemNameController,
+                      hintText: context.tr(AppText.item_name),
+                    ),
                   ),
 
                   BlocBuilder<FoldersBloc, FoldersBlocState>(
                     builder: (context, state) => PopupMenuButton(
-                      child: Text(selectedFolder ?? context.tr(AppText.none)),
+                      child: Text(selectedFolder ?? context.tr(AppText.folder)),
                       itemBuilder: (context) {
                         if (state is FoldersBlocLoaded) {
                           return List.generate(state.folders.length, (index) {
@@ -174,19 +176,25 @@ class _CreatingLoginPageState extends State<CreatingLoginPage> {
               ),
 
               Text(context.tr(AppText.login_credentials)),
-              CustomTextfield(
-                controller: userNameController,
-                hintText: context.tr(AppText.user_name),
+              Flexible(
+                child: CustomTextfield(
+                  controller: userNameController,
+                  hintText: context.tr(AppText.user_name),
+                ),
               ),
-              CustomTextfield(
-                controller: passwordController,
-                withEye: true,
-                obscure: true,
-                hintText: context.tr(AppText.password),
+              Flexible(
+                child: CustomTextfield(
+                  controller: passwordController,
+                  withEye: true,
+                  obscure: true,
+                  hintText: context.tr(AppText.password),
+                ),
               ),
-              CustomTextfield(
-                controller: urlController,
-                hintText: context.tr(AppText.website),
+              Flexible(
+                child: CustomTextfield(
+                  controller: urlController,
+                  hintText: context.tr(AppText.website),
+                ),
               ),
             ],
           ),

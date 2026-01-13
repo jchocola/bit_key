@@ -19,7 +19,7 @@ class AppIcon {
   static const IconData userIcon = LucideIcons.user;
 
   static const IconData loginIcon = LucideIcons.globe;
-  static const IconData identityIcon = LucideIcons.idCard;
+  static const IconData identityIcon = LucideIcons.userRound;
   static const IconData cardIcon = LucideIcons.idCard;
 
   static const IconData folderIcon = LucideIcons.folder;
@@ -43,4 +43,7 @@ class AppIcon {
   static const IconData clearKeyIcon = LucideIcons.rotateCcwKey;
   static const IconData screenShootIcon = LucideIcons.scanEye;
   static const IconData shakeIcon = LucideIcons.squarePower;
+
+  static const IconData exportDataIcon = LucideIcons.fileInput;
+  static const IconData importDataIcon = LucideIcons.fileOutput;
 }

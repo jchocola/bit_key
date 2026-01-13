@@ -182,7 +182,9 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
           ),
         );
       },
-    ).then((_) {
+    ).then((_) async{
+
+      await Future.delayed(Duration(seconds: 1));
       // RELOAD LOGINS LIST WHEN BOMMTOM MODAL CLOSED
       context.read<LoginsBloc>().add(LoginsBlocEvent_loadLogins());
 
@@ -218,7 +220,8 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
           ),
         );
       },
-    ).then((_) {
+    ).then((_) async{
+         await Future.delayed(Duration(seconds: 1));
       // RELOAD CARDS
       context.read<CardsBloc>().add(CardsBlocEvent_loadCards());
 

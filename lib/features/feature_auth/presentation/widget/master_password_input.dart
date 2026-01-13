@@ -27,10 +27,12 @@ class MasterPasswordInput extends StatelessWidget {
             Row(
               spacing: AppConstant.appPadding,
               children: [
-                CustomTextfield(
-                  withEye: true,
-                  obscure: true,
-                  controller: masterKeyController,
+                Flexible(
+                  child: CustomTextfield(
+                    withEye: true,
+                    obscure: true,
+                    controller: masterKeyController,
+                  ),
                 ),
 
                 IconButton(

@@ -1,9 +1,11 @@
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/icon/app_icon.dart';
 import 'package:bit_key/core/theme/app_bg.dart';
 import 'package:bit_key/core/theme/app_color.dart';
 import 'package:bit_key/features/feature_vault/presentation/bloc/folders_bloc.dart';
 import 'package:bit_key/shared/widgets/custom_listile.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
@@ -20,7 +22,7 @@ class FoldersModalPage extends StatelessWidget {
           padding: const EdgeInsets.all(AppConstant.appPadding),
           child: Column(
             children: [
-              Text('Folders', style: theme.textTheme.titleMedium),
+              Text(context.tr(AppText.folder), style: theme.textTheme.titleMedium),
               _buildFolders(context),
             ],
           ),
@@ -76,13 +78,14 @@ class _deleteFolderConfirm extends StatelessWidget {
   final void Function()? onConfirmPressed;
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return FakeGlass(
       settings: LiquidGlassSettings(
         glassColor: AppColor.primary.withOpacity(0.1),
       ),
       shape: LiquidRoundedSuperellipse(borderRadius: AppConstant.appBorder),
       child: AlertDialog(
-        title: Text('Do you really want to delete this folder?'),
+        title: Text(context.tr(AppText.confirm_delete_folder)),
 
         actionsAlignment: MainAxisAlignment.spaceBetween,
         content: SizedBox.fromSize(
@@ -90,7 +93,7 @@ class _deleteFolderConfirm extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Items on this folder will not be delete'),
+              Text(context.tr(AppText.item_on_folder_will_not_be_delete)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -98,11 +101,14 @@ class _deleteFolderConfirm extends StatelessWidget {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text('Cancel'),
+                    child: Text(context.tr(AppText.cancel) , style: theme.textTheme.bodySmall,),
                   ),
                   ElevatedButton(
+                     style: ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(AppColor.primary)
+                ),
                     onPressed: onConfirmPressed,
-                    child: Text('Confirm'),
+                    child: Text(context.tr(AppText.confirm) ,style: theme.textTheme.bodyMedium,),
                   ),
                 ],
               ),

@@ -40,34 +40,32 @@ class _CustomTextfieldState extends State<CustomTextfield> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).textTheme;
-    return Flexible(
-      child: TextField(
-        controller: widget.controller,
-        obscureText: obscureValue,
-        cursorColor: AppColor.primary,
-        mouseCursor: MouseCursor.defer,
-        keyboardType: widget.inputType,
-        decoration: InputDecoration(
-          
-          hintText: widget.hintText,
-
-          suffixIcon: widget.withEye
-              ? IconButton(onPressed: toogleObscureValue, icon: Icon(obscureValue ? AppIcon.closedEyeIcon : AppIcon.openEyeIcon))
-              : null,
-
-          hintStyle: theme.bodySmall,
-          hoverColor: AppColor.secondary,
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(color: AppColor.primary.withOpacity(0.2)),
-          ),
-
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: AppColor.primary.withOpacity(0.5)),
-          ),
-
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: AppColor.primary),
-          ),
+    return TextField(
+      controller: widget.controller,
+      obscureText: obscureValue,
+      cursorColor: AppColor.primary,
+      mouseCursor: MouseCursor.defer,
+      keyboardType: widget.inputType,
+      decoration: InputDecoration(
+        
+        hintText: widget.hintText,
+    
+        suffixIcon: widget.withEye
+            ? IconButton(onPressed: toogleObscureValue, icon: Icon(obscureValue ? AppIcon.closedEyeIcon : AppIcon.openEyeIcon))
+            : null,
+    
+        hintStyle: theme.bodySmall,
+        hoverColor: AppColor.secondary,
+        border: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColor.primary.withOpacity(0.2)),
+        ),
+    
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColor.primary.withOpacity(0.5)),
+        ),
+    
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColor.primary),
         ),
       ),
     );

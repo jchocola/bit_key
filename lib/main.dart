@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:bit_key/core/di/di.dart';
 import 'package:bit_key/core/router/app_router_config.dart';
+import 'package:bit_key/core/supported_locales.dart';
 import 'package:bit_key/core/theme/app_theme.dart';
 import 'package:bit_key/features/feature_analytic/data/analytics_facade_repo_impl.dart';
 import 'package:bit_key/features/feature_auth/domain/repo/local_auth_repository.dart';
@@ -32,9 +35,13 @@ import 'package:bit_key/features/feature_vault/presentation/bloc/search_bloc.dar
 import 'package:bit_key/features/feature_vault/presentation/page/creating_card/bloc/create_card_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_identity/bloc/create_identity_bloc.dart';
 import 'package:bit_key/features/feature_vault/presentation/page/creating_login/bloc/create_login_bloc.dart';
+import 'package:bit_key/firebase_options.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:easy_localization_loader/easy_localization_loader.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -44,28 +51,45 @@ import 'package:wiredash/wiredash.dart';
 final logger = Logger();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   // load .env
   await dotenv.load(fileName: ".env");
 
-  // localization
-  await EasyLocalization.ensureInitialized();
+  // firebase init app
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.android);
 
   // DI
   await DI();
 
+  // localization
+  await EasyLocalization.ensureInitialized();
+
   // init local db
   await getIt<LocalDbRepository>().init();
 
-  
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+
+  // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: false);
+    return true;
+  };
 
   // get current langcode
-  final currentLangCode = await getIt<LanguageSettingRepo>().getCurrentLangCode();
+  final currentLangCode = await getIt<LanguageSettingRepo>()
+      .getCurrentLangCode();
+
+  // 2. Set preferred orientations
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 
   // run app
   runApp(
     EasyLocalization(
-      supportedLocales: [Locale('en'), Locale('ru'), Locale('vi')],
+      supportedLocales: supportedLocales,
       path: 'assets/translations',
       assetLoader: JsonAssetLoader(),
       fallbackLocale: Locale('en'),
@@ -173,8 +197,11 @@ class MyApp extends StatelessWidget {
         ),
 
         BlocProvider(
-          create: (context) =>
-              PickedItemBloc(localDbRepository: getIt<LocalDbRepository>(), authBloc: context.read<AuthBloc>(), encryptionRepository: getIt<EncryptionRepository>(),),
+          create: (context) => PickedItemBloc(
+            localDbRepository: getIt<LocalDbRepository>(),
+            authBloc: context.read<AuthBloc>(),
+            encryptionRepository: getIt<EncryptionRepository>(),
+          ),
         ),
 
         BlocProvider(
@@ -217,7 +244,11 @@ class MyApp extends StatelessWidget {
           ),
         ),
 
-        BlocProvider(create: (context)=> LanguageBloc(languageSettingRepo: getIt<LanguageSettingRepo>())..add(LanguageBlocEvent_loadCurrentLangCode()))
+        BlocProvider(
+          create: (context) =>
+              LanguageBloc(languageSettingRepo: getIt<LanguageSettingRepo>())
+                ..add(LanguageBlocEvent_loadCurrentLangCode()),
+        ),
       ],
 
       // child: MainPage(),

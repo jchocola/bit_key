@@ -1,7 +1,9 @@
+import 'package:bit_key/core/app_text/app_text.dart';
 import 'package:bit_key/core/constants/app_constant.dart';
 import 'package:bit_key/core/theme/app_color.dart';
 import 'package:bit_key/features/feature_auth/presentation/bloc/auth_bloc.dart';
 import 'package:bit_key/shared/widgets/custom_textfield.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -32,13 +34,14 @@ class _DeleteAllDataConfirmState extends State<DeleteAllDataConfirm> {
 
   @override
   Widget build(BuildContext context) {
+     final theme = Theme.of(context);
     return FakeGlass(
       settings: LiquidGlassSettings(
         glassColor: AppColor.primary.withOpacity(0.1),
       ),
       shape: LiquidRoundedSuperellipse(borderRadius: AppConstant.appBorder),
       child: AlertDialog(
-        title: Text('Do you really want to delete all data?'),
+        title: Text(context.tr(AppText.confirm_delete_all_data)),
 
         actionsAlignment: MainAxisAlignment.spaceBetween,
         content: SizedBox.fromSize(
@@ -46,9 +49,9 @@ class _DeleteAllDataConfirmState extends State<DeleteAllDataConfirm> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Will delete everything'),
+              Text(context.tr(AppText.everything_wil_be_deleted)),
               CustomTextfield(
-                hintText: 'Please',
+                hintText: context.tr(AppText.verifyMasterKey),
                 controller: _masterKeyController,
               ),
               Row(
@@ -58,7 +61,7 @@ class _DeleteAllDataConfirmState extends State<DeleteAllDataConfirm> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text('Cancel'),
+                    child: Text(context.tr(AppText.cancel), style: theme.textTheme.bodySmall,),
                   ),
                   BlocListener<AuthBloc, AuthBlocState>(
                     listener: (context, state) {
@@ -67,6 +70,9 @@ class _DeleteAllDataConfirmState extends State<DeleteAllDataConfirm> {
                       }
                     },
                     child: ElevatedButton(
+                      style: ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(AppColor.primary)
+                ),
                       onPressed: () {
                         context.read<AuthBloc>().add(
                           AuthBlocEvent_DELETE_ALL_DATA(
@@ -75,7 +81,7 @@ class _DeleteAllDataConfirmState extends State<DeleteAllDataConfirm> {
                         );
                         Navigator.pop(context);
                       },
-                      child: Text('Confirm'),
+                      child: Text(context.tr(AppText.confirm), style: theme.textTheme.bodyMedium,)
                     ),
                   ),
                 ],

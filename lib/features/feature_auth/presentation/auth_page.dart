@@ -38,7 +38,7 @@ class AuthPage extends StatelessWidget {
                         );
                       } else if (state is AuthBlocAuthenticated) {
                         logger.i('User authenticated successfully.');
-
+                  
                         context.go('/main');
                       }
                     },

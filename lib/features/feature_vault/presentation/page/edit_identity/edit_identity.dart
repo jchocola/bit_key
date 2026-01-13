@@ -221,14 +221,16 @@ class _EditIdentityPageState extends State<EditIdentityPage> {
                     Row(
                       spacing: AppConstant.appPadding,
                       children: [
-                        CustomTextfield(
-                          controller: itemNameController,
-                          hintText: context.tr(AppText.item_name),
+                        Flexible(
+                          child: CustomTextfield(
+                            controller: itemNameController,
+                            hintText: context.tr(AppText.item_name),
+                          ),
                         ),
 
                         BlocBuilder<FoldersBloc, FoldersBlocState>(
                           builder: (context, state) => PopupMenuButton(
-                            child: Text(folder ?? context.tr(AppText.none)),
+                            child: Text(folder ?? context.tr(AppText.folder)),
                             itemBuilder: (context) {
                               if (state is FoldersBlocLoaded) {
                                 return List.generate(state.folders.length, (

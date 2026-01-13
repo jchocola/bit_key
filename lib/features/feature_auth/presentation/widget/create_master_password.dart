@@ -22,18 +22,22 @@ class CreateMasterPassword extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: AppConstant.appPadding,
           children: [
-            CustomTextfield(
-              controller: masterPasswordController,
-              hintText: context.tr(AppText.masterKey),
-              withEye: true,
-              obscure: true,
+            Flexible(
+              child: CustomTextfield(
+                controller: masterPasswordController,
+                hintText: context.tr(AppText.masterKey),
+                withEye: true,
+                obscure: true,
+              ),
             ),
 
-            CustomTextfield(
-              controller: confirmMasterPasswordController,
-              hintText: context.tr(AppText.comfirmMasterKey),
-              withEye: true,
-              obscure: true,
+            Flexible(
+              child: CustomTextfield(
+                controller: confirmMasterPasswordController,
+                hintText: context.tr(AppText.comfirmMasterKey),
+                withEye: true,
+                obscure: true,
+              ),
             ),
 
             Text(
