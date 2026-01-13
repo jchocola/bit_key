@@ -32,12 +32,14 @@ A secure password manager application built with Flutter that allows users to st
 ## 📋 Data Categories
 
 ### Logins
+
 - Website/Application name
 - Username/Email
 - Encrypted password
 - Custom fields
 
 ### Credit Cards
+
 - Card number
 - Expiration date
 - CVV
@@ -45,6 +47,7 @@ A secure password manager application built with Flutter that allows users to st
 - Card type
 
 ### Identities
+
 - Personal information
 - Addresses
 - Phone numbers
@@ -74,6 +77,7 @@ data (data sources)
 ```
 
 ### Key Components:
+
 - **BLoC Pattern**: For state management and business logic
 - **Repository Pattern**: For data abstraction
 - **Dependency Injection**: For loose coupling
@@ -93,6 +97,7 @@ data (data sources)
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Flutter SDK (3.9.2 or higher)
 - Dart SDK (bundled with Flutter)
 - Android Studio / VS Code
@@ -101,17 +106,20 @@ data (data sources)
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd bit_key
 ```
 
 2. Install dependencies:
+
 ```bash
 flutter pub get
 ```
 
 3. Run the application:
+
 ```bash
 flutter run
 ```
@@ -171,6 +179,52 @@ If you encounter any issues or have questions, please file an issue in the GitHu
 - Flutter team for the amazing framework
 - All the open-source packages that made this project possible
 - The security community for best practices and guidance
+
+## 🖼️ Screenshots
+
+Below are example screenshots to showcase the app. Place your images in the `assets/screenshots/` folder (or another path you prefer) and update `pubspec.yaml` accordingly.
+
+| Screen              |                                  Description | Example path                          |
+| ------------------- | -------------------------------------------: | ------------------------------------- |
+| Login / Unlock      |           Master password / biometric screen | ![](flutter_01.png)                   |
+| Vault page          |          All logins/cards/identities/folders | ![](flutter_02.png)                   |
+| Generator password  | Generate password with any custom parameters |  ![](flutter_03.png)                  |
+| Settings            |                                              | ![](flutter_04.png)                   |
+| Settings / Security |            App settings and security options | ![](flutter_05.png)                   |
+| Settings / Language |                                              | ![](flutter_06.png)                   |
+| Settings / About app|                                              | ![](flutter_07.png)                   |
+
+How to add screenshots:
+
+1. Create the folder (if missing):
+
+```bash
+mkdir -p assets/screenshots
+```
+
+2. Copy your PNG/JPEG images into `assets/screenshots/` and name them as used in the table.
+
+3. Register the assets in `pubspec.yaml` (example):
+
+```yaml
+flutter:
+	assets:
+		- assets/screenshots/home.png
+		- assets/screenshots/login.png
+		- assets/screenshots/vault_logins.png
+		- assets/screenshots/create_item.png
+		- assets/screenshots/settings.png
+```
+
+4. (Optional) For many images, register the whole folder:
+
+```yaml
+flutter:
+	assets:
+		- assets/screenshots/
+```
+
+Recommended image size: 1080x1920 (or scaled down for README previews). Use compressed PNG/JPEG to keep repo size small.
 
 ---
 
