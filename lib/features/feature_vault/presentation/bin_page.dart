@@ -333,7 +333,7 @@ class BinPage extends StatelessWidget {
                         logger.e(e);
                       }
                     },
-                    child: Text(context.tr(AppText.delete), style: theme.textTheme.bodyMedium),
+                    child: Text(context.tr(AppText.restore), style: theme.textTheme.bodyMedium),
                   ),
 
                   TextButton(
